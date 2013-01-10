@@ -1,0 +1,160 @@
+{"listening": {
+	#INPUT#"inputElementsString": "" +
+		"<input type=\"text\" id=\"inputField\"/><input type=\"button\" id=\"submitButton\" value=\"submit\"/>" +
+		"",#INPUT#
+	#CONFIG#"configurationElementString": "" + 
+		"<style>.input-label { display: inline-block; width: 10em; } label { display: block;} label:nth-child(odd) { background-color: #ccc; } </style>" + 
+		"<div><label for=\"points\"><span class=\"input-label\">Total points: </span><input type=\"text\" id=\"points\" placeholder=\"Points\"/></label>\n" + 
+		"<label for=\"correct\"><span class=\"input-label\">Correct answer: </span><input type=\"text\" id=\"correct\" placeholder=\"Correct Answer\"/></label>\n" + 
+		"<label for=\"grace\"><span class=\"input-label\">Answer tolerance: </span><input type=\"text\" id=\"grace\" placeholder=\"Allowed deviation\"/><div>The above is the amount an answer must be away from the correct answer before the student starts losing points</div></label>\n" + 
+		"<label for=\"deviance\"><span class=\"input-label\">Deviation breakpoint: </span><input type=\"text\" id=\"deviance\" placeholder=\"Deviation breakpoint\"/><div>The above is the interval at which the penalty is compounded</div></label>\n" + 
+		"<label for=\"penalty\"><span class=\"input-label\">Penalty: </span><input type=\"text\" id=\"penalty\" placeholder=\"Deviation penalty\"/><div>The above is the number of points lost at each breakpoint</div></label>\n" + 
+		"</div><input type=\"button\" id=\"submitButton\" value=\" Save \"/>" +
+		"<h4>The numbers above are calculated to score according to the following formula:</h4>" + 
+		"<div style=\"display: table;\">" +
+			"<div style=\"height: 2.5em; display: table-cell; vertical-align: middle;\">" + 
+				"Points = Full Points + " + 
+					"<span style=\"position: relative; top: -0.6em;\">Deviation Penalty</span>" + 
+					"<span style=\"display: inline-block; position: relative; top: 0.55em; left: -6.8em; margin-right: -6.8em; border-top: 1px solid black;\">Deviation breakpoint</span> &times; " + 
+					"<span style=\"\">(</span>" +
+						"Allowed Deviation - | Student Answer - Correct Answer |" +
+					"<span style=\"\">)</span>" + 
+			"</div>" + 
+		"</div>\n" +
+		"<h4>You may test the formula here:</h4>" + 
+		"<div style=\"display: table;\">" + 
+			"<div style=\"height: 2.5em; display: table-cell; vertical-align: middle;\">" + 
+				"<span class=\"score\">??</span> = <span class=\"points\">??</span> + " + 
+					"<span style=\"position: relative; top: -0.6em;display: inline-block; width: 2em; text-align: center;\"><span class=\"penalty\">??</span></span>" + 
+					"<span style=\"display: inline-block; text-align: center; position: relative; top: 0.55em; width: 2em; left: -2em; margin-right: -2em; border-top: 1px solid black;\"><span class=\"deviance\">??</span></span> &times; " + 
+					"<span style=\"\">(</span>" +
+						"<span class=\"grace\">??</span> - | <input type=\"text\" id=\"testGrade\" placeholder=\"??\" style=\"width: 3em; text-align: center; height: 1em;\"/> - <span class=\"correct\">??</span> |" +
+					"<span style=\"\">)</span>" + 
+			"</div>" + 
+		"</div>\n" +
+		"",#CONFIG#
+	"methods": 
+		[
+			#CONFIG#{
+				"name": "submitClick",
+				"type": "click",
+				"id": "submitButton",
+				"handler": "function() {
+					var formInputs = {};
+					var gatherValues = [\"correct\", \"deviance\", \"grace\", \"penalty\", \"points\"];
+					for(var i=0; i < gatherValues.length; i++) {
+						formInputs[gatherValues[i]] = $(\"#\"+gatherValues[i]).val();
+						if(formInputs[gatherValues[i]] === \"\") {
+							alert(\"Can't save settings until they are all filled out.\\n\"+$(\"#\"+gatherValues[i]).attr(\"placeholder\")+\" is currently empty.\");
+							return false;
+						}
+					}
+					/*for(var i=0; i < $(\"input\").length; i++) {
+						var key = (($(\"input\")[i].name!=\"\")?$(\"input\")[i].name:$(\"input\")[i].id);
+						console.log(\"Key:\"+key);
+						formInputs[key] = $($(\"input\")[i]).val();
+					}*/
+					$.post(
+						portalURL,
+						{
+							\"ia_type\":		\"listening\",
+							\"action\":		\"create\",
+							\"JSONString\":	JSON.stringify(formInputs),
+							\"domain\": bhDomain,
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
+						},
+						function(data) {
+							console.log(data);			/*	posts success or failure to console	*/
+							$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
+						}
+					);
+					
+				}"
+			},
+			{
+				"name": "testCalculateGrade",
+				"type": "input",
+				"tag": "input",
+				"handler": "function() {
+					var numberRegEx = /^[\\d\\.]+$/;
+					var input = (numberRegEx.test($(\"#testGrade\").val()))?$(\"#testGrade\").val():0;
+					
+					var points = parseFloat((numberRegEx.test($(\"#points\").val()))?$(\"#points\").val():0);
+					for(var i=0; i < $(\".points\").length; i++) $($(\".points\")[i]).html(points);
+					var correct = parseFloat((numberRegEx.test($(\"#correct\").val()))?$(\"#correct\").val():0);
+					for(var i=0; i < $(\".correct\").length; i++) $($(\".correct\")[i]).html(correct);
+					var grace = parseFloat((numberRegEx.test($(\"#grace\").val()))?$(\"#grace\").val():0);
+					for(var i=0; i < $(\".grace\").length; i++) $($(\".grace\")[i]).html(grace);
+					var deviance = parseFloat((numberRegEx.test($(\"#deviance\").val()))?$(\"#deviance\").val():0);
+					for(var i=0; i < $(\".deviance\").length; i++) $($(\".deviance\")[i]).html(deviance);
+					var penalty = parseFloat((numberRegEx.test($(\"#penalty\").val()))?$(\"#penalty\").val():0);
+					for(var i=0; i < $(\".penalty\").length; i++) $($(\".penalty\")[i]).html(penalty);
+					var score = parseFloat(points + ((penalty / deviance) * ( grace - Math.abs(correct - input))));
+					if(isNaN(score)) score = 0; else score = (Math.round(score * 100) / 100);
+					if(score > points) score = \"<span style=\\\"color: green;\\\" title=\\\"Points calculated to be greater than maximum are rounded down.\\\">\"+points+\"</span>\";
+					if(score < 0) score = \"<span style=\\\"color: red;\\\" title=\\\"Points calculated to be less than 0 are rounded up to zero.\\\">\"+0+\"</span>\";
+					for(var i=0; i < $(\".score\").length; i++) $($(\".score\")[i]).html(score);
+				}"
+			}#CONFIG#
+			#INPUT#{
+				"name": "gradeClick",
+				"type": "click",
+				"id": "submitButton",
+				"handler": "function() {
+					var formInputs = {};
+					var gatherValues = [\"inputField\"];
+					for(var i=0; i < gatherValues.length; i++) {
+						formInputs[gatherValues[i]] = $(\"#\"+gatherValues[i]).val();
+						if(formInputs[gatherValues[i]] === \"\") {
+							alert(\"You at least need to guess.\\n\"+$(\"#\"+gatherValues[i]).attr(\"placeholder\")+\" is currently empty.\");
+							return false;
+						}
+					}
+					$.post(
+						portalURL,
+						{
+							\"ia_type\":		\"listening\",
+							\"action\":			\"done\",
+							\"JSONString\":		JSON.stringify(formInputs),
+							\"domain\": bhDomain,
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
+						},
+						function(data) {
+							data = JSON.parse(data);
+							console.log(data);			/*	posts success or failure to console	*/
+							if(!$(\"#responseData\").length > 0) {
+								var responseData = $(\"<div></div>\");
+								$(responseData).attr(\"id\", \"responseData\");
+								$($(\"#inputField\")[0].parentElement).append($(responseData));
+							}
+							var messageKey = null;
+							for(var d=0; d < Object.keys(data).length; d++) {
+								if( isNaN(data[Object.keys(data)[d]]) && (Object.keys(data)[d]).toLowerCase() != \"error\")
+									messageKey = Object.keys(data)[d];
+							}
+							$(\"#responseData\").html(
+								((data.ERROR)?\"<span style=\\\"color: red\\\">\"+data.ERROR+\"</span>\":\"\")+((messageKey)?\"<span>\"+data[messageKey]+\"</span>\":\"\")
+							);
+							//console.log($($(\"#inputField\")[0].parentElement));
+							if(apiInitialized === true) {
+								if(typeof setScore == \"function\") {
+									setScore(data.grade);
+								} else {
+									console.log(\"Error: Unable to set the score. API not loaded.\");
+								}
+							} else {
+								console.log(\"Error: Unable to set the score. API not loaded.\");
+							}
+						}
+					);
+					
+				}"
+			}#INPUT#
+		]
+}}
