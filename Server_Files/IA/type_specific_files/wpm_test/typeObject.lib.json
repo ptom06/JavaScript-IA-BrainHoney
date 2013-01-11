@@ -122,7 +122,7 @@
 							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
 							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
 							var seconds = text_area.time; 
-							//console.log(seconds);
+							//IsLog.c(seconds);
 							InitTimer(seconds);
 						},
 						\"json\"
@@ -272,7 +272,7 @@
 								\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
 							},
 							function(data) {
-								console.log(data);			//posts success or failure to console
+								IsLog.c(data);			//posts success or failure to console
 								$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
 							}
 						);
@@ -338,12 +338,12 @@
 							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
 						};
-						console.log(postVars);
+						IsLog.c(postVars);
 						$.post(
 							portalURL,
 							postVars,
 							function(data) {
-								console.log(data);
+								IsLog.c(data);
 								$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
 							}
 						);

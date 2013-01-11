@@ -51,7 +51,7 @@
 					}
 					/*for(var i=0; i < $(\"input\").length; i++) {
 						var key = (($(\"input\")[i].name!=\"\")?$(\"input\")[i].name:$(\"input\")[i].id);
-						console.log(\"Key:\"+key);
+						IsLog.c(\"Key:\"+key);
 						formInputs[key] = $($(\"input\")[i]).val();
 					}*/
 					$.post(
@@ -67,7 +67,7 @@
 							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
 						},
 						function(data) {
-							console.log(data);			/*	posts success or failure to console	*/
+							IsLog.c(data);			/*	posts success or failure to console	*/
 							$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
 						}
 					);
@@ -127,7 +127,7 @@
 						},
 						function(data) {
 							data = JSON.parse(data);
-							console.log(data);			/*	posts success or failure to console	*/
+							IsLog.c(data);			/*	posts success or failure to console	*/
 							if(!$(\"#responseData\").length > 0) {
 								var responseData = $(\"<div></div>\");
 								$(responseData).attr(\"id\", \"responseData\");
@@ -141,15 +141,15 @@
 							$(\"#responseData\").html(
 								((data.ERROR)?\"<span style=\\\"color: red\\\">\"+data.ERROR+\"</span>\":\"\")+((messageKey)?\"<span>\"+data[messageKey]+\"</span>\":\"\")
 							);
-							//console.log($($(\"#inputField\")[0].parentElement));
+							//IsLog.c($($(\"#inputField\")[0].parentElement));
 							if(apiInitialized === true) {
 								if(typeof setScore == \"function\") {
 									setScore(data.grade);
 								} else {
-									console.log(\"Error: Unable to set the score. API not loaded.\");
+									IsLog.c(\"Error: Unable to set the score. API not loaded.\");
 								}
 							} else {
-								console.log(\"Error: Unable to set the score. API not loaded.\");
+								IsLog.c(\"Error: Unable to set the score. API not loaded.\");
 							}
 						}
 					);

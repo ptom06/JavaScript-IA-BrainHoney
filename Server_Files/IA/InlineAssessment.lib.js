@@ -19,7 +19,7 @@ if(!loc)
 	var isserver = (!devRegEx.test(loc.hostname))?"":"dev";
 
 var portalURL = "https://is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
-//console.log("using: "+portalURL);
+//IsLog.c("using: "+portalURL);
 
 if(!scriptsToLoadIA)
 	var scriptsToLoadIA = [];
@@ -146,13 +146,13 @@ function InlineAssessment(elementArg) {
 	};
 	
 	this.setEvents = function(){ //this allows for the dynamic creation of events. In the types object above, you can have an array of events with their respective information
-		//console.log("Assigning methods:");
-		//console.log(this.allTypes[this.type].methods);
+		//IsLog.c("Assigning methods:");
+		//IsLog.c(this.allTypes[this.type].methods);
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
 			if(typeof this.allTypes[this.type].methods[i].handler == "string")
-				console.log("The handler for "+this.type+":"+this.allTypes[this.type].methods[i].name+" appears to be a string?");		//this.allTypes[this.type].methods[i].handler = eval(this.allTypes[this.type].methods[i].handler);
-			//console.log(this.allTypes[this.type]);
-			//console.log(this.allTypes[this.type].methods[i]);
+				IsLog.c("The handler for "+this.type+":"+this.allTypes[this.type].methods[i].name+" appears to be a string?");		//this.allTypes[this.type].methods[i].handler = eval(this.allTypes[this.type].methods[i].handler);
+			//IsLog.c(this.allTypes[this.type]);
+			//IsLog.c(this.allTypes[this.type].methods[i]);
 			if(this.allTypes[this.type].methods[i].fireAutomatically === true) {
 				this.allTypes[this.type].methods[i].handler();
 			}
@@ -162,7 +162,7 @@ function InlineAssessment(elementArg) {
 				var inputElement = $("."+this.allTypes[this.type].methods[i].class);
 			if(this.allTypes[this.type].methods[i].tag)
 				var inputElement = $(""+this.allTypes[this.type].methods[i].tag);
-			//console.log(inputElement);
+			//IsLog.c(inputElement);
 			for(var j=0; j < inputElement.length; j++) {
 				switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
 				//Onload has already been run.
@@ -170,8 +170,8 @@ function InlineAssessment(elementArg) {
 						$(inputElement[j]).change(this.allTypes[this.type].methods[i].handler);
 					break;
 					case "click":
-						//console.log("click event!");
-						//console.log(this.allTypes[this.type].methods[i].handler);
+						//IsLog.c("click event!");
+						//IsLog.c(this.allTypes[this.type].methods[i].handler);
 						$(inputElement[j]).click(this.allTypes[this.type].methods[i].handler);
 					break;
 					default: //bind Event
@@ -194,7 +194,7 @@ function InlineAssessment(elementArg) {
 			//return false;
 		}
 	}
-	//console.log(this);			//logs the entire object in the console
+	//IsLog.c(this);			//logs the entire object in the console
 	return this;
 }
 InlineAssessment.prototype.getId = function() { return this.id; };					//additionally functionalities that may or may nto be needed
@@ -220,12 +220,12 @@ InlineAssessment.prototype.allTypes = 	this.allTypes = {		//all the available ty
 var assessmentElements;
 
 if(! $.isReady ) {
-	console.log("IA: Document not yet ready...");
+	IsLog.c("IA: Document not yet ready...");
 	$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
 		parseAssessmentObjects();
 	});
 } else {
-	console.log("IA: Document was ready.");
+	IsLog.c("IA: Document was ready.");
 	parseAssessmentObjects();
 }
 
@@ -262,46 +262,46 @@ function parseAssessmentObjects() {
 					if(assessmentInfo.typeObject[typeName].methods) {
 						for(var b=0; b < assessmentInfo.typeObject[typeName].methods.length; b++) {
 							if(typeof assessmentInfo.typeObject[typeName].methods[b].handler == "string") {
-								console.log("Assigning handler for "+typeName+":"+assessmentInfo.typeObject[typeName].methods[b].name);
+								IsLog.c("Assigning handler for "+typeName+":"+assessmentInfo.typeObject[typeName].methods[b].name);
 								var funcString = assessmentInfo.typeObject[typeName].methods[b].handler;
 								var defineString = "InlineAssessment.prototype.allTypes[\""+typeName+"\"].methods["+b+"].handler = "+funcString+"";
 								try {
 									eval(defineString);
 								} catch (err) {
-									//console.log("Error: type method string failed eval(): " + err.message);
+									//IsLog.c("Error: type method string failed eval(): " + err.message);
 									throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
 								}
 								if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
-									console.log("Error: Failed to assign handler!");
+									IsLog.c("Error: Failed to assign handler!");
 							}
 						}
 					}
-					//console.log(InlineAssessment.prototype.allTypes[typeName].methods);
+					//IsLog.c(InlineAssessment.prototype.allTypes[typeName].methods);
 				}
 				//	Make sure required scripts are loaded...
 				if(typeof getScript != "function") {
 					var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
 					$.cachedScript(scriptLoc).done(function(script, textStatus) {
-						console.log(script + ": " + textStatus);
+						IsLog.c(script + ": " + textStatus);
 					});
 				}
 				if(typeof initializeAPI != "function") {
 					var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
 					$.cachedScript(scriptLoc).done(function(script, textStatus) {
-						console.log(script + ": " + textStatus);
+						IsLog.c(script + ": " + textStatus);
 					});
 				}
 				if(InlineAssessment.prototype.allTypes[typeName].scripts) {
 					for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
 						var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
 						$.cachedScript(scriptLoc).done(function(script, textStatus) {
-							console.log(script + ": " + textStatus);
+							IsLog.c(script + ": " + textStatus);
 						});
 					}
 				}
 				
 				courseID = assessmentInfo.courseID;
-				//console.log(InlineAssessment.prototype.allTypes[Object.keys(assessmentInfo.typeObject)[0]]);
+				//IsLog.c(InlineAssessment.prototype.allTypes[Object.keys(assessmentInfo.typeObject)[0]]);
 				if(courseID === false){
 					teacherStudent = "Teacher";
 				}else{
@@ -354,18 +354,18 @@ function initAssessmentObjects() {
 	}
 }
 function checkGradeCompletion() {
-	console.log("The document is "+((! $.isReady )?"not ":"")+"finished loading.");
+	IsLog.c("The document is "+((! $.isReady )?"not ":"")+"finished loading.");
 	for(var a=0; a < assessmentElements.length; a++) {
 		if(typeof getScore == "function")
 			var scormGrade = getScore();
 		else {
 			//throw new Error("getScore() not defined!!! Is the API not initialized by now?");
-			console.log("getScore() not defined!!! Is the API not initialized by now?");
+			IsLog.c("getScore() not defined!!! Is the API not initialized by now?");
 			var scormGrade = "ERROR";
 		}
-		console.log("scormGrade: "+scormGrade);
+		IsLog.c("scormGrade: "+scormGrade);
 		if(scormGrade !== "" && scormGrade !== null && scormGrade !== false && scormGrade !== "false" && scormGrade !== "unknown") {
-			console.log("Grade retrieved: "+scormGrade);
+			IsLog.c("Grade retrieved: "+scormGrade);
 			$(assessmentElements[a].gradeHolder).html("You already completed this assignment.<br/>Your score is "+( parseFloat(scormGrade) * 100 )+"%");
 			$(assessmentElements[a].element).append(assessmentElements[a].gradeHolder);
 		}
@@ -388,7 +388,7 @@ function checkAPIErrors() {
 function getScriptIA() {
 	if(scriptsToLoadIAIndex < scriptsToLoadIA.length && scriptsToLoadIA[scriptsToLoadIAIndex] != null) {
 		$.cachedScript(scriptsToLoadIA[scriptsToLoadIAIndex]).done(function(script, textStatus) {
-			console.log(scriptsToLoadIA[scriptsToLoadIAIndex] + ": " + textStatus);
+			IsLog.c(scriptsToLoadIA[scriptsToLoadIAIndex] + ": " + textStatus);
 			scriptsToLoadIAIndex++;
 			getScriptIA();
 		});
