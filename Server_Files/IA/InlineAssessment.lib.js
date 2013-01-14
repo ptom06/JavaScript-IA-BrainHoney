@@ -150,34 +150,37 @@ function InlineAssessment(elementArg) {
 		//IsLog.c(this.allTypes[this.type].methods);
 		for(var i=0;i<this.allTypes[this.type].methods.length;i++) {
 			if(typeof this.allTypes[this.type].methods[i].handler == "string")
-				IsLog.c("The handler for "+this.type+":"+this.allTypes[this.type].methods[i].name+" appears to be a string?");		//this.allTypes[this.type].methods[i].handler = eval(this.allTypes[this.type].methods[i].handler);
+				IsLog.c("Error: The handler for "+this.type+":"+this.allTypes[this.type].methods[i].name+" appears to be a string?");		//this.allTypes[this.type].methods[i].handler = eval(this.allTypes[this.type].methods[i].handler);
 			//IsLog.c(this.allTypes[this.type]);
-			//IsLog.c(this.allTypes[this.type].methods[i]);
-			if(this.allTypes[this.type].methods[i].fireAutomatically === true) {
+			IsLog.c("Processing "+this.allTypes[this.type].methods[i].name);
+			if(this.allTypes[this.type].methods[i].fireAutomatically == true || this.allTypes[this.type].methods[i].fireAutomatically == "true") {
 				IsLog.c("Setting the handler "+this.allTypes[this.type].methods[i].name+" and running it.");
 				this.allTypes[this.type].methods[i].handler();
 			}
+			var inputElement;
 			if(this.allTypes[this.type].methods[i].id)
-				var inputElement = $("#"+this.allTypes[this.type].methods[i].id);
+				inputElement = $("#"+this.allTypes[this.type].methods[i].id);
 			if(this.allTypes[this.type].methods[i].class)
-				var inputElement = $("."+this.allTypes[this.type].methods[i].class);
+				inputElement = $("."+this.allTypes[this.type].methods[i].class);
 			if(this.allTypes[this.type].methods[i].tag)
-				var inputElement = $(""+this.allTypes[this.type].methods[i].tag);
+				inputElement = $(""+this.allTypes[this.type].methods[i].tag);
 			//IsLog.c(inputElement);
-			for(var j=0; j < inputElement.length; j++) {
-				switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
-				//Onload has already been run.
-					case "change":
-						$(inputElement[j]).change(this.allTypes[this.type].methods[i].handler);
-					break;
-					case "click":
-						//IsLog.c("click event!");
-						//IsLog.c(this.allTypes[this.type].methods[i].handler);
-						$(inputElement[j]).click(this.allTypes[this.type].methods[i].handler);
-					break;
-					default: //bind Event
-						$(inputElement[j]).bind(this.allTypes[this.type].methods[i].type, this.allTypes[this.type].methods[i].handler);
-					break;
+			if(inputElement != null) {
+				for(var j=0; j < inputElement.length; j++) {
+					switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
+					//Onload has already been run.
+						case "change":
+							$(inputElement[j]).change(this.allTypes[this.type].methods[i].handler);
+						break;
+						case "click":
+							//IsLog.c("click event!");
+							//IsLog.c(this.allTypes[this.type].methods[i].handler);
+							$(inputElement[j]).click(this.allTypes[this.type].methods[i].handler);
+						break;
+						default: //bind Event
+							$(inputElement[j]).bind(this.allTypes[this.type].methods[i].type, this.allTypes[this.type].methods[i].handler);
+						break;
+					}
 				}
 			}
 		}
@@ -264,7 +267,9 @@ function parseAssessmentObjects() {
 						//	Make sure required scripts are loaded...
 						if(typeof getScript != "function") {
 							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
+							IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loadinh filesToLoad.js");
 							$.cachedScript(scriptLoc).done(function(script, textStatus) {
+								IsLog.c(arguments);
 								IsLog.c(script + ": " + textStatus);
 							});
 						}
@@ -275,44 +280,61 @@ function parseAssessmentObjects() {
 							});
 						}
 						if(InlineAssessment.prototype.allTypes[typeName].scripts) {
+							InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
 							for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
 								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
-								$.cachedScript(scriptLoc).done(function(script, textStatus) {
-									IsLog.c(script + ": " + textStatus);
+								IsLog.c(scriptLoc);
+								$.cachedScript(scriptLoc,{"dataType": "script","cache": true,"url": scriptLoc,"async": false}).done(function(script, textStatus) {
+									//IsLog.c(InlineAssessment.prototype.allTypes[typeName]);
+									InlineAssessment.prototype.allTypes[typeName].scriptIndex++;
+									//IsLog.c(arguments);
+									//IsLog.c(script + ": " + textStatus);
+									if(InlineAssessment.prototype.allTypes[typeName].scriptIndex == InlineAssessment.prototype.allTypes[typeName].scripts.length) {
+										IsLog.c("script loading complete!");
+										loadAssessmentMethods();
+									}
 								});
 							}
 						}
-						
-						for(var b=0; b < assessmentInfo.typeObject[typeName].methods.length; b++) {
-							if(typeof assessmentInfo.typeObject[typeName].methods[b].handler == "string") {
-								IsLog.c("Assigning handler for "+typeName+":"+assessmentInfo.typeObject[typeName].methods[b].name);
-								var funcString = assessmentInfo.typeObject[typeName].methods[b].handler;
-								var defineString = "InlineAssessment.prototype.allTypes[\""+typeName+"\"].methods["+b+"].handler = "+funcString+"";
-								try {
-									eval(defineString);
-								} catch (err) {
-									//IsLog.c("Error: type method string failed eval(): " + err.message);
-									throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
-								}
-								if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
-									IsLog.c("Error: Failed to assign handler!");
-							}
-						}
+					} else {
+						loadAssessmentMethods();
 					}
-					//IsLog.c(InlineAssessment.prototype.allTypes[typeName].methods);
+				} else {
+					loadAssessmentMethods();
 				}
-				courseID = assessmentInfo.courseID;
-				//IsLog.c(InlineAssessment.prototype.allTypes[Object.keys(assessmentInfo.typeObject)[0]]);
-				if(courseID === false){
-					teacherStudent = "Teacher";
-				}else{
-					teacherStudent = "Student";	
-				}
-				initAssessmentObjects();
-			},
-			"json"
+			}, "json"
 		);
 	}
+}
+function loadAssessmentMethods() {
+	var assessmentInfo = InlineAssessment.prototype;
+	for(var i=0; i < assessmentElements.length; i++) {
+		var typeName =  $(assessmentElements[i]).attr("type");
+		for(var b=0; b < assessmentInfo.allTypes[typeName].methods.length; b++) {
+			if(typeof assessmentInfo.allTypes[typeName].methods[b].handler == "string") {
+				IsLog.c("Assigning handler for "+typeName+":"+assessmentInfo.allTypes[typeName].methods[b].name);
+				var funcString = assessmentInfo.allTypes[typeName].methods[b].handler;
+				//IsLog.c(funcString);
+				var defineString = "InlineAssessment.prototype.allTypes[\""+typeName+"\"].methods["+b+"].handler = "+funcString+"";
+				try {
+					eval(defineString);
+				} catch (err) {
+					IsLog.c("Error: type method string failed eval(): " + err.message);
+					throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
+				}
+				if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
+					IsLog.c("Error: Failed to assign handler!");
+			}
+		}
+		courseID = assessmentInfo.courseID;
+		//IsLog.c(InlineAssessment.prototype.allTypes[Object.keys(assessmentInfo.typeObject)[0]]);
+		if(courseID === false){
+			teacherStudent = "Teacher";
+		}else{
+			teacherStudent = "Student";	
+		}
+	}
+	initAssessmentObjects();
 }
 
 function collectAssessmentElements() {
@@ -350,6 +372,7 @@ function collectAssessmentElements() {
 	return retArray;
 }
 function initAssessmentObjects() {
+	IsLog.c(window['InlineAssessment'].prototype);
 	for(var a=0; a < assessmentElements.length; a++) {
 		assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
 	}
