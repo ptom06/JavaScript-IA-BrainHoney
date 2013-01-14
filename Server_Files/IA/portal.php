@@ -23,11 +23,7 @@ try {
 	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
 	$typeObjectFH = fopen("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json", "r");
 	$typeObject = fread($typeObjectFH, filesize("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"));
-<<<<<<< HEAD
-	$return_json .= "\"file-modified-time\":\"".filemtime("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json")."\"";
-=======
 	$return_json .= "\"file-modified-time\":\"".date("r", filemtime("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"))."\",";
->>>>>>> origin/13/01/14-Luke
 	fclose($typeObjectFH);
 	//$typeObject = preg_replace("/\\/","\\\\",$typeObject);
 	//$typeObject = preg_replace("/\"/","\\\"",$typeObject);
