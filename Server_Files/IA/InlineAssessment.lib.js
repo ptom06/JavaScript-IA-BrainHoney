@@ -154,6 +154,7 @@ function InlineAssessment(elementArg) {
 			//IsLog.c(this.allTypes[this.type]);
 			//IsLog.c(this.allTypes[this.type].methods[i]);
 			if(this.allTypes[this.type].methods[i].fireAutomatically === true) {
+				IsLog.c("Setting the handler "+this.allTypes[this.type].methods[i].name+" and running it.");
 				this.allTypes[this.type].methods[i].handler();
 			}
 			if(this.allTypes[this.type].methods[i].id)
