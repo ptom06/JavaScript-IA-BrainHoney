@@ -12,8 +12,8 @@
 		"		</div>" +
 		"	 </div>" +
 		"	<br /> " + 
-		"	<input class=\"in\" type=\"submit\" action=\"vstart\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input type=\"submit\" name=\"done\" id=\"done\" value=\"Done\" onClick=\"doneClicked();\" />" +
+		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
 		"	<textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
@@ -94,6 +94,12 @@
 "<div id=\"jsonR\"></div></form>",#CONFIG#
 	"methods": 
 	[
+		{
+			"name":	"rightClick",
+			"fireAutomatically": "true",
+			"type": "click",
+			"handler": "function() {disableCtrlKeyCombination();}"
+		},
 		#INPUT#{
 			"name": "startClick",
 			"type": "click",
