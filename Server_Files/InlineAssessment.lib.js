@@ -378,7 +378,7 @@ function initAssessmentObjects() {
 	}
 }
 function checkGradeCompletion() {
-	IsLog.c("The document is "+((! $.isReady )?"not ":"")+"finished loading.");
+	IsLog.c("IA SCORM+ API:The document is "+((! $.isReady )?"not ":"")+"finished loading.");
 	for(var a=0; a < assessmentElements.length; a++) {
 		if(typeof getScore == "function")
 			var scormGrade = getScore();
