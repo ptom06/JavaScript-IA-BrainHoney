@@ -261,6 +261,28 @@ function parseAssessmentObjects() {
 					var typeName = Object.keys(assessmentInfo.typeObject)[0];
 					InlineAssessment.prototype.allTypes[typeName] = assessmentInfo.typeObject[Object.keys(assessmentInfo.typeObject)[0]];
 					if(assessmentInfo.typeObject[typeName].methods) {
+						//	Make sure required scripts are loaded...
+						if(typeof getScript != "function") {
+							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
+							$.cachedScript(scriptLoc).done(function(script, textStatus) {
+								IsLog.c(script + ": " + textStatus);
+							});
+						}
+						if(typeof initializeAPI != "function") {
+							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
+							$.cachedScript(scriptLoc).done(function(script, textStatus) {
+								IsLog.c(script + ": " + textStatus);
+							});
+						}
+						if(InlineAssessment.prototype.allTypes[typeName].scripts) {
+							for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
+								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
+								$.cachedScript(scriptLoc).done(function(script, textStatus) {
+									IsLog.c(script + ": " + textStatus);
+								});
+							}
+						}
+						
 						for(var b=0; b < assessmentInfo.typeObject[typeName].methods.length; b++) {
 							if(typeof assessmentInfo.typeObject[typeName].methods[b].handler == "string") {
 								IsLog.c("Assigning handler for "+typeName+":"+assessmentInfo.typeObject[typeName].methods[b].name);
@@ -279,28 +301,6 @@ function parseAssessmentObjects() {
 					}
 					//IsLog.c(InlineAssessment.prototype.allTypes[typeName].methods);
 				}
-				//	Make sure required scripts are loaded...
-				if(typeof getScript != "function") {
-					var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
-					$.cachedScript(scriptLoc).done(function(script, textStatus) {
-						IsLog.c(script + ": " + textStatus);
-					});
-				}
-				if(typeof initializeAPI != "function") {
-					var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
-					$.cachedScript(scriptLoc).done(function(script, textStatus) {
-						IsLog.c(script + ": " + textStatus);
-					});
-				}
-				if(InlineAssessment.prototype.allTypes[typeName].scripts) {
-					for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
-						var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
-						$.cachedScript(scriptLoc).done(function(script, textStatus) {
-							IsLog.c(script + ": " + textStatus);
-						});
-					}
-				}
-				
 				courseID = assessmentInfo.courseID;
 				//IsLog.c(InlineAssessment.prototype.allTypes[Object.keys(assessmentInfo.typeObject)[0]]);
 				if(courseID === false){

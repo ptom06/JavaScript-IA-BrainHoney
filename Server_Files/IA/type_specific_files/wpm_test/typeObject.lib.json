@@ -98,7 +98,7 @@
 			"name":	"rightClick",
 			"fireAutomatically": "true",
 			"type": "click",
-			"handler": "disableCtrlKeyCombination();",
+			"handler": "disableCtrlKeyCombination();"
 		},
 		#INPUT#{
 			"name": "startClick",
