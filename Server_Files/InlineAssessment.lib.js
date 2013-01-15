@@ -77,7 +77,7 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
-		if(teacherStudent == "Teacher" && this.allTypes[this.type].configurationElementString){
+		if(this.allTypes[this.type].teacherStudent == "Teacher" && typeof this.allTypes[this.type].configurationElementString == "string"){
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		}else{
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
@@ -85,6 +85,7 @@ function InlineAssessment(elementArg) {
 		
 		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
 		this.DOMNodes = DOMNodesCreate;										//adds to the proper place in the HTML page
+		//IsLog.c("Type set to "+this.type+" and created "+((this.DOMNodes.length)?this.DOMNodes.length:this.DOMNodes));
 		return this.type;
 	}
 	
@@ -108,12 +109,23 @@ function InlineAssessment(elementArg) {
 		//	We no longer want to empty the element, we sometimes need there to be content to describe the activity which is particular to the instance on the page - not global for the IA type.
 		//	this.emptyElement();
 		if(this.displayed) {
-			for(var i=0; i < this.DOMNodes.length; i++)
-				this.element.removeChild( this.DOMNodes[i] );
+			if(this.DOMNodes.length) {
+				for(var i=0; i < this.DOMNodes.length; i++)
+					this.element.removeChild( this.DOMNodes[i] );
+			} else {
+				this.element.removeChild( this.DOMNodes );
+			}
 		}
 		if( this.DOMNodes ) {
-			for(var i=0; i < this.DOMNodes.length; i++)
-				this.element.appendChild( this.DOMNodes[i] );
+			//IsLog.c("Appending "+this.DOMNodes.length+" elements.");
+			if(this.DOMNodes.length) {
+				for(var i=0; i < this.DOMNodes.length; i++) {
+					//IsLog.c( this.DOMNodes[i] );
+					this.element.appendChild( this.DOMNodes[i] );
+				}
+			} else {
+				this.element.appendChild( this.DOMNodes );
+			}
 		} else {
 			throw "Error (Inline Assessment): the intended DOM elements are invalid.";
 			return false;
@@ -121,14 +133,28 @@ function InlineAssessment(elementArg) {
 		this.displayed = true;
 		//	This section disables the handlers and adds a display for the submission if the assessment has already been done.
 		if(!this.allowRedo) {
-			for(var e=0; e < this.DOMNodes.length; e++) {
-				$(this.DOMNodes).off("*");
+			if(this.DOMNodes.length) {
+				for(var e=0; e < this.DOMNodes.length; e++) {
+					//$(this.DOMNodes).off("*");
+					$(this.DOMNodes).unbind();
+					$(this.DOMNodes).unbind("click");
+					$(this.DOMNodes).unbind("change");
+					if((["input","button","textarea","radio","select","option","fieldset","label"]).indexOf(this.DOMNodes.tagName)) {
+						$(this.DOMNodes).attr("disabled", "disabled");
+					}
+				}
+			} else {
+				//$(this.DOMNodes).off("*");
 				$(this.DOMNodes).unbind();
 				$(this.DOMNodes).unbind("click");
 				$(this.DOMNodes).unbind("change");
-				if((["input","button","textarea","radio","select","option","fieldset","label"]).indexOf(this.DOMNodes.tagName)) {
-					$(this.DOMNodes).attr("disabled", "disabled");
-				}
+			}
+			var allInputs = $(this.DOMNodes).find("input button textarea radio select option fieldset label");
+			for(var k=0; k < allInputs.length; k++) {
+				$(allInputs[k]).attr("disabled", "disabled");
+			}
+			if((["input","button","textarea","radio","select","option","fieldset","label"]).indexOf(this.DOMNodes.tagName)) {
+				$(this.DOMNodes).attr("disabled", "disabled");
 			}
 		}
 		//	Detect if the SCORM+ API is loaded and then check to see if the assessment has been completed
@@ -222,22 +248,11 @@ InlineAssessment.prototype.allTypes = 	this.allTypes = {		//all the available ty
 };
 
 var assessmentElements;
-
-if(! $.isReady ) {
-	IsLog.c("IA: Document not yet ready...");
-	$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
-		parseAssessmentObjects();
-	});
-} else {
-	IsLog.c("IA: Document was ready.");
-	parseAssessmentObjects();
-}
-
-var assessmentElements;
 var scriptsToLoadIA = [];
 var scriptsToLoadIAIndex = 0;
 function parseAssessmentObjects() {
 	assessmentElements = collectAssessmentElements();
+	//IsLog.c("IA: found "+assessmentElements.length+" assessment element(s).");
 	for(var a=0; a < assessmentElements.length; a++) {
 		
 		$.post(
@@ -263,11 +278,14 @@ function parseAssessmentObjects() {
 				if(assessmentInfo.typeObject != null) {
 					var typeName = Object.keys(assessmentInfo.typeObject)[0];
 					InlineAssessment.prototype.allTypes[typeName] = assessmentInfo.typeObject[Object.keys(assessmentInfo.typeObject)[0]];
+					InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Student";
+					if(assessmentInfo.courseID == false || assessmentInfo.courseID == "false")
+						InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
 					if(assessmentInfo.typeObject[typeName].methods) {
 						//	Make sure required scripts are loaded...
 						if(typeof getScript != "function") {
 							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
-							IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loadinh filesToLoad.js");
+							IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loading filesToLoad.js");
 							$.cachedScript(scriptLoc).done(function(script, textStatus) {
 								IsLog.c(arguments);
 								IsLog.c(script + ": " + textStatus);
@@ -295,7 +313,8 @@ function parseAssessmentObjects() {
 									}
 								});
 							}
-						}
+						}else
+							loadAssessmentMethods();
 					} else {
 						loadAssessmentMethods();
 					}
@@ -372,10 +391,11 @@ function collectAssessmentElements() {
 	return retArray;
 }
 function initAssessmentObjects() {
-	IsLog.c(window['InlineAssessment'].prototype);
+	//IsLog.c(window['InlineAssessment'].prototype);
 	for(var a=0; a < assessmentElements.length; a++) {
 		assessmentElements[a] = new InlineAssessment(assessmentElements[a]);
 	}
+	//IsLog.c(assessmentElements[a]);
 }
 function checkGradeCompletion() {
 	IsLog.c("IA SCORM+ API:The document is "+((! $.isReady )?"not ":"")+"finished loading.");
@@ -433,4 +453,14 @@ if( typeof jQuery.cachedScript != "function" ) {
 		// Return the jqXHR object so we can chain callbacks
 		return jQuery.ajax(options);
 	};
+}
+
+if(! $.isReady ) {
+	IsLog.c("IA: Document not yet ready...");
+	$(document).ready(function(){								//this is the main part of the function. It creates an array of inline assesments. As it creates the array, it formats them each properly. This means we can have multiple inline assesment tags on a single page
+		parseAssessmentObjects();
+	});
+} else {
+	IsLog.c("IA: Document was ready.");
+	parseAssessmentObjects();
 }
