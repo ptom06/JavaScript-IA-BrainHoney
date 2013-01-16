@@ -45,6 +45,7 @@ function InlineAssessment(elementArg) {
 			throw 'Error (Inline Assessment): element must be a valid dom element.'; 
 		}
 		this.element = elementArg;
+		$(this.element).attr("id", "ia"+this.id);
 		this.setType( this.element ); 
 		this.display( this.element );
 		if (this.allTypes[this.type].methods.length > 0){
@@ -108,20 +109,35 @@ function InlineAssessment(elementArg) {
 	this.display = function() {			//adds formatted information to the proper DOM node
 		//	We no longer want to empty the element, we sometimes need there to be content to describe the activity which is particular to the instance on the page - not global for the IA type.
 		//	this.emptyElement();
+		if($($("#ia"+this.id)[0]).html().indexOf($(this.DOMNodes).html()) > -1)
+			this.displayed = true;
 		if(this.displayed) {
-			if(this.DOMNodes.length) {
-				for(var i=0; i < this.DOMNodes.length; i++)
-					this.element.removeChild( this.DOMNodes[i] );
+			if(!(this.DOMNodes instanceof HTMLElement)) {
+				for(var i=0; i < this.DOMNodes.length; i++) {
+					$($("#ia"+this.id)[0]).html($($("#ia"+this.id)[0]).html().replace($(this.DOMNodes).html(),""));
+					IsLog.c("apparently display has happened once already.");
+					if($(this.DOMNodes[i]))
+						$(this.DOMNodes[i]).remove();
+					else
+						IsLog.c("Error: Failed to remove the DOMNode["+i+"]");
+					//this.element.removeChild( this.DOMNodes[i] );
+				}
 			} else {
-				this.element.removeChild( this.DOMNodes );
+				$(this.DOMNodes).remove();
+				//this.element.removeChild( this.DOMNodes );
 			}
 		}
 		if( this.DOMNodes ) {
-			//IsLog.c("Appending "+this.DOMNodes.length+" elements.");
-			if(this.DOMNodes.length) {
+			if(!(this.DOMNodes instanceof HTMLElement)) {
 				for(var i=0; i < this.DOMNodes.length; i++) {
-					//IsLog.c( this.DOMNodes[i] );
-					this.element.appendChild( this.DOMNodes[i] );
+					if($("#ia"+this.id).find($(this.DOMNodes[i])).length == 0) {
+						this.element.appendChild( this.DOMNodes[i] );
+						if($(this.DOMNodes[i]).attr("id") == undefined)
+							$(this.DOMNodes[i]).attr("id", getUniqueDOMId());
+						else
+							IsLog.c("DOMNode id: "+$(this.DOMNodes[i]).attr("id"));
+					} else
+						IsLog.c("Skipping element, already found.");
 				}
 			} else {
 				this.element.appendChild( this.DOMNodes );
@@ -178,9 +194,9 @@ function InlineAssessment(elementArg) {
 			if(typeof this.allTypes[this.type].methods[i].handler == "string")
 				IsLog.c("Error: The handler for "+this.type+":"+this.allTypes[this.type].methods[i].name+" appears to be a string?");		//this.allTypes[this.type].methods[i].handler = eval(this.allTypes[this.type].methods[i].handler);
 			//IsLog.c(this.allTypes[this.type]);
-			IsLog.c("Processing "+this.allTypes[this.type].methods[i].name);
+			IsLog.c("Assigning handler: "+this.type+":"+this.allTypes[this.type].methods[i].name+"["+this.allTypes[this.type].methods[i].type+"]");
 			if(this.allTypes[this.type].methods[i].fireAutomatically == true || this.allTypes[this.type].methods[i].fireAutomatically == "true") {
-				IsLog.c("Setting the handler "+this.allTypes[this.type].methods[i].name+" and running it.");
+				IsLog.c("AutoFiring the handler: "+this.type+":"+this.allTypes[this.type].methods[i].name+"");
 				this.allTypes[this.type].methods[i].handler();
 			}
 			var inputElement;
@@ -246,83 +262,87 @@ InlineAssessment.prototype.allTypes = 	this.allTypes = {		//all the available ty
 			]
 	}
 };
-
-var assessmentElements;
-var scriptsToLoadIA = [];
-var scriptsToLoadIAIndex = 0;
+if(typeof assessmentElements == "undefined")
+	var assessmentElements;
+if(typeof scriptsToLoadIA == "undefined")
+	var scriptsToLoadIA = [];
+if(typeof scriptsToLoadIAIndex == "undefined")
+	var scriptsToLoadIAIndex = 0;
 function parseAssessmentObjects() {
 	assessmentElements = collectAssessmentElements();
 	//IsLog.c("IA: found "+assessmentElements.length+" assessment element(s).");
 	for(var a=0; a < assessmentElements.length; a++) {
-		
-		$.post(
-			//"portal.php",
-			portalURL,
-			{
-				"ia_type":		$(assessmentElements[a]).attr("type"),
-				"action":		"check",
-				"domain":		bhDomain,
-				"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
-				"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
-				"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
-				"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
-			},
-			//{action: "start", bhCourseID:window.parent.bhCourseId },
-			//For when the files save properly
-			function(data){
-				if(typeof data === "string") {
-					var assessmentInfo = JSON.parse(data);
-				} else {
-					var assessmentInfo = data;
-				}
-				if(assessmentInfo.typeObject != null) {
-					var typeName = Object.keys(assessmentInfo.typeObject)[0];
-					InlineAssessment.prototype.allTypes[typeName] = assessmentInfo.typeObject[Object.keys(assessmentInfo.typeObject)[0]];
-					InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Student";
-					if(assessmentInfo.courseID == false || assessmentInfo.courseID == "false")
-						InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
-					if(assessmentInfo.typeObject[typeName].methods) {
-						//	Make sure required scripts are loaded...
-						if(typeof getScript != "function") {
-							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
-							IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loading filesToLoad.js");
-							$.cachedScript(scriptLoc).done(function(script, textStatus) {
-								IsLog.c(arguments);
-								IsLog.c(script + ": " + textStatus);
-							});
-						}
-						if(typeof initializeAPI != "function") {
-							var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
-							$.cachedScript(scriptLoc).done(function(script, textStatus) {
-								IsLog.c(script + ": " + textStatus);
-							});
-						}
-						if(InlineAssessment.prototype.allTypes[typeName].scripts) {
-							InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
-							for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
-								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
-								IsLog.c(scriptLoc);
-								$.cachedScript(scriptLoc,{"dataType": "script","cache": true,"url": scriptLoc,"async": false}).done(function(script, textStatus) {
-									//IsLog.c(InlineAssessment.prototype.allTypes[typeName]);
-									InlineAssessment.prototype.allTypes[typeName].scriptIndex++;
-									//IsLog.c(arguments);
-									//IsLog.c(script + ": " + textStatus);
-									if(InlineAssessment.prototype.allTypes[typeName].scriptIndex == InlineAssessment.prototype.allTypes[typeName].scripts.length) {
-										IsLog.c("script loading complete!");
-										loadAssessmentMethods();
-									}
+		if(assessmentElements[a] instanceof HTMLElement) {
+			$.post(
+				//"portal.php",
+				portalURL,
+				{
+					"ia_type":		$(assessmentElements[a]).attr("type"),
+					"action":		"check",
+					"domain":		bhDomain,
+					"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
+					"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
+					"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
+					"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+				},
+				//{action: "start", bhCourseID:window.parent.bhCourseId },
+				//For when the files save properly
+				function(data){
+					if(typeof data === "string") {
+						var assessmentInfo = JSON.parse(data);
+					} else {
+						var assessmentInfo = data;
+					}
+					if(assessmentInfo.typeObject != null) {
+						var typeName = Object.keys(assessmentInfo.typeObject)[0];
+						InlineAssessment.prototype.allTypes[typeName] = assessmentInfo.typeObject[Object.keys(assessmentInfo.typeObject)[0]];
+						InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Student";
+						if(assessmentInfo.courseID == false || assessmentInfo.courseID == "false")
+							InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
+						if(assessmentInfo.typeObject[typeName].methods) {
+							//	Make sure required scripts are loaded...
+							if(typeof getScript != "function") {
+								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
+								IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loading filesToLoad.js");
+								$.cachedScript(scriptLoc).done(function(script, textStatus) {
+									IsLog.c(arguments[2].getResponseHeader("ETag") + ": " + textStatus);
 								});
 							}
-						}else
+							if(typeof initializeAPI != "function") {
+								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
+								$.cachedScript(scriptLoc).done(function(script, textStatus) {
+									IsLog.c(arguments[2].getResponseHeader("ETag") + ": " + textStatus);
+								});
+							}
+							if(InlineAssessment.prototype.allTypes[typeName].scripts) {
+								InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
+								for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
+									var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
+									IsLog.c(scriptLoc);
+									$.cachedScript(scriptLoc,{"dataType": "script","cache": true,"url": scriptLoc,"async": false}).done(function(script, textStatus) {
+										//IsLog.c(InlineAssessment.prototype.allTypes[typeName]);
+										InlineAssessment.prototype.allTypes[typeName].scriptIndex++;
+										//IsLog.c(arguments);
+										//IsLog.c(script + ": " + textStatus);
+										if(InlineAssessment.prototype.allTypes[typeName].scriptIndex == InlineAssessment.prototype.allTypes[typeName].scripts.length) {
+											IsLog.c("script loading complete!");
+											loadAssessmentMethods();
+										}
+									});
+								}
+							}else
+								loadAssessmentMethods();
+						} else {
 							loadAssessmentMethods();
+						}
 					} else {
 						loadAssessmentMethods();
 					}
-				} else {
-					loadAssessmentMethods();
-				}
-			}, "json"
-		);
+				}, "json"
+			);
+		} else {
+			IsLog.c("Not re-initializing the inline assessment element. It appears to already have been processed.");
+		}
 	}
 }
 function loadAssessmentMethods() {
@@ -331,7 +351,7 @@ function loadAssessmentMethods() {
 		var typeName =  $(assessmentElements[i]).attr("type");
 		for(var b=0; b < assessmentInfo.allTypes[typeName].methods.length; b++) {
 			if(typeof assessmentInfo.allTypes[typeName].methods[b].handler == "string") {
-				IsLog.c("Assigning handler for "+typeName+":"+assessmentInfo.allTypes[typeName].methods[b].name);
+				IsLog.c("Building handler for "+typeName+":"+assessmentInfo.allTypes[typeName].methods[b].name+"["+assessmentInfo.allTypes[typeName].methods[b].type+"]");
 				var funcString = assessmentInfo.allTypes[typeName].methods[b].handler;
 				//IsLog.c(funcString);
 				var defineString = "InlineAssessment.prototype.allTypes[\""+typeName+"\"].methods["+b+"].handler = "+funcString+"";
