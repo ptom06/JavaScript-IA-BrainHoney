@@ -209,6 +209,12 @@ function InlineAssessment(elementArg) {
 			//IsLog.c(inputElement);
 			if(inputElement != null) {
 				for(var j=0; j < inputElement.length; j++) {
+					$.each($(inputElement[j]).data('events', function(index, event){
+						$.each(event, function(index2, handler){
+							
+						});
+					});
+					//.off(this.allTypes[this.type].methods[i].type);
 					switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
 					//Onload has already been run.
 						case "change":
