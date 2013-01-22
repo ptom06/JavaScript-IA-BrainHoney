@@ -83,24 +83,31 @@
 			"handler":"function(){
 				var startCount = 0;
 				startCount++;
+				IsLog.c(startCount);
 				if (startCount == 1){
 					$.post(
 						portalURL,
 						{
 							\"ia_type\":		\"wpm_test\",
-							\"action\": 		\"start\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+							\"action\": \"start\",
 						},
 						/*For when the files save properly*/
 						function(data){
-							if(typeof data === \"string\")
+							if(typeof data === \"string\"){
 								text_area = JSON.parse(data);
-							else
+							}else{
 								text_area = data;
+							}
 							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
 							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
 							var seconds = text_area.time; 
-							//IsLog.c(seconds);
+							IsLog.c(seconds);
 							InitTimer(seconds);
+							IsLog.c(\"Timer should have started\");
 						},
 						\"json\"
 					);
@@ -120,6 +127,7 @@
 						window.clearInterval(intervalVar);
 					}
 				}
+				
 			}"
 		},
 		{
@@ -159,6 +167,7 @@
 			"type": "click",
 			"id": "done",
 			"handler":"function(){
+				var doneCount=0;
 				doneCount++;
 				userInput = $('textarea#userText').val();
 				var Jstring = JSON.stringify(userInput);

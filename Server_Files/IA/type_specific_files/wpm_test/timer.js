@@ -64,4 +64,3 @@ function Pad(number) //pads the mins/secs with a 0 if its less than 10
        number=0 + "" + number;
     return number;
  }
-

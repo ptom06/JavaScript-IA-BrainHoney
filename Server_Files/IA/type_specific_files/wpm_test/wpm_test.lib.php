@@ -21,24 +21,24 @@ function startup($les_text){
 }
 
 	/* if you hit start, timer starts and text is adjusted */
-function start(){
-	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID;
-	//$bhCourseID=$POST_GET['bhCourseID'];
-	//only needed for testing
-	$les_text = $POST_GET['text'];
-	$timeLimit = $POST_GET['timeLimit'];
-	$errorPenalty=$POST_GET['pointsOff'];
-	$goalWPM=$POST_GET['expectedWPM'];
-	$percentPoints=$POST_GET['errorType'];
-	//
+function start() {
+	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID,$POST_GET;
+	
+	$course_info=file_get_contents(check("configfile"));
+	$conf_obj = json_decode($course_info,true);
+	
+	$goalWPM=$conf_obj['expectedWPM'];
+	$errorPenalty=$conf_obj['errorValue'];
+	$percentPoints=$conf_obj['errorValueType'];
+	$les_text=$conf_obj['text'];
+	$timeLimit=$conf_obj['timeLimit'];
+	
 	$time_start=microtime(true);
-	//$courseInfo=file_get_contents( "courses.".$bhCourseID.".txt" );
-	//$obj = json_decode($courseInfo);
-	$time_start = 
+	
 	$_SESSION['start'] = $time_start;
 	$_SESSION['errorPenalty'] = ($errorPenalty/100);
-	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['percentPoints'] = $percentPoints;
+	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['text']=$les_text;
 	$readonly="";
 	$welcome="";
