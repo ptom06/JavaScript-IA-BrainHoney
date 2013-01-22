@@ -19,6 +19,8 @@ if(!loc)
 	var isserver = (!devRegEx.test(loc.hostname))?"":"dev";
 
 var portalURL = "https://is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
+if(loc.hostname == "localhost")
+	portalURL = "http://localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
 //IsLog.c("using: "+portalURL);
 
 if(!scriptsToLoadIA)
@@ -301,9 +303,12 @@ function parseAssessmentObjects() {
 							InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
 						if(assessmentInfo.typeObject[typeName].methods) {
 							//	Make sure required scripts are loaded...
-							if(typeof getScript != "function" && loc.hostname.indexOf(/localhost/i) == -1) {
+							var localhostRegEx = new RegExp("localhost", "i");
+							if(typeof getScript != "function" && !(localhostRegEx.test(loc.hostname))) {
+								IsLog.c("Location: " + loc.hostname);
+								IsLog.c("Location indexOf:" + localhostRegEx.test(loc.hostname));
 								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/HTML_Resources/JavaScript/File_Loader/filesToLoad.js";
-								IsLog.c("getScript wasn't set yet... adding $.cachedScript to jQuery and loading filesToLoad.js");
+								IsLog.c("IA getScript wasn't set yet... adding $.cachedScript to jQuery and loading filesToLoad.js");
 								$.cachedScript(scriptLoc).done(function(script, textStatus) {
 									IsLog.c(arguments[2].getResponseHeader("ETag") + ": " + textStatus);
 								});
@@ -311,7 +316,7 @@ function parseAssessmentObjects() {
 							if(typeof initializeAPI != "function") {
 								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
 								$.cachedScript(scriptLoc).done(function(script, textStatus) {
-									IsLog.c(arguments[2].getResponseHeader("ETag") + ": " + textStatus);
+									IsLog.c("IA "+arguments[2].getResponseHeader("ETag") + ": " + textStatus);
 								});
 							}
 							if(InlineAssessment.prototype.allTypes[typeName].scripts) {
@@ -483,4 +488,16 @@ if(! $.isReady ) {
 } else {
 	IsLog.c("IA: Document was ready.");
 	parseAssessmentObjects();
+}
+
+if(typeof getUniqueDOMId != "function") {
+	function getUniqueDOMId() {
+		var randomId = ((arguments[0] == undefined)?"rid":arguments[0])+(Math.round(Math.random()*4095)).toString(16);
+		var loopCount = 0;
+		var maxLoops = 100;
+		while(loopCount < maxLoops && $("#"+randomId) == null) {
+			randomId = ((arguments[0] == undefined)?"rid":arguments[0])+(Math.round(Math.random()*1000)).toString(16);
+		}
+		return randomId;
+	}
 }
