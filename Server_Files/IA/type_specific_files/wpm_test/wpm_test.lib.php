@@ -134,7 +134,7 @@ function getScoreTable() {
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
     $results .= "   </tr>";*/
 	//
-	$results .= "   <td>&nbsp;</td>";
+	//$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
 	return $results;
 }

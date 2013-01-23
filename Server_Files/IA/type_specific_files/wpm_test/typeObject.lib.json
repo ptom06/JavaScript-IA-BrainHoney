@@ -4,25 +4,43 @@
 		"checker.js",
 		"copyPaste.js"
 	],
-	#INPUT#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
+	#EXAM#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
 		"	<br />\n" +
 		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">" +
-		"	<textarea id=\"area1\"  onkeydown=\"return disableCtrlKeyCombination(event);\" onKeyUp=\"return disableCtrlKeyCombination(event);\"  style=\"font-family:Arial, Helvetica, sans-serif;\" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-168px;left:0px;  width:inherit;  height:inherit;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	<textarea id=\"area1\"  style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
+		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"		</div>" +
 		"	 </div>" +
 		"	<br /> " + 
 		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
 		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>",#INPUT#
+		" 	</div></form>",#EXAM#
+		#PRAC#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">" +
+		"	Practice #<select id=\"PracSelect\" >" +
+		"		<option selected=\"selected\">--Select Practice--</option>" +
+		"	</select>"
+		"	<br />\n" +
+		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">" +
+		"	<textarea id=\"area1\"  style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
+		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"		</div>" +
+		"	 </div>" +
+		"	<br /> " + 
+		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
+		"	 <br /> " + 
+		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<br />  " +
+		"	<div id=\"scoreTable\" >" +				 
+		" 	</div></form>",#PRAC#
 	#CONFIG#"configurationElementString":"<h2 style=\"color:teal\">Typing Assessment Configurator</h2>" +
 		"<select id=\"pracFin\" >" +
 		"	<option value=\"practice\">Practice</option>" +
-		"	<option value=\"test\">Test</option>" +
+		"	<option value=\"exam\">Exam</option>" +
 		"</select>" +
 		"<div id=\"practiceDiv\">" +
 		"	<div class=\"align-left\">" +
@@ -76,7 +94,7 @@
 	"methods": 
 	[
 		
-		#INPUT#{
+		#EXAM#{
 			"name": "startClick",
 			"type": "click",
 			"id": "vStart",
@@ -188,7 +206,120 @@
 				}
 				setScore(table.grade);
 			}"
-		}#INPUT#
+		}#EXAM#
+		#PRAC#{
+			"name": "startClick",
+			"type": "click",
+			"id": "vStart",
+			"handler":"function(){
+				var startCount = 0;
+				startCount++;
+				IsLog.c(startCount);
+				if (startCount == 1){
+					$.post(
+						portalURL,
+						{
+							\"ia_type\":		\"wpm_test\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+							\"action\": \"start\",
+						},
+						/*For when the files save properly*/
+						function(data){
+							if(typeof data === \"string\"){
+								text_area = JSON.parse(data);
+							}else{
+								text_area = data;
+							}
+							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+							var seconds = text_area.time; 
+							IsLog.c(seconds);
+							InitTimer(seconds);
+							IsLog.c(\"Timer should have started\");
+						},
+						\"json\"
+					);
+				}
+				var message=\"Sorry, right-click has been disabled\"; 
+				function clickIE() {if (document.all) {(message);return false;}} 
+				function clickNS(e) {if 
+				(document.layers||(document.getElementById&&!document.all)) { 
+				if (e.which==2||e.which==3) {(message);return false;}}} 
+				if (document.layers) 
+					{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
+				else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
+				document.oncontextmenu=new Function(\"return false\");
+				function submitScores() {
+					if(initialized == true && doneClicked == true) {
+						setScore(cpm);
+						window.clearInterval(intervalVar);
+					}
+				}
+				
+			}"
+		},
+		{
+			"name":	"rightClick",
+			"id":"area1",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				if(e == null) {
+					e = arguments[0];
+				}
+				IsLog.c(\"Disabled event type \"+e.type);
+				return false;
+			}"
+		},
+		{
+			"name":	"rightClick",
+			"id":"userText",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				if(e == null) {
+					e = arguments[0];
+				}
+				//IsLog.c(e);
+				if(e.type == \"contextmenu\")
+					return false;
+				if(e.type.indexOf(\"mouse\") > -1) {
+					this.focus();
+					return false;
+				}
+				if(e.ctrlKey == true) {
+					return false;
+				}
+			}"
+		},
+		{
+			"name": "doneClick",
+			"type": "click",
+			"id": "done",
+			"handler":"function(){
+				var doneCount=0;
+				doneCount++;
+				userInput = $('textarea#userText').val();
+				var Jstring = JSON.stringify(userInput);
+				if (doneCount == 1){
+					$.post(
+						portalURL,
+						{
+							\"ia_type\":		\"wpm_test\",
+							\"action\":		\"done\",
+							\"ui\":			userInput
+						},
+						function(data){
+							table = JSON.parse(data);
+							document.getElementById(\"scoreTable\").innerHTML = table.scores;
+							StopTimer();
+						}
+					);
+				}
+				setScore(table.grade);
+			}"
+		}#PRAC#
 		#CONFIG#{
 			"name": "startup",
 			"fireAutomatically": true,
@@ -270,7 +401,7 @@
 						portalURL,
 						{
 							\"ia_type\":\"wpm_test\",
-							\"type\":\"final\",
+							\"type\":$(\"#pracFin\").val(),
 							\"JSONString\":JSONString,
 							\"domain\": bhDomain,
 							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",

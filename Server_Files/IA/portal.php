@@ -98,7 +98,7 @@ function create($filename=null){
 }
 
 function check($return_val="json"){
-	global $POST_GET,$courseID;
+	global $POST_GET,$courseID,$prac_exam;
 	$bhCourseID = $POST_GET['courseID'];
 	//print_r($POST_GET);
 	$file_name_parts = array("itemID","domain","courseID","itemTitle","json");	//	These are the possible parts of the filename to check for
@@ -125,6 +125,10 @@ function check($return_val="json"){
 		//echo "Did not find file: ".$filename."\n";
 		$courseID = false;
 	}
+	
+	$conf_obj = json_decode($filename,true);
+	$prac_exam=$conf_obj['pracFin'];
+	
 	if($return_val == "json")
 		return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
 	else if($return_val == "student") {
@@ -170,11 +174,19 @@ switch($POST_GET['action']) {
 	case "check":
 		$return_json .= check();
 		if(check("student")) {
-			$typeObject = preg_replace("/\#INPUT\#/iU","",$typeObject);
-			$typeObject = preg_replace("/\#CONFIG\#.+\#CONFIG\#/iU","",$typeObject);
+			if($prac_exam =="exam"){
+				$typeObject = preg_replace("/\#EXAM\#/iU","",$typeObject);
+				$typeObject = preg_replace("/\#PRAC\#.+\#PRAC\#/iU","",$typeObject);
+				$typeObject = preg_replace("/\#CONFIG\#.+\#CONFIG\#/iU","",$typeObject);
+			}else{
+				$typeObject = preg_replace("/\#PRAC\#/iU","",$typeObject);
+				$typeObject = preg_replace("/\#EXAM\#.+\#EXAM\#/iU","",$typeObject);
+				$typeObject = preg_replace("/\#CONFIG\#.+\#CONFIG\#/iU","",$typeObject);
+			}
 		} else {
 			$typeObject = preg_replace("/\#CONFIG\#/iU","",$typeObject);
-			$typeObject = preg_replace("/\#INPUT\#.+\#INPUT\#/iU","",$typeObject);
+			$typeObject = preg_replace("/\#EXAM\#.+\#EXAM\#/iU","",$typeObject);
+			$typeObject = preg_replace("/\#PRAC\#.+\#PRAC\#/iU","",$typeObject);
 		}
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;
