@@ -143,8 +143,11 @@ function check($return_val="json"){
 		$courseID = false;
 	}
 	
-	$conf_obj = json_decode($filename,true);
-	$prac_exam=$conf_obj['pracFin'];
+	if($POST_GET['ia_type'] == "wpm_test") {
+		$conf_obj = json_decode(file_get_contents($filename),true);
+		$prac_exam=$conf_obj['pracFin'];
+	} else {
+	}
 	
 	if($return_val == "json")
 		return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
@@ -191,20 +194,15 @@ switch($POST_GET['action']) {
 	case "check":
 		$return_json .= check();
 		
-		if(check("student")) {
-			if($prac_exam =="exam"){
-				$typeObject = preg_replace("/\#EXAM\#/iU","",$typeObject);
-				$typeObject = preg_replace("/\#PRAC\#.+\#PRAC\#/iU","",$typeObject);
-				$typeObject = preg_replace("/\#CONFIG\#.+\#CONFIG\#/iU","",$typeObject);
-			}else{
-				$typeObject = preg_replace("/\#PRAC\#/iU","",$typeObject);
-				$typeObject = preg_replace("/\#EXAM\#.+\#EXAM\#/iU","",$typeObject);
-				$typeObject = preg_replace("/\#CONFIG\#.+\#CONFIG\#/iU","",$typeObject);
+		if(is_array($type_remove_markers)) {
+			for($i=0; $i < count($type_remove_markers); $i++) {
+				if(is_array($type_remove_markers[$i])) {
+					if($type_remove_markers[$i]['remove'] == "all")
+						$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#.+\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
+					else
+						$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
+				}
 			}
-		} else {
-			$typeObject = preg_replace("/\#CONFIG\#/iU","",$typeObject);
-			$typeObject = preg_replace("/\#EXAM\#.+\#EXAM\#/iU","",$typeObject);
-			$typeObject = preg_replace("/\#PRAC\#.+\#PRAC\#/iU","",$typeObject);
 		}
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;

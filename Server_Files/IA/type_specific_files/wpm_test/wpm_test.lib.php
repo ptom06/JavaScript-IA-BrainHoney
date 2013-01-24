@@ -1,5 +1,30 @@
 <?PHP
 
+$prac_exam = true;
+if($POST_GET['action'] == "check") {
+	if(check("student")) {
+		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
+		if($prac_exam == "exam"){
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"CONFIG"),
+				array("remove"=>"all","marker"=>"PRAC"),
+				array("remove"=>"tag_only","marker"=>"EXAM")
+			);
+		}else{
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"CONFIG"),
+				array("remove"=>"all","marker"=>"EXAM"),
+				array("remove"=>"tag_only","marker"=>"PRAC")
+			);
+		}
+	} else {
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"PRAC"),
+			array("remove"=>"all","marker"=>"EXAM"),
+			array("remove"=>"tag_only","marker"=>"CONFIG")
+		);
+	}
+}
 
 	/*function to determine the number of errors */
 function GetError($str1,$str2){
@@ -19,6 +44,49 @@ function startup($les_text){
 	$wpmObj->les_text = $les_text;
 	return $wpmObj;
 }
+
+/*function checkIfFileExists($return_val="json"){
+	global $POST_GET,$courseID,$prac_exam;
+	$bhCourseID = $POST_GET['courseID'];
+	//print_r($POST_GET);
+	$file_name_parts = array("itemID","domain","courseID","itemTitle","json");	//	These are the possible parts of the filename to check for
+	$filename = "courses/".cleanString($POST_GET['courseTitle'])."/IDONTEXIST";					//	This is purely an example... this will never (and should never) exit as a valid file
+	$loopCount = 0;
+	$maxLoops = count($file_name_parts)-1;
+	while(!file_exists($filename) && $loopCount < $maxLoops) {
+		//	Loop until the file is found...
+		$filename = "courses/".cleanString($POST_GET['courseTitle']).((isset($POST_GET['courseTitle']))?"/":"");
+		foreach($file_name_parts as $part) {
+			//	Build the expected filename...
+			$filename .= cleanString((isset($POST_GET[$part]))?$POST_GET[$part]:$part).".";
+		}
+		$filename = substr($filename, 0, strlen($filename)-1);					//	Get rid of that pesky trailing "."
+		//echo "Checking for ".$filename."\n";
+		$removed_part = array_shift($file_name_parts);							//	Remove thee first value from		 the filename
+		//echo "Removed ".$removed_part."\n";
+		$loopCount++;															//	Iterate the loop counter so that we don't get all infinite on the CPU
+	}
+	if(file_exists($filename)){
+		//echo "Found file: ".$filename."\n";
+		$courseID = true;
+	}else{
+		//echo "Did not find file: ".$filename."\n";
+		$courseID = false;
+	}
+	
+	$conf_obj = json_decode($filename,true);
+	$prac_exam=$conf_obj['pracFin'];
+	
+	if($return_val == "json")
+		return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
+	else if($return_val == "student") {
+		if(file_exists($filename))
+			return true;
+		else
+			return false;
+	}else
+		return $filename;
+}*/
 
 	/* if you hit start, timer starts and text is adjusted */
 function start() {

@@ -407,7 +407,7 @@
 					
 					var formObject = {};					
 					for(var i=0; i < formInputs.length; i++) {
-						if(([\"assessmentSubmit\",\"numTexts\"]).indexOf($(formInputs[i]).attr(\"id\")) == -1) {
+						if(([\"assessmentSubmit\"]).indexOf($(formInputs[i]).attr(\"id\")) == -1) {
 							var objectKey = (($(formInputs[i]).attr(\"id\"))?$(formInputs[i]).attr(\"id\"):$(formInputs[i]).attr(\"name\"));
 							if(formObject[objectKey] == null)
 								formObject[objectKey] = ($(formInputs[i]).val());
