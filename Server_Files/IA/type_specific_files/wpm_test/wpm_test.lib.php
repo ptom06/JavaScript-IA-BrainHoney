@@ -138,4 +138,10 @@ function getScoreTable() {
     $results .= "</table>";
 	return $results;
 }
+$default_case_set = true;
+function default_case() {
+	$retString = "";
+	$retString .= "\"default-case\":\"success\"";
+	return $retString;
+}
 ?>

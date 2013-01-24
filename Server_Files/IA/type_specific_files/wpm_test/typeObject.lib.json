@@ -18,11 +18,11 @@
 		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>",#EXAM#
+		" 	</div></form>"#EXAM#
 		#PRAC#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">" +
 		"	Practice #<select id=\"PracSelect\" >" +
 		"		<option selected=\"selected\">--Select Practice--</option>" +
-		"	</select>"
+		"	</select>" +
 		"	<br />\n" +
 		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">" +
 		"	<textarea id=\"area1\"  style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
@@ -36,7 +36,7 @@
 		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>",#PRAC#
+		" 	</div></form>"#PRAC#
 	#CONFIG#"configurationElementString":"<h2 style=\"color:teal\">Typing Assessment Configurator</h2>" +
 		"<select id=\"pracFin\" >" +
 		"	<option value=\"practice\">Practice</option>" +
@@ -90,7 +90,7 @@
 		"	<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" />" +
 		"</div>" +
 		"<div id=\"result\"></div>" +
-		"<div id=\"jsonR\"></div>",#CONFIG#
+		"<div id=\"jsonR\"></div>"#CONFIG#,
 	"methods": 
 	[
 		
@@ -208,6 +208,28 @@
 			}"
 		}#EXAM#
 		#PRAC#{
+			"name": "init",
+			"fireAutomatically": true,
+			"type": "click",
+			"tag": "this_tag_doesn't exist!",
+			"handler":"function(){
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"default\",
+					},
+					function() {
+						IsLog.c(\"IA: wpm_test. practice config loaded.\");
+					}
+				);
+			}"
+		},
+		{
 			"name": "startClick",
 			"type": "click",
 			"id": "vStart",
@@ -262,7 +284,7 @@
 			}"
 		},
 		{
-			"name":	"rightClick",
+			"name":	"rightClick1",
 			"id":"area1",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
@@ -274,7 +296,7 @@
 			}"
 		},
 		{
-			"name":	"rightClick",
+			"name":	"rightClick2",
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {

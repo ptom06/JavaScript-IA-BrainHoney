@@ -19,6 +19,7 @@ if(!isset($POST_GET['ia_type'])) {
 	exit;
 }
 
+$default_case_set = false;
 try {
 	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
 	$typeObjectFH = fopen("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json", "r");
@@ -173,6 +174,7 @@ switch($POST_GET['action']) {
 	break;
 	case "check":
 		$return_json .= check();
+		
 		if(check("student")) {
 			if($prac_exam =="exam"){
 				$typeObject = preg_replace("/\#EXAM\#/iU","",$typeObject);
@@ -191,6 +193,11 @@ switch($POST_GET['action']) {
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;
 	default:
+		if(function_exists($POST_GET['action'])) {
+			$return_json .= eval("return ".$POST_GET['action']."();");
+		} else {
+			$return_json .= "\"error\":\"\\\"".$POST_GET['action']."\\\" function not defined in lib\"";
+		}
 	break;
 }
 $return_json = preg_replace('/([\:,\[])\s*null\s*([,\}\]])/i', '\1"null"\2', $return_json);
