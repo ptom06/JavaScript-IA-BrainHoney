@@ -9,6 +9,11 @@ error_reporting(E_ALL);
 ini_set('display_errors','On');
 $return_json ="{";
 
+/*	IE will only "POST" with a content-type of text/plain - therefore we have to parse it out of the raw header (which we custom-built into our IE $.post	*/
+/*	reference: https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest	*/
+if(isset($HTTP_RAW_POST_DATA)) {
+	parse_str($HTTP_RAW_POST_DATA, $_POST);
+}
 $POST_GET = array_merge($_POST, $_GET);
 
 //	The following will ensure that the properly library of functions is called and exists
@@ -20,18 +25,21 @@ if(!isset($POST_GET['ia_type'])) {
 }
 
 try {
+	$get_typeObject = null;
 	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
-	$typeObjectFH = fopen("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json", "r");
-	$typeObject = fread($typeObjectFH, filesize("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"));
-	$return_json .= "\"file-modified-time\":\"".date("r", filemtime("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"))."\",";
-	fclose($typeObjectFH);
-	//$typeObject = preg_replace("/\\/","\\\\",$typeObject);
-	//$typeObject = preg_replace("/\"/","\\\"",$typeObject);
-	$typeObject = preg_replace("/\/\/[^\n\r]+[\r\n]/i","",$typeObject);
-	$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);
-	$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);
-	$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);
-	$typeObject = preg_replace("/\/\*[.\r\n\s]+\*\//imU","",$typeObject);
+	if($POST_GET['action'] == "check" || !is_null($get_typeObject)) {
+		$typeObjectFH = fopen("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json", "r");
+		$typeObject = fread($typeObjectFH, filesize("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"));
+		$return_json .= "\"file-modified-time\":\"".date("r", filemtime("type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json"))."\",";
+		fclose($typeObjectFH);
+		//$typeObject = preg_replace("/\\/","\\\\",$typeObject);
+		//$typeObject = preg_replace("/\"/","\\\"",$typeObject);
+		$typeObject = preg_replace("/\/\/[^\n\r]+[\r\n]/i","",$typeObject);
+		$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);
+		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);
+		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);
+		$typeObject = preg_replace("/\/\*[.\r\n\s]+\*\//imU","",$typeObject);
+	}
 } catch(Exception $e) {
 	$return_json .= "\"ERROR\": \"".$e."\"";
 	echo $return_json."}";
@@ -45,7 +53,7 @@ function create($filename=null){
 	if(is_null($filename))
 		$filename = check("file");
 	$return_json = "\"filename\":".json_encode($filename);
-	$return_json .= ",{\"file_lock\":";
+	$return_json .= ",\"file_lock\":{";
 	
 		$bytes_written = 0;										//	Initialize our file write counter
 	
@@ -86,17 +94,25 @@ function create($filename=null){
 			fclose($fh);										//	... and close it.
 	
 			if($bytes_written > 0)								//	Now to let the client know what happened.
-				$return_json .= '{"status":"success","bytes_written":"'.$bytes_written.'"}';
+				$return_json .= '"status":"success","bytes_written":"'.$bytes_written.'"';
 			else
-				$return_json .= '{"status":"failure", "message":"Error:write failed!"}';
+				$return_json .= '"status":"failure", "message":"Error:write failed!"';
 		} else {
-			$return_json .= '{"status":"failure","message":"Error:file lock failed!"}';
+			$return_json .= '"status":"failure","message":"Error:file lock failed!"';
 		}
 	
-	$return_json .= "";
+	$return_json .= "}";
 	return $return_json;
 }
 
+/*
+	*	To use this function:
+		1. Give it no parameters and receive
+			a) JSON string containing the "courseID" (which will tell you if the access is for configuration or for student interaction)
+			b) the file that contains the grading configuration (or will when the configuration is saved)
+		2. Give it "student" to get the boolean return of whether or not this is the configuration interface or not.
+		3. Anything else (except nothing) will return the file path that needs to be opened to retrieve the configuration.
+*/
 function check($return_val="json"){
 	global $POST_GET,$courseID;
 	$bhCourseID = $POST_GET['courseID'];
