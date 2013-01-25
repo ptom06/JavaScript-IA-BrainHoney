@@ -1,8 +1,9 @@
 <?PHP
 
-$prac_exam = true;
+
 if($POST_GET['action'] == "check") {
 	if(check("student")) {
+		$prac_exam = $_SESSION['pracFin'];
 		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(

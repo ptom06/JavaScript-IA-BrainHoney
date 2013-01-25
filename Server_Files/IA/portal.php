@@ -148,7 +148,7 @@ function check($return_val="json"){
 		$prac_exam=$conf_obj['pracFin'];
 		$num_texts=$conf_obj['numTexts'];
 		$_SESSION['numTexts'] = $num_texts;
-		//$_SESSION['pracFin'] = $prac_exam;
+		$_SESSION['pracFin'] = $prac_exam;
 	} else {
 	}
 	
