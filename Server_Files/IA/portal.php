@@ -115,7 +115,7 @@ function create($filename=null){
 		3. Anything else (except nothing) will return the file path that needs to be opened to retrieve the configuration.
 */
 function check($return_val="json"){
-	global $POST_GET,$courseID,$prac_exam;
+	global $POST_GET,$courseID;
 	$bhCourseID = $POST_GET['courseID'];
 	//print_r($POST_GET);
 	$file_name_parts = array("itemID","domain","courseID","itemTitle","json");	//	These are the possible parts of the filename to check for
@@ -146,6 +146,9 @@ function check($return_val="json"){
 	if($POST_GET['ia_type'] == "wpm_test") {
 		$conf_obj = json_decode(file_get_contents($filename),true);
 		$prac_exam=$conf_obj['pracFin'];
+		$num_texts=$conf_obj['numTexts'];
+		$_SESSION['numTexts'] = $num_texts;
+		//$_SESSION['pracFin'] = $prac_exam;
 	} else {
 	}
 	

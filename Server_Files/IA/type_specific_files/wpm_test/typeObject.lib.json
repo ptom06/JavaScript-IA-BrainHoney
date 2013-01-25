@@ -223,8 +223,33 @@
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 						\"action\": \"default\",
 					},
-					function() {
-						IsLog.c(\"IA: wpm_test. practice config loaded.\");
+					function(data) {
+						var numTexts;
+						var JSONobj;
+						if(typeof data === \"string\"){
+							JSONobj = JSON.parse(data);
+						}else{
+							JSONobj = data;
+						}
+						IsLog.c(JSONobj);
+						numTexts = JSONobj.numTexts.val();
+						for(i = 0; i < $('#numTexts').val(); i++) {
+							var textArea = $(\"<textarea rows=\\\"8\\\" cols=\\\"64\\\" placeholder=\\\"the instructor will input the material for which the student will be assesed in this box\\\"></textarea>\");
+							textArea.attr(\"name\", \"text\");
+							var additionalFormatting = $(\"<br/>\");
+							if(textStrings[i])
+								textArea.val(window['textStrings'][i]);
+							targetElement.append(textArea);
+							targetElement.append(additionalFormatting);
+							/*	initAssessmentObjects();	*/
+						}
+						if(this instanceof HTMLElement) {
+							for(var i=0; i < assessmentElements.length; i++) {
+								if(typeof assessmentElements[i].setEvents == \"function\") {
+									assessmentElements[i].setEvents();
+								}
+							}
+						};
 					}
 				);
 			}"

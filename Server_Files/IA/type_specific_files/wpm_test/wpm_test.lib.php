@@ -210,6 +210,10 @@ $default_case_set = true;
 function default_case() {
 	$retString = "";
 	$retString .= "\"default-case\":\"success\"";
+	
+	$num_texts = $_SESSION['numTexts'];
+	$retString .= "\"numTexts\":\"".$num_texts."\"";
+	
 	return $retString;
 }
 ?>
