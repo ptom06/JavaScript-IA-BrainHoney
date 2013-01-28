@@ -99,53 +99,32 @@
 			"type": "click",
 			"id": "vStart",
 			"handler":"function(){
-				var startCount = 0;
-				startCount++;
-				IsLog.c(startCount);
-				if (startCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"action\": \"start\",
-						},
-						/*For when the files save properly*/
-						function(data){
-							if(typeof data === \"string\"){
-								text_area = JSON.parse(data);
-							}else{
-								text_area = data;
-							}
-							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
-							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
-							var seconds = text_area.time; 
-							IsLog.c(seconds);
-							InitTimer(seconds);
-							IsLog.c(\"Timer should have started\");
-						},
-						\"json\"
-					);
-				}
-				var message=\"Sorry, right-click has been disabled\"; 
-				function clickIE() {if (document.all) {(message);return false;}} 
-				function clickNS(e) {if 
-				(document.layers||(document.getElementById&&!document.all)) { 
-				if (e.which==2||e.which==3) {(message);return false;}}} 
-				if (document.layers) 
-					{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
-				else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
-				document.oncontextmenu=new Function(\"return false\");
-				function submitScores() {
-					if(initialized == true && doneClicked == true) {
-						setScore(cpm);
-						window.clearInterval(intervalVar);
-					}
-				}
-				
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"start\",
+					},
+					/*For when the files save properly*/
+					function(data){
+						if(typeof data === \"string\"){
+							text_area = JSON.parse(data);
+						}else{
+							text_area = data;
+						}
+						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						var seconds = text_area.time; 
+						IsLog.c(seconds);
+						InitTimer(seconds);
+						IsLog.c(\"Timer should have started\");
+					},
+					\"json\"
+				);			
 			}"
 		},
 		{
@@ -255,35 +234,31 @@
 			"type": "click",
 			"id": "vStart",
 			"handler":"function(){
-				if($(\"#area1\").innerHTML.substr(0,10) == \"Type the t\") {
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"action\": \"start\",
-							\"selectedPrac\": $('#PracSelect').val()
-						},				
-						function(data){
-							if(typeof data === \"string\"){
-								text_area = JSON.parse(data);
-							}else{
-								text_area = data;
-							}
-							
-							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
-							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
-							var seconds = text_area.time; 
-							IsLog.c(seconds);
-							InitTimer(seconds);
-							IsLog.c(\"Timer should have started\");
-						},
-						\"json\"
-					);
-				}
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"start\",
+						\"selectedPrac\": $('#PracSelect').val()
+					},				
+					function(data){
+						if(typeof data === \"string\"){
+							text_area = JSON.parse(data);
+						}else{
+							text_area = data;
+						}
+						
+						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						var seconds = text_area.time; 
+						InitTimer(seconds);
+					},
+					\"json\"
+				);
 			}"
 		},
 		{

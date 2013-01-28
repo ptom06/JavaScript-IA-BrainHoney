@@ -46,63 +46,33 @@ function startup($les_text){
 	return $wpmObj;
 }
 
-/*function checkIfFileExists($return_val="json"){
-	global $POST_GET,$courseID,$prac_exam;
-	$bhCourseID = $POST_GET['courseID'];
-	//print_r($POST_GET);
-	$file_name_parts = array("itemID","domain","courseID","itemTitle","json");	//	These are the possible parts of the filename to check for
-	$filename = "courses/".cleanString($POST_GET['courseTitle'])."/IDONTEXIST";					//	This is purely an example... this will never (and should never) exit as a valid file
-	$loopCount = 0;
-	$maxLoops = count($file_name_parts)-1;
-	while(!file_exists($filename) && $loopCount < $maxLoops) {
-		//	Loop until the file is found...
-		$filename = "courses/".cleanString($POST_GET['courseTitle']).((isset($POST_GET['courseTitle']))?"/":"");
-		foreach($file_name_parts as $part) {
-			//	Build the expected filename...
-			$filename .= cleanString((isset($POST_GET[$part]))?$POST_GET[$part]:$part).".";
-		}
-		$filename = substr($filename, 0, strlen($filename)-1);					//	Get rid of that pesky trailing "."
-		//echo "Checking for ".$filename."\n";
-		$removed_part = array_shift($file_name_parts);							//	Remove thee first value from		 the filename
-		//echo "Removed ".$removed_part."\n";
-		$loopCount++;															//	Iterate the loop counter so that we don't get all infinite on the CPU
-	}
-	if(file_exists($filename)){
-		//echo "Found file: ".$filename."\n";
-		$courseID = true;
-	}else{
-		//echo "Did not find file: ".$filename."\n";
-		$courseID = false;
-	}
-	
-	$conf_obj = json_decode($filename,true);
-	$prac_exam=$conf_obj['pracFin'];
-	
-	if($return_val == "json")
-		return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
-	else if($return_val == "student") {
-		if(file_exists($filename))
-			return true;
-		else
-			return false;
-	}else
-		return $filename;
-}*/
-
 	/* if you hit start, timer starts and text is adjusted */
 function start() {
 	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID,$POST_GET;
 	
-	$course_info=file_get_contents(default_get_configuration_parameters("file"));
+	$course_info=default_get_configuration_parameters("file");
 	$conf_obj = json_decode($course_info,true);
 	
 	$goalWPM=$conf_obj['expectedWPM'];
 	$errorPenalty=$conf_obj['errorValue'];
 	$percentPoints=$conf_obj['errorValueType'];
-	$les_text=$conf_obj['text'];
+	$all_texts=$conf_obj['text'];
 	$timeLimit=$conf_obj['timeLimit'];
+	$prac_fin=$conf_obj['pracFin'];
 	
 	$time_start=microtime(true);
+	
+	$i=$POST_GET['selectedPrac'];
+		
+	if ($prac_fin=="exam"){
+		$les_text= array_rand($all_texts,1);
+	}else{
+		if(is_numeric($i)){
+			$les_text= $all_texts[$i];
+		}else{
+			$les_text= $all_texts[array_rand($all_texts,1)];
+		}
+	}
 	
 	$_SESSION['start'] = $time_start;
 	$_SESSION['errorPenalty'] = ($errorPenalty/100);
