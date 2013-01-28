@@ -210,13 +210,13 @@
 		#PRAC#{
 			"name": "init",
 			"fireAutomatically": true,
-			"type": "click",
-			"tag": "this_tag_doesn't exist!",
+			"type": "change",
+			"tag": "",
 			"handler":"function(){
 				$.post(
 					portalURL,
 					{
-						\"ia_type\":		\"wpm_test\",
+						\"ia_type\": \"wpm_test\",
 						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
 						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
@@ -224,7 +224,7 @@
 						\"action\": \"default\",
 					},
 					function(data) {
-						var targetElement = (($('#PracSelect').length > 0)?$($('#PracSelect')[0]):null);
+						var targetElement = $('#PracSelect');
 						var numOfTexts;
 						var JSONobj;
 						if(typeof data === \"string\"){
@@ -233,7 +233,7 @@
 							JSONobj = data;
 						}
 						IsLog.c(JSONobj);
-						numOfTexts = JSONobj.numTexts.val();
+						/*	numOfTexts = JSONobj.numTexts.val();	*/
 						for(i = 0; i < numOfTexts; i++) {
 							var textArea = $(\"<option value=\"\"i\"\">\"i\"</option>\");
 							targetElement.append(textArea);
