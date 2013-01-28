@@ -151,28 +151,7 @@ function default_get_configuration_parameters($return_val="json"){
 			return $filename;
 		break;
 	}
-<<<<<<< HEAD
-	
-	if($POST_GET['ia_type'] == "wpm_test") {
-		$conf_obj = json_decode(file_get_contents($filename),true);
-		$prac_exam=$conf_obj['pracFin'];
-		$num_texts=$conf_obj['numTexts'];
-		$_SESSION['numTexts'] = $num_texts;
-		$_SESSION['pracFin'] = $prac_exam;
-	} else {
-	}
-	
-	if($return_val == "json")
-		return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
-	else if($return_val == "student") {
-		if(file_exists($filename))
-			return true;
-		else
-			return false;
-	}else
-		return $filename;
-=======
->>>>>>> origin/13/01/25-Luke-(Portal-changes)
+
 }
 
 //	This is used in the file names... we don't want weird characters causing the file to not be written, do we?
