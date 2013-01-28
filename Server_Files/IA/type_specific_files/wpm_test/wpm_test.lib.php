@@ -2,7 +2,7 @@
 
 
 if($POST_GET['action'] == "check") {
-	if(check("student")) {
+	if(default_get_configuration_parameters("student")) {
 		$prac_exam = $_SESSION['pracFin'];
 		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 		if($prac_exam == "exam"){
@@ -93,7 +93,7 @@ function startup($les_text){
 function start() {
 	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID,$POST_GET;
 	
-	$course_info=file_get_contents(check("configfile"));
+	$course_info=file_get_contents(default_get_configuration_parameters("file"));
 	$conf_obj = json_decode($course_info,true);
 	
 	$goalWPM=$conf_obj['expectedWPM'];
@@ -213,7 +213,7 @@ function default_case() {
 	$retString .= "\"default-case\":\"success\"";
 	
 	$num_texts = $_SESSION['numTexts'];
-	$retString .= "\"numTexts\":\"".$num_texts."\"";
+	$retString .= ",\"numTexts\":\"".$num_texts."\"";
 	
 	return $retString;
 }

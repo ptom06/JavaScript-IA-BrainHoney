@@ -142,7 +142,7 @@ function default_get_configuration_parameters($return_val="json"){
 			return file_exists($filename);
 		break;
 		case "json":
-			return "\"courseID\":".json_encode($courseID).",\"filename\":\"".$filename."\"";
+			return "\"courseID\":".json_encode(file_exists($filename)).",\"filename\":\"".$filename."\"";
 		break;
 		case "file":
 		break;
