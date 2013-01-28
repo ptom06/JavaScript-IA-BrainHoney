@@ -151,7 +151,6 @@ function default_get_configuration_parameters($return_val="json"){
 			return $filename;
 		break;
 	}
-
 }
 
 //	This is used in the file names... we don't want weird characters causing the file to not be written, do we?
