@@ -14,7 +14,7 @@ function diffString1( o, n ) {
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
   
-  var out = diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
+  var out = diff(o == "" ? [] : o.split(/[\s^]+/), n == "" ? [] : n.split(/[\s^]+/) );
   var str = "";
   var colors = new Array();
   	  colors[0] = "FF0033";

@@ -56,7 +56,7 @@ try {
 function default_write_configuration_json_file($filename=null){
 	global $POST_GET;
 	if(is_null($filename))
-		$filename = default_get_configuration_parameters("file");
+		$filename = default_get_configuration_parameters("name");
 	$return_json = "\"filename\":".json_encode($filename);
 	$return_json .= ",\"file_lock\":{";
 	
@@ -145,7 +145,10 @@ function default_get_configuration_parameters($return_val="json"){
 			return "\"courseID\":".json_encode(file_exists($filename)).",\"filename\":\"".$filename."\"";
 		break;
 		case "file":
-			return file_get_contents($filename);
+			if(file_exists($filename))		
+				return file_get_contents($filename);
+			else
+				return $filename;
 		break;
 		default:
 			return $filename;

@@ -1,9 +1,8 @@
 <?PHP
-
-
+$json_conf = json_decode(default_get_configuration_parameters("file"), true);
 if($POST_GET['action'] == "check") {
-	if(default_get_configuration_parameters("student")) {
-		$prac_exam = $_SESSION['pracFin'];
+	if(in_array("pracFin", array_keys($json_conf))) {
+		$prac_exam = $json_conf['pracFin'];
 		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(
@@ -62,11 +61,12 @@ function start() {
 	
 	$time_start=microtime(true);
 	
-	$i=$POST_GET['selectedPrac'];
+	
 		
 	if ($prac_fin=="exam"){
-		$les_text= array_rand($all_texts,1);
+		$les_text= $all_texts[array_rand($all_texts,1)];
 	}else{
+		$i=$POST_GET['selectedPrac'];
 		if(is_numeric($i)){
 			$les_text= $all_texts[$i];
 		}else{
@@ -152,18 +152,18 @@ function getScoreTable() {
     $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
     $results .= "   </tr>";
 	//testing only
-	/*$results .= "   <tr>";
+	$results .= "   <tr>";
     $results .= "         <td class='td'><b>Grade</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$grade."</b></td>";
     $results .= "   </tr>";
-	$results .= "   <tr>";
+	/*$results .= "   <tr>";
     $results .= "         <td class='td'><b>start</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$time_start."</b></td>";
     $results .= "   </tr>";
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>total</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";
+    $results .= "   </tr>";*/
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>grading</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$percentPoints."</b></td>";
@@ -171,7 +171,7 @@ function getScoreTable() {
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>penalty</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
-    $results .= "   </tr>";*/
+    $results .= "   </tr>";
 	//
 	//$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
@@ -179,11 +179,11 @@ function getScoreTable() {
 }
 $default_case_set = true;
 function default_case() {
+	global $json_conf;
 	$retString = "";
 	$retString .= "\"default-case\":\"success\"";
 	
-	$num_texts = $_SESSION['numTexts'];
-	$retString .= ",\"numTexts\":\"".$num_texts."\"";
+	$retString .= ",\"numTexts\":\"".$json_conf['numTexts']."\"";
 	
 	return $retString;
 }

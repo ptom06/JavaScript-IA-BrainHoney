@@ -15,10 +15,12 @@
 		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
 		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>"#EXAM#
+		" 	</div>"+
+		"	<input id=\"accesskey\" type=\"hidden\" name=\"accessKey\" >" + 
+		"	</div></form>"#EXAM#
 		#PRAC#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">" +
 		"	Practice #<select id=\"PracSelect\" >" +
 		"		<option selected=\"selected\">--Select Practice--</option>" +
@@ -33,7 +35,7 @@
 		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
 		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\"  onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
 		" 	</div></form>"#PRAC#
@@ -128,7 +130,22 @@
 			}"
 		},
 		{
-			"name":	"rightClick",
+			"name":	"keyCounter",
+			"id": "userText",
+			"type": "keydown",
+			"handler": "function(e) {
+				var counter = $(\"#accesskey\");
+				if(counter) {
+					var count = (typeof counter.val() == \"undefined\")?0:parseInt(counter.val(),16);
+					// IsLog.c(\"IA: wpm_test counter: \"+(counter.val()));
+					counter.val(((isNaN(count))?0:count+1).toString(16));
+				} else {
+					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
+				}
+			}"
+		},
+		{
+			"name":	"disableAllEvents",
 			"id":"area1",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
@@ -140,10 +157,11 @@
 			}"
 		},
 		{
-			"name":	"rightClick",
+			"name":	"disableSpecificMouseandKeyboardEvents",
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
+				diffString1($(\"#area1\").val(),$(this).val());
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -174,16 +192,21 @@
 						{
 							\"ia_type\":		\"wpm_test\",
 							\"action\":		\"done\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 							\"ui\":			userInput
 						},
-						function(data){
-							table = JSON.parse(data);
-							document.getElementById(\"scoreTable\").innerHTML = table.scores;
-							StopTimer();
-						}
+							function(data){
+								var table = JSON.parse(data);
+								document.getElementById(\"scoreTable\").innerHTML = table.scores;
+								StopTimer();
+								setScore(table.grade);
+							}
 					);
 				}
-				setScore(table.grade);
+				
 			}"
 		}#EXAM#
 		#PRAC#{
@@ -278,6 +301,7 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
+				diffString1($(\"#area1\").val(),$(this).val());
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -308,16 +332,21 @@
 						{
 							\"ia_type\":		\"wpm_test\",
 							\"action\":		\"done\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 							\"ui\":			userInput
 						},
 						function(data){
-							table = JSON.parse(data);
+							var table = JSON.parse(data);
 							document.getElementById(\"scoreTable\").innerHTML = table.scores;
 							StopTimer();
+							setScore(table.grade);
 						}
 					);
 				}
-				setScore(table.grade);
+				
 			}"
 		}#PRAC#
 		#CONFIG#{
@@ -388,11 +417,11 @@
 						if(([\"assessmentSubmit\"]).indexOf($(formInputs[i]).attr(\"id\")) == -1) {
 							var objectKey = (($(formInputs[i]).attr(\"id\"))?$(formInputs[i]).attr(\"id\"):$(formInputs[i]).attr(\"name\"));
 							if(formObject[objectKey] == null)
-								formObject[objectKey] = ($(formInputs[i]).val());
+								formObject[objectKey] = ($(formInputs[i]).val().trim());
 							else if($(formInputs[i]).val() != \"\") {
 								if(typeof formObject[objectKey] == \"string\")
 									formObject[objectKey] = [formObject[objectKey]];
-								formObject[objectKey].push($(formInputs[i]).val());
+								formObject[objectKey].push($(formInputs[i]).val().trim());
 							}
 						}
 					}
