@@ -14,7 +14,7 @@ function diffString1( o, n ) {
   o = o.replace(/\s+$/, '');
   n = n.replace(/\s+$/, '');
   
-  var out = diff(o == "" ? [] : o.split(/[\s^]+/), n == "" ? [] : n.split(/[\s^]+/) );
+  var out = diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
   var str = "";
   var colors = new Array();
   	  colors[0] = "FF0033";
@@ -34,6 +34,7 @@ function diffString1( o, n ) {
     nSpace.push("\n");
   }
 
+  //	These first two cases are for when the input is empty, either the whole thing is empty or the array parsed to empty stuff.
   if (out.n.length == 0) {
       for (var i = 0; i < out.o.length; i++) {
         str += '<span style="color:#'+ colors[0] + '">'+ escape(out.o[i]) + oSpace[i] +"</span>" ;
@@ -44,16 +45,21 @@ function diffString1( o, n ) {
         str +=  '<span style="color:#'+ colors[0] + '">'+ escape(out.o[n]) + oSpace[n] + "</span>";
       }
     }
-
+    
+	//	Loop through out.n (which is the object returned from diff()) and mark the words colors[0] that are wrong and leave the others alone...
     for ( var i = 0; i < out.n.length; i++ ) {
+	  //	The contents of this loop are executed for every word of input
       if (out.n[i].text == null) {
-        
+        //	That's weird, there's a null in the middle of our input. This should probably not happen.
       } else {
+		//	For this word - match it to something in our "o"
         var pre = "";
-
+		//	Start looking, starting at where the current "n" row is, plus 1
+		//	Loop until you find a word that diff() marked as a "text" match.
         for (n = out.n[i].row + 1; n < out.o.length && out.o[n].text == null; n++ ) {
           pre += '<span style="color:#' + colors[0] + '">'+ escape(out.o[n]) + oSpace[n] +"</span>" ;
         }
+		//	Output the match and move on to the next "n"
         str += " " + out.n[i].text + nSpace[i] + pre;
       }
     }

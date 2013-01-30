@@ -142,6 +142,14 @@
 				} else {
 					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
+				var testString = $(\"#area1\").val();
+				if(testString) {
+					var inputString = $(\"this\").val();
+					if(inputString) {
+						penalty = complexMatchFunction(testString, inputString);
+						IsLog.c(\"IA: wpm_test; final penalty\"+penalty);
+					}
+				}
 			}"
 		},
 		{
