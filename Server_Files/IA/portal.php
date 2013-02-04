@@ -185,13 +185,15 @@ switch($POST_GET['action']) {
 			$return_json .= "\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
 		}
 		//	I'd like to see this whole section be replaced with a more elegant configuration method. The heavily escaped strings could probably be moved into their own files to be automatically escaped...
-		if(is_array($type_remove_markers)) {
-			for($i=0; $i < count($type_remove_markers); $i++) {
-				if(is_array($type_remove_markers[$i])) {
-					if($type_remove_markers[$i]['remove'] == "all")
-						$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#.+\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
-					else
-						$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
+		if(isset($type_remove_markers)) {
+			if(is_array($type_remove_markers)) {
+				for($i=0; $i < count($type_remove_markers); $i++) {
+					if(is_array($type_remove_markers[$i])) {
+						if($type_remove_markers[$i]['remove'] == "all")
+							$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#.+\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
+						else
+							$typeObject = preg_replace("/\#".$type_remove_markers[$i]['marker']."\#/iU","",$typeObject);
+					}
 				}
 			}
 		}
