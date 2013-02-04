@@ -21,8 +21,8 @@ if(typeof loc == "undefined")
 	var isserver = (!devRegEx.test(loc.hostname))?"":"dev";
 
 var portalURL = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
-if(loc.hostname == "localhost")
-	portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
+//if(loc.hostname == "localhost")
+//	portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
 //IsLog.c("IA: using: "+portalURL);
 
 if(!scriptsToLoadIA)
@@ -332,7 +332,7 @@ function parseAssessmentObjects() {
 								InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
 								for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
 									var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
-									IsLog.c("IA: "+scriptLoc);
+									IsLog.c("IA: "+iptLoc);
 									$.cachedScript(scriptLoc,{"dataType": "script","cache": true,"url": scriptLoc,"async": false}).done(function(script, textStatus) {
 										//IsLog.c("IA: "+inlineAssessment.prototype.allTypes[typeName]);
 										InlineAssessment.prototype.allTypes[typeName].scriptIndex++;
@@ -356,8 +356,12 @@ function parseAssessmentObjects() {
 				}, "json"
 			).error(function() {
 				IsLog.c("IA: error loading initial config: " + arguments[2].message);
-				for(var i=0; i < arguments.length; i++)
-					IsLog.c(objectKeys(arguments[i]));
+				for(var i=0; i < arguments.length; i++) {
+					if(typeof arguments[i] == "object")
+						IsLog.c(objectKeys(arguments[i]));
+					else
+						IsLog.c(arguments[i]);
+				}
 			});
 		} else {
 			IsLog.c("IA: Not re-initializing the inline assessment element. It appears to already have been processed.");

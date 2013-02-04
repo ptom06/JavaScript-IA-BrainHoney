@@ -1,12 +1,20 @@
 <?PHP
-function start(){
-	global $_SESSION;
-	$time_start=microtime(true);
-	$_SESSION['start'] = $time_start;
-	$return_json = "\"time\":".json_encode($time_start)."";
-	return $return_json;
+
+if($POST_GET['action'] == "check") {
+	if(default_get_configuration_parameters("student")) {
+		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"CONFIG"),
+			array("remove"=>"tag_only","marker"=>"INPUT")
+		);
+	} else {
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"INPUT"),
+			array("remove"=>"tag_only","marker"=>"CONFIG")
+		);
+	}
 }
-	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
+
 function done(){
 	global $_SESSION, $POST_GET;
 	$return_json = "";
