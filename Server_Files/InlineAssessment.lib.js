@@ -332,7 +332,7 @@ function parseAssessmentObjects() {
 								InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
 								for(var c=0; c < InlineAssessment.prototype.allTypes[typeName].scripts.length; c++) {
 									var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/type_specific_files/"+typeName+"/"+InlineAssessment.prototype.allTypes[typeName].scripts[c];
-									IsLog.c("IA: "+iptLoc);
+									IsLog.c("IA: "+scriptLoc);
 									$.cachedScript(scriptLoc,{"dataType": "script","cache": true,"url": scriptLoc,"async": false}).done(function(script, textStatus) {
 										//IsLog.c("IA: "+inlineAssessment.prototype.allTypes[typeName]);
 										InlineAssessment.prototype.allTypes[typeName].scriptIndex++;
