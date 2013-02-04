@@ -1,9 +1,7 @@
 <?PHP
 
-$prac_exam = true;
 if($POST_GET['action'] == "check") {
 	if(check("student")) {
-		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(
 				array("remove"=>"all","marker"=>"CONFIG"),
