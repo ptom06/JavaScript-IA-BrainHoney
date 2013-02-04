@@ -1,9 +1,9 @@
 <?PHP
 $json_conf = json_decode(default_get_configuration_parameters("file"), true);
+$prac_exam = $json_conf['pracFin'];
+$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 if($POST_GET['action'] == "check") {
 	if(in_array("pracFin", array_keys($json_conf))) {
-		$prac_exam = $json_conf['pracFin'];
-		$return_json .= "\"pracFin\":\"".$prac_exam."\",";
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(
 				array("remove"=>"all","marker"=>"CONFIG"),
@@ -22,6 +22,20 @@ if($POST_GET['action'] == "check") {
 			array("remove"=>"all","marker"=>"PRAC"),
 			array("remove"=>"all","marker"=>"EXAM"),
 			array("remove"=>"tag_only","marker"=>"CONFIG")
+		);
+	}
+} else {
+	if($prac_exam == "exam"){
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"CONFIG"),
+			array("remove"=>"all","marker"=>"PRAC"),
+			array("remove"=>"tag_only","marker"=>"EXAM")
+		);
+	}else{
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"CONFIG"),
+			array("remove"=>"all","marker"=>"EXAM"),
+			array("remove"=>"tag_only","marker"=>"PRAC")
 		);
 	}
 }
