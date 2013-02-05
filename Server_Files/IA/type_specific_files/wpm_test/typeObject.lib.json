@@ -44,59 +44,58 @@
 		"	<option value=\"practice\">Practice</option>" +
 		"	<option value=\"exam\">Exam</option>" +
 		"</select>" +
-		"<div id=\"practiceDiv\">" +
-		"	<div class=\"align-left\">" +
-		"		Time limit (seconds):" +
-		"	</div>" +
-		"	<div>" +
-		"		<input id=\"timeLimit\" type=\"text\"  placeholder=\"time limit (seconds)...\" 	/>" +
-		"	</div>" +
-		"	<div class=\"align-left\">" +
-		"		Expected words per minute:" +
-		"	</div>" +
-		"	<div>" +
-		"		<input id=\"expectedWPM\" type=\"text\" placeholder=\"Insert expected WPM\"/>" +
-		"	</div>" +
-		"	<div>" +
-		"		How to account for errors:" +
-		"		<select id=\"grading type\">" +
-		"			<option value=\"default\">default</option>" +
-		"			<option value=\"custom\">custom</option>" +
-		"		</select>" +
-		"		<div id\"customSettings\" >" +
-		"		</div>" +
-		"	</div>" +
-		"	<div id=\"spaceFill\" style=\"height:1.5em\">" +
-		"		<div id=\"gradingOptions\" contenteditable=\"false\">" +
-		"			Subtract <input type=\"text\" style=\"max-width:20px\" id=\"errorValue\" />" +
-		"			<select id=\"errorValueType\">" +
-		"				<option value=\"points\">point(s)</option>" +
-		"				<option value=\"percent\">percent</option>" +
-		"			</select>" +
-		"			per error" +
-		"		</div>" +
-		"	</div>" +
-		"	Number of Possible Texts:" +
-		"	<select id=\"numTexts\" >" +
-		"		<option value=\"1\">1</option>" +
-		"		<option value=\"2\">2</option>" +
-		"		<option value=\"3\">3</option>" +
-		"		<option value=\"4\">4</option>" +
-		"		<option value=\"5\">5</option>" +
-		"		<option value=\"6\">6</option>" +
-		"		<option value=\"7\">7</option>" +
-		"		<option value=\"8\">8</option>" +
-		"		<option value=\"9\">9</option>" +
-		"		<option value=\"10\">10</option>" +
-		"	</select>" +
-		"	<br/>" +
-		"	<div id=\"tooShort\">" +
-		"	</div>" +
-		"	<div id=\"textfields\" >" +
-		"	</div>" +
-		"	<br/>" +
-		"	<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" />" +
+		"<br/>" +
+		"<div class=\"align-left\">" +
+		"	Time limit (seconds):" +
 		"</div>" +
+		"<div>" +
+		"	<input id=\"timeLimit\" type=\"text\"  placeholder=\"time limit (seconds)...\" 	/>" +
+		"</div>" +
+		"<div class=\"align-left\">" +
+		"	Expected words per minute:" +
+		"</div>" +
+		"<div>" +
+		"	<input id=\"expectedWPM\" type=\"text\" placeholder=\"Insert expected WPM\"/>" +
+		"</div>" +
+		"<div>" +
+		"	How to account for errors:" +
+		"	<select id=\"gradingType\">" +
+		"		<option value=\"default\">default</option>" +
+		"		<option value=\"custom\">custom</option>" +
+		"	</select>" +
+		"</div>" +
+		"<div id=\"customSettings\">" +
+		"</div>" +
+		"<div id=\"spaceFill\" style=\"height:1.5em\">" +
+		"	<div id=\"gradingOptions\" contenteditable=\"false\">" +
+		"		Subtract <input type=\"text\" style=\"max-width:20px\" id=\"errorValue\" />" +
+		"		<select id=\"errorValueType\">" +
+		"			<option value=\"points\">point(s)</option>" +
+		"			<option value=\"percent\">percent</option>" +
+		"		</select>" +
+		"		per error" +
+		"	</div>" +
+		"</div>" +
+		"Number of Possible Texts:" +
+		"<select id=\"numTexts\" >" +
+		"	<option value=\"1\">1</option>" +
+		"	<option value=\"2\">2</option>" +
+		"	<option value=\"3\">3</option>" +
+		"	<option value=\"4\">4</option>" +
+		"	<option value=\"5\">5</option>" +
+		"	<option value=\"6\">6</option>" +
+		"	<option value=\"7\">7</option>" +
+		"	<option value=\"8\">8</option>" +
+		"	<option value=\"9\">9</option>" +
+		"	<option value=\"10\">10</option>" +
+		"</select>" +
+		"<br/>" +
+		"<div id=\"tooShort\">" +
+		"</div>" +
+		"<div id=\"textfields\" >" +
+		"</div>" +
+		"<br/>" +
+		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" />" +
 		"<div id=\"result\"></div>" +
 		"<div id=\"jsonR\"></div>"#CONFIG#,
 	"methods": 
@@ -470,37 +469,18 @@
 				}
 			}"
 		},{
-			"name": "addInput",
+			"name": "customErrors",
 			"type": "change",
-			"id": "numTexts",
-			"fireAutomatically": true,
+			"id": "gradingType",
 			"handler": "function() {
-				var targetElement = (($('#textfields').length > 0)?$($('#textfields')[0]):null);
-				if(!targetElement)
-					return -1;
-				var loopCount = 0;
-				var maxLoops = 10;
-				var textArea = $(\"textarea\")[$(\"textarea\").length-1];
-				while(loopCount <= maxLoops && textArea) {
-					if($(textArea).val())
-						window['textStrings'][$(\"textarea\").length-1] = $(textArea).val();
-					textArea.parentElement.removeChild(textArea);
-					loopCount++;
-					textArea = $(\"textarea\")[$(\"textarea\").length-1];
+				var targetElement = $('#customSettings');
+				targetElement.empty();	
+				if($('#gradingType').val()==\"custom\"){
+					
+				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/>\");
+				targetElement.append(textArea);
 				}
 				
-				targetElement.empty();
-				
-				for(i = 0; i < $('#numTexts').val(); i++) {
-					var textArea = $(\"<textarea rows=\\\"8\\\" cols=\\\"64\\\" placeholder=\\\"the instructor will input the material for which the student will be assesed in this box\\\"></textarea>\");
-					textArea.attr(\"name\", \"text\");
-					var additionalFormatting = $(\"<br/>\");
-					if(textStrings[i])
-						textArea.val(window['textStrings'][i]);
-					targetElement.append(textArea);
-					targetElement.append(additionalFormatting);
-					/*	initAssessmentObjects();	*/
-				}
 				if(this instanceof HTMLElement) {
 					for(var i=0; i < assessmentElements.length; i++) {
 						if(typeof assessmentElements[i].setEvents == \"function\") {
