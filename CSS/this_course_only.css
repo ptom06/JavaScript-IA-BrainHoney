@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+.IAbutton {
+	background-color:#848689;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #000000;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:14px;
+	font-weight:bold;
+	padding:6px 10px;
+	text-decoration:none;
+}.IAbutton:hover {
+	background-color:#848689;
+}.IAbutton:active {
+	position:relative;
+	top:1px;
+}
+.options {
+	font-family:arial;
+	font-size:14px;
+	line-height:200%;
+}

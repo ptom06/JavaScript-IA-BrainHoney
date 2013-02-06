@@ -40,62 +40,58 @@
 		"	<div id=\"scoreTable\" >" +				 
 		" 	</div></form>"#PRAC#
 	#CONFIG#"configurationElementString":"<h2 style=\"color:teal\">Typing Assessment Configurator</h2>" +
-		"<select id=\"pracFin\" >" +
+		"<select id=\"pracFin\" class=\"options\">" +
 		"	<option value=\"practice\">Practice</option>" +
 		"	<option value=\"exam\">Exam</option>" +
 		"</select>" +
 		"<br/>" +
-		"<div class=\"align-left\">" +
-		"	Time limit (seconds):" +
+		"<div class=\"options\">" +
+		"	<div class=\"align-left\">" +
+		"		Time limit (seconds):" +
+		"	</div>" +
 		"</div>" +
 		"<div>" +
-		"	<input id=\"timeLimit\" type=\"text\"  placeholder=\"time limit (seconds)...\" 	/>" +
+		"	<input id=\"timeLimit\" type=\"text\" class=\"options\" placeholder=\"time limit (seconds)...\" 	/>" +
 		"</div>" +
-		"<div class=\"align-left\">" +
-		"	Expected words per minute:" +
+		"<div class=\"options\">" +
+		"	<div class=\"align-left\">" +
+		"		Expected words per minute:" +
+		"	</div>" +
 		"</div>" +
 		"<div>" +
-		"	<input id=\"expectedWPM\" type=\"text\" placeholder=\"Insert expected WPM\"/>" +
+		"	<input id=\"expectedWPM\" type=\"text\" class=\"options\" placeholder=\"Insert expected WPM\"/>" +
 		"</div>" +
-		"<div>" +
+		"<div class=\"options\">" +
 		"	How to account for errors:" +
-		"	<select id=\"gradingType\">" +
+		"	<select id=\"gradingType\" class=\"options\">" +
 		"		<option value=\"default\">default</option>" +
 		"		<option value=\"custom\">custom</option>" +
 		"	</select>" +
 		"</div>" +
-		"<div id=\"customSettings\">" +
+		"<div id=\"customSettings\" class=\"options\">" +
 		"</div>" +
-		"<div id=\"spaceFill\" style=\"height:1.5em\">" +
-		"	<div id=\"gradingOptions\" contenteditable=\"false\">" +
-		"		Subtract <input type=\"text\" style=\"max-width:20px\" id=\"errorValue\" />" +
-		"		<select id=\"errorValueType\">" +
-		"			<option value=\"points\">point(s)</option>" +
-		"			<option value=\"percent\">percent</option>" +
-		"		</select>" +
-		"		per error" +
-		"	</div>" +
+		"<div class=\"options\">" +
+		"	Number of Possible Texts:" +
+		"	<select id=\"numTexts\" class=\"options\">" +
+		"		<option value=\"1\">1</option>" +
+		"		<option value=\"2\">2</option>" +
+		"		<option value=\"3\">3</option>" +
+		"		<option value=\"4\">4</option>" +
+		"		<option value=\"5\">5</option>" +
+		"		<option value=\"6\">6</option>" +
+		"		<option value=\"7\">7</option>" +
+		"		<option value=\"8\">8</option>" +
+		"		<option value=\"9\">9</option>" +
+		"		<option value=\"10\">10</option>" +
+		"	</select>" +
 		"</div>" +
-		"Number of Possible Texts:" +
-		"<select id=\"numTexts\" >" +
-		"	<option value=\"1\">1</option>" +
-		"	<option value=\"2\">2</option>" +
-		"	<option value=\"3\">3</option>" +
-		"	<option value=\"4\">4</option>" +
-		"	<option value=\"5\">5</option>" +
-		"	<option value=\"6\">6</option>" +
-		"	<option value=\"7\">7</option>" +
-		"	<option value=\"8\">8</option>" +
-		"	<option value=\"9\">9</option>" +
-		"	<option value=\"10\">10</option>" +
-		"</select>" +
 		"<br/>" +
 		"<div id=\"tooShort\">" +
 		"</div>" +
 		"<div id=\"textfields\" >" +
 		"</div>" +
 		"<br/>" +
-		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" />" +
+		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" class=\"IAbutton\" />" +
 		"<div id=\"result\"></div>" +
 		"<div id=\"jsonR\"></div>"#CONFIG#,
 	"methods": 
@@ -477,7 +473,7 @@
 				targetElement.empty();	
 				if($('#gradingType').val()==\"custom\"){
 					
-				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/>\");
+				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/><br/>\");
 				targetElement.append(textArea);
 				}
 				
