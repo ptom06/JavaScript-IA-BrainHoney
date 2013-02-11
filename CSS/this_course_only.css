@@ -24,3 +24,23 @@
 	font-size:14px;
 	line-height:200%;
 }
+.everything {
+	border:solid;
+	border-bottom-left-radius:25px;
+	border-bottom-right-radius:25px;
+	border-width:2px;
+	border-color:#848689;
+	padding:10px;
+}
+h2 {
+	border-style:solid;
+	border-top-left-radius:25px;
+	border-top-right-radius:25px;
+	border-width:2px;
+	background-color:#cbccce;
+	color:black;
+	font-family:arial;
+	font-size:21px;
+	font-weight:bold;
+	padding:6px 15px;
+}

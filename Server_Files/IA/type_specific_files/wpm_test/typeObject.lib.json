@@ -39,8 +39,8 @@
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
 		" 	</div></form>"#PRAC#
-	#CONFIG#"configurationElementString":"<h2 style=\"color:teal\">Typing Assessment Configurator</h2>" +
-		"<select id=\"pracFin\" class=\"options\">" +
+	#CONFIG#"configurationElementString":"><h2>Typing Assessment Configurator</h2>" +
+		"<div class=\"everything\"<select id=\"pracFin\" class=\"options\">" +
 		"	<option value=\"practice\">Practice</option>" +
 		"	<option value=\"exam\">Exam</option>" +
 		"</select>" +
@@ -93,7 +93,7 @@
 		"<br/>" +
 		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" class=\"IAbutton\" />" +
 		"<div id=\"result\"></div>" +
-		"<div id=\"jsonR\"></div>"#CONFIG#,
+		"<div id=\"jsonR\"></div></div>"#CONFIG#,
 	"methods": 
 	[
 		
