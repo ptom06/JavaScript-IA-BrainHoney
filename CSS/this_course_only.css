@@ -25,12 +25,16 @@
 	line-height:200%;
 }
 .everything {
+	position:relative;
+	top:-5px;
 	border:solid;
 	border-bottom-left-radius:25px;
 	border-bottom-right-radius:25px;
 	border-width:2px;
 	border-color:#848689;
-	padding:10px;
+	padding-bottom:15px;
+	padding-left:15px;
+	padding-right:15px;
 }
 h2 {
 	border-style:solid;
@@ -42,5 +46,69 @@ h2 {
 	font-family:arial;
 	font-size:21px;
 	font-weight:bold;
-	padding:6px 15px;
+	padding-top:10px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.exam {
+	position:relative;
+	top:-5px;
+	border:solid;
+	border-bottom-left-radius:25px;
+	border-bottom-right-radius:25px;
+	border-width:2px;
+	border-color:#848689;
+	padding-bottom:15px;
+	padding-left:15px;
+	padding-right:15px;
+}
+.etext{
+	font-family:arial;
+	font-size:14px;
+	line-height:200%;
+}
+.eheading {
+	border-style:solid;
+	border-top-left-radius:25px;
+	border-top-right-radius:25px;
+	border-width:2px;
+	background-color:#cbccce;
+	color:black;
+	font-family:arial;
+	font-size:21px;
+	font-weight:bold;
+	padding-top:10px;
+	padding-left:10px;
+	padding-right:10px;
+}
+.practice {
+	position:relative;
+	top:-5px;
+	border:solid;
+	border-bottom-left-radius:25px;
+	border-bottom-right-radius:25px;
+	border-width:2px;
+	border-color:#848689;
+	padding-bottom:15px;
+	padding-left:15px;
+	padding-right:15px;
+}
+.ptext{
+	font-family:arial;
+	font-size:14px;
+	line-height:200%;
+}
+.pheading {
+	border-style:solid;
+	border-top-left-radius:25px;
+	border-top-right-radius:25px;
+	border-width:2px;
+	background-color:#cbccce;
+	color:black;
+	font-family:arial;
+	font-size:21px;
+	font-weight:bold;
+	padding-top:10px;
+	padding-left:10px;
+	padding-right:10px;
 }

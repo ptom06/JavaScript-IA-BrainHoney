@@ -4,20 +4,20 @@
 		"checker.js",
 		"copyPaste.js"
 	],
-	#EXAM#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
+	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div><form class=\"exam\">Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
 		"	<br />\n" +
-		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">" +
-		"	<textarea id=\"area1\"  style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	<div id=\"inputText\" class=\"etext\" style=\"position:static;  width:823px;  height:166px;\">" +
+		"	<textarea id=\"area1\" class=\"etext\" style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
+		"	 	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"		</div>" +
 		"	 </div>" +
 		"	<br /> " + 
-		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
+		"	<input class=\"etext\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input class=\"etext\" type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\" class=\"etext\" rows=\"10\" cols=\"100\" name=\"user_text\"></textarea>" + 
 		"	<br />  " +
-		"	<div id=\"scoreTable\" >" +				 
+		"	<div id=\"scoreTable\" class=\"etext\">" +				 
 		" 	</div>"+
 		"	<input id=\"accesskey\" type=\"hidden\" name=\"accessKey\" >" + 
 		"	</div></form>"#EXAM#
@@ -39,7 +39,7 @@
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
 		" 	</div></form>"#PRAC#
-	#CONFIG#"configurationElementString":"><h2>Typing Assessment Configurator</h2>" +
+	#CONFIG#"configurationElementString":"<h2>Typing Assessment Configurator</h2>" +
 		"<div class=\"everything\"<select id=\"pracFin\" class=\"options\">" +
 		"	<option value=\"practice\">Practice</option>" +
 		"	<option value=\"exam\">Exam</option>" +
