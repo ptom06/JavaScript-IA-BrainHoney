@@ -4,38 +4,39 @@
 		"checker.js",
 		"copyPaste.js"
 	],
-	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div><form class=\"exam\">Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
-		"	<br />\n" +
-		"	<div id=\"inputText\" class=\"etext\" style=\"position:static;  width:823px;  height:166px;\">" +
-		"	<textarea id=\"area1\" class=\"etext\" style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-		"	 	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
-		"		</div>" +
-		"	 </div>" +
-		"	<br /> " + 
-		"	<input class=\"etext\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input class=\"etext\" type=\"button\" id=\"done\" value=\"Done\" />" +
+	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
+		"	<form class=\"exam\">" +
+		"	<div class=\"etext\">Time remaining:" +
+		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
+		"	</div>" +
+		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:100%;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	</div>" +
+		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input class=\"ebutton\" type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\" class=\"etext\" rows=\"10\" cols=\"100\" name=\"user_text\"></textarea>" + 
+		"	<textarea id=\"userText\" class=\"etext\" rows=\"10\" cols=\"132\"></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" class=\"etext\">" +				 
 		" 	</div>"+
 		"	<input id=\"accesskey\" type=\"hidden\" name=\"accessKey\" >" + 
 		"	</div></form>"#EXAM#
-		#PRAC#"inputElementsString": "<form>Time remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">" +
-		"	Practice #<select id=\"PracSelect\" >" +
+		#PRAC#"inputElementsString": "<div class=\"pheading\">Practice Typing Activity</div>" +
+		"	<form class=\"practice\">" +
+		"	<div class=\"ptext\">Time remaining:" +
+		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
+		"	Practice #<select id=\"PracSelect\" class=\"ptext\">" +
 		"		<option selected=\"selected\">--Select Practice--</option>" +
 		"	</select>" +
-		"	<br />\n" +
-		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">" +
-		"	<textarea id=\"area1\"  style=\"font-family:Arial, Helvetica, sans-serif; \" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-183px;left:0px;  width:910px;  height:180px;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
-		"		</div>" +
-		"	 </div>" +
+		"	</div>" +
+		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	<div id=\"textCorrection\" class=\"ptext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	</div>" +
 		"	<br /> " + 
-		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
+		"	<input type=\"button\" class=\"pbutton\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input type=\"button\" class=\"pbutton\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\" class=\"ptext\" rows=\"10\" cols=\"132\"></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
 		" 	</div></form>"#PRAC#
