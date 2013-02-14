@@ -1,3 +1,37 @@
+/*
+	This script expects something to this effect will be run somewhere else:
+	
+function initTest() {
+	IsLog.timerOn();
+	window["typingText"] = "Mr. Speaker, Mr. Vice President, Members of Congress, fellow citizens: Fifty-one years ago, John F. Kennedy declared to this Chamber that “the Constitution makes us not rivals for power but partners for progress... It is my task,” he said, “to report the State of the Union – to improve it is the task of us all.” Tonight, thanks to the grit and determination of the American people, there is much progress to report. After a decade of grinding war, our brave men and women in uniform are coming home. After years of grueling recession, our businesses have created over six million new jobs. We buy more American cars than we have in five years, and less foreign oil than we have in twenty. Our housing market is healing, our stock market is rebounding, and consumers, patients, and homeowners enjoy stronger protections than ever before. Together, we have cleared away the rubble of crisis, and can say with renewed confidence that the state of our union is stronger. But we gather here knowing that there are millions of Americans whose hard work and dedication have not yet been rewarded. Our economy is adding jobs – but too many people still can’t find full-time employment. Corporate profits have rocketed to all-time highs – but for more than a decade, wages and incomes have barely budged.";
+	window["typingTextInputId"] = "againstThis";
+	window["typingTextOutputId"] = "checkThis";
+	if(typeof window["typingText"] != "undefined")
+		var primaryText = window["typingText"];
+	else {
+		IsLog.c("Error: can't match string, \"typingText\" not defined.");
+		return -1;
+	}
+	if(typeof window["typingTextOutputId"] != "undefined") {
+		if($("#"+window["typingTextOutputId"])) {
+			var outputElement = $("#"+window["typingTextOutputId"]);
+			outputElement.html(document.createTextNode(primaryText));
+		} else {
+			IsLog.c("Error: can't output results, \"#"+window["typingTextOutputId"]+"\" element not found.");
+			return -1;
+		}
+	} else {
+		IsLog.c("Error: can't output results, \"typingTextOutputId\" not defined.");
+		return -1;
+	}
+	$("#againstThis").bind("keyup", function(event) {
+		if(event.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
+			updateTestDisplay();
+		} 
+	});
+}
+*/
+
 function updateTestDisplay() {
 	var d = new Date();
 	if(typeof window["typingText"] != "undefined")
