@@ -3,6 +3,7 @@
 		"timer.js",
 		"checker.js",
 		"copyPaste.js"
+		"stringMatcher.js"
 	],
 	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
 		"	<form class=\"exam\">" +
