@@ -479,7 +479,7 @@ function testForWhitespaceError(coreObject) {
 			"match":		false,
 			"code":			"MS",
 			"message":		"Missing space between \""+currentPrimaryWord+"\" and \""+currentPrimaryWord2+"\" match found at recursion depth "+coreObject.recursionDepth+" and position "+coreObject.primary.position+" of "+coreObject.primary.text.length+","+coreObject.secondary.position+" of "+coreObject.secondary.text.length,
-			"data": {"html":""+currentPrimaryWord+"<span class=\"missing-space\" title=\"You forgot to put space between these words\">"+currentPrimaryWhitespace+"</span>"+currentPrimaryWord2}
+			"data": {"html":"<span class=\"typing-error\">"+currentPrimaryWord+"<span class=\"missing-space\" title=\"You forgot to put space between these words\">"+currentPrimaryWhitespace+"</span>"+currentPrimaryWord2+"</span>"}
 		});
 		//IsLog.c("stringMatcher: current primary position:"+coreObject.primary.position);
 		//IsLog.c("stringMatcher: current secondary position:"+coreObject.secondary.position);
@@ -811,7 +811,7 @@ function parseSearchResult(result, regularExpression, csw, wildCards) {
 		}
 		inputStringIndex++;
 	}
-	outObject.html = outString;
+	outObject.html = "<span class=\"typing-error\">"+outString+"</span>";
 	//IsLog.c("stringMatcher: parseResult;");
 	//IsLog.c(outObject);
 	return outObject;
