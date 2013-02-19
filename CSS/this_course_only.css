@@ -130,17 +130,46 @@ h2 {
 	font-size:14px;
 	line-height:200%;
 }
-.squiggle_red {
-	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_red.png");
-	background-repeat:repeat-x;
-	background-position:left bottom;
-	padding-bottom:2px;
-	vertical-align:text-top;
-}
-.squiggle_blue {
+.missing-letter, .extra-letter {
+	color: blue;
 	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_blue.png");
 	background-repeat:repeat-x;
 	background-position:left bottom;
-	padding-bottom:2px;
-	vertical-align:text-top;
+	padding-bottom:5px;
+}
+.missing-word, .extra-word{
+	font-family:arial;
+	font-size:14px;
+	color: red;
+	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_red.png");
+	background-repeat:repeat-x;
+	background-position:left bottom;
+	padding-bottom:5px;
+}
+.mistyped-letter {
+	font-family:arial;
+	font-size:14px;
+	color: blue;
+	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_blue.png");
+	background-repeat:repeat-x;
+	background-position:left bottom;
+	padding-bottom:5px;
+}
+.missing-space {
+	background-color: red;
+	text-decoration: underline;
+	border-bottom: 1px pink;
+}
+.correct {
+	color: black;
+}
+.untyped {
+	color: grey;
+}
+.typing-error {
+	color: red;	
+	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_red.png");
+	background-repeat:repeat-x;
+	background-position:left bottom;
+	padding-bottom:5px;
 }

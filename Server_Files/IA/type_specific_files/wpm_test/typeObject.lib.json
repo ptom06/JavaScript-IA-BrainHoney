@@ -1,15 +1,15 @@
 {"wpm_test": {
 	"scripts": [
 		"timer.js",
-		"checker.js",
-		"copyPaste.js"
+		"copyPaste.js",
+		"stringMatcher.js"
 	],
 	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
 		"	<form class=\"exam\">" +
 		"	<div class=\"etext\">Time remaining:" +
 		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
 		"	</div>" +
-		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	" +
 		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"	</div>" +
 		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
@@ -106,7 +106,7 @@
 				$.post(
 					portalURL,
 					{
-						\"ia_type\":		\"wpm_test\",
+						\"ia_type\":\"wpm_test\",
 						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
 						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
@@ -115,13 +115,35 @@
 					},
 					/*For when the files save properly*/
 					function(data){
+						IsLog.timerOn();
 						if(typeof data === \"string\"){
 							text_area = JSON.parse(data);
 						}else{
 							text_area = data;
 						}
-						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+						
 						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						window[\"typingTextInputId\"] = \"userText\";
+						window[\"typingTextOutputId\"] = \"textCorrection\";
+						window[\"typingText\"] = text_area.welcome.les_text;
+						if(typeof window[\"typingText\"] != \"undefined\")
+							var primaryText = window[\"typingText\"];
+						else {
+							IsLog.c(\"Error: can't match string, 'typingText' not defined.\");
+							return -1;
+						}
+						if(typeof window[\"typingTextOutputId\"] != \"undefined\") {
+							if($(\"#\"+window[\"typingTextOutputId\"])) {
+								var outputElement = $(\"#\"+window[\"typingTextOutputId\"]);
+								outputElement.html(document.createTextNode(primaryText));
+							} else {
+								IsLog.c(\"Error: can't output results, '#\"+window[\"typingTextOutputId\"]+\"' element not found.\");
+								return -1;
+							}
+						} else {
+							IsLog.c(\"Error: can't output results, 'typingTextOutputId' not defined.\");
+							return -1;
+						}
 						var seconds = text_area.time; 
 						IsLog.c(seconds);
 						InitTimer(seconds);
@@ -135,7 +157,7 @@
 			"name":	"keyCounter",
 			"id": "userText",
 			"type": "keydown",
-			"handler": "function(e) {
+			"handler": "function(event) {
 				var counter = $(\"#accesskey\");
 				if(counter) {
 					var count = (typeof counter.val() == \"undefined\")?0:parseInt(counter.val(),16);
@@ -144,14 +166,9 @@
 				} else {
 					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
-				var testString = $(\"#area1\").val();
-				if(testString) {
-					var inputString = $(\"this\").val();
-					if(inputString) {
-						penalty = complexMatchFunction(testString, inputString);
-						IsLog.c(\"IA: wpm_test; final penalty\"+penalty);
-					}
-				}
+				if(event.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
+				updateTestDisplay();
+				} 
 			}"
 		},
 		{
@@ -171,7 +188,6 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
-				diffString1($(\"#area1\").val(),$(this).val());
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -192,31 +208,27 @@
 			"type": "click",
 			"id": "done",
 			"handler":"function(){
-				var doneCount=0;
-				doneCount++;
 				userInput = $('textarea#userText').val();
 				var Jstring = JSON.stringify(userInput);
-				if (doneCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"action\":		\"done\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"ui\":			userInput
-						},
-							function(data){
-								var table = JSON.parse(data);
-								document.getElementById(\"scoreTable\").innerHTML = table.scores;
-								StopTimer();
-								setScore(table.grade);
-							}
-					);
-				}
-				
+				StopTimer();
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"action\":		\"done\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"ui\":			userInput
+					},
+						function(data){
+							var table = JSON.parse(data);
+							document.getElementById(\"scoreTable\").innerHTML = table.scores;
+							
+							setScore(table.grade);
+						}
+				);
 			}"
 		}#EXAM#
 		#PRAC#{
@@ -284,9 +296,28 @@
 						}else{
 							text_area = data;
 						}
-						
-						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
 						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						window[\"typingTextInputId\"] = \"userText\";
+						window[\"typingTextOutputId\"] = \"textCorrection\";
+						window[\"typingText\"] = text_area.welcome.les_text;
+						if(typeof window[\"typingText\"] != \"undefined\")
+							var primaryText = window[\"typingText\"];
+						else {
+							IsLog.c(\"Error: can't match string, 'typingText' not defined.\");
+							return -1;
+						}
+						if(typeof window[\"typingTextOutputId\"] != \"undefined\") {
+							if($(\"#\"+window[\"typingTextOutputId\"])) {
+								var outputElement = $(\"#\"+window[\"typingTextOutputId\"]);
+								outputElement.html(document.createTextNode(primaryText));
+							} else {
+								IsLog.c(\"Error: can't output results, '#\"+window[\"typingTextOutputId\"]+\"' element not found.\");
+								return -1;
+							}
+						} else {
+							IsLog.c(\"Error: can't output results, 'typingTextOutputId' not defined.\");
+							return -1;
+						}
 						var seconds = text_area.time; 
 						InitTimer(seconds);
 					},
@@ -311,7 +342,6 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
-				diffString1($(\"#area1\").val(),$(this).val());
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -325,6 +355,9 @@
 				if(e.ctrlKey == true) {
 					return false;
 				}
+				if(e.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
+				updateTestDisplay();
+				} 
 			}"
 		},
 		{
@@ -332,31 +365,26 @@
 			"type": "click",
 			"id": "done",
 			"handler":"function(){
-				var doneCount=0;
-				doneCount++;
 				userInput = $('textarea#userText').val();
 				var Jstring = JSON.stringify(userInput);
-				if (doneCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"action\":		\"done\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"ui\":			userInput
-						},
-						function(data){
-							var table = JSON.parse(data);
-							document.getElementById(\"scoreTable\").innerHTML = table.scores;
-							StopTimer();
-							setScore(table.grade);
-						}
-					);
-				}
-				
+				StopTimer();
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"action\":		\"done\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"ui\":			userInput
+					},
+					function(data){
+						var table = JSON.parse(data);
+						document.getElementById(\"scoreTable\").innerHTML = table.scores;
+						setScore(table.grade);
+					}
+				);				
 			}"
 		}#PRAC#
 		#CONFIG#{

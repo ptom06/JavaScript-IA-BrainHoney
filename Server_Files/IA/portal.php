@@ -1,20 +1,34 @@
 <?PHP
-session_start();
+$POST_GET = array_merge($_POST, $_GET);
+
+$bh_student_id = $POST_GET["studentID"];
+$current_session = session_id($POST_GET["studentID"]);
+if(empty($current_session)){
+	session_start();
+	$current_session = session_id($POST_GET["studentID"]);
+} else {
+	//	Session has already been started?
+}
+
 // This file is meant to be called using Ajax from anywhere. It adds lines to a log file, so some injection attacks should be cleaned out...
 header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: https://byuisdevelopment.brainhoney.com");
+//header("Access-Control-Allow-Origin: https://isdev.byu.edu");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
 header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Credentials: true");
+//header("Access-Control-Expose-Headers: COOKIE, SET-COOKIE");
 
 error_reporting(E_ALL);
 ini_set('display_errors','On');
-$return_json ="{";
+$return_json ="{\"session\":\"".$current_session."\",";
 
 /*	IE will only "POST" with a content-type of text/plain - therefore we have to parse it out of the raw header (which we custom-built into our IE $.post	*/
 /*	reference: https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest	*/
 if(isset($HTTP_RAW_POST_DATA)) {
 	parse_str($HTTP_RAW_POST_DATA, $_POST);
 }
-$POST_GET = array_merge($_POST, $_GET);
+
 
 //	The following will ensure that the properly library of functions is called and exists
 if(!isset($POST_GET['ia_type'])) {
@@ -209,5 +223,5 @@ switch($POST_GET['action']) {
 }
 $return_json = preg_replace('/([\:,\[])\s*null\s*([,\}\]])/i', '\1"null"\2', $return_json);
 echo $return_json."}";
-session_write_close();
+//session_write_close();
 ?>

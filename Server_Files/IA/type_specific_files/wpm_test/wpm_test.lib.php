@@ -1,9 +1,31 @@
 <?PHP
 $json_conf = json_decode(default_get_configuration_parameters("file"), true);
-$prac_exam = $json_conf['pracFin'];
-$return_json .= "\"pracFin\":\"".$prac_exam."\",";
-if($POST_GET['action'] == "check") {
-	if(in_array("pracFin", array_keys($json_conf))) {
+if($json_conf) {
+	$prac_exam = $json_conf['pracFin'];
+	$return_json .= "\"pracFin\":\"".$prac_exam."\",";
+	if($POST_GET['action'] == "check") {
+		if(in_array("pracFin", array_keys($json_conf))) {
+			if($prac_exam == "exam"){
+				$type_remove_markers = array(
+					array("remove"=>"all","marker"=>"CONFIG"),
+					array("remove"=>"all","marker"=>"PRAC"),
+					array("remove"=>"tag_only","marker"=>"EXAM")
+				);
+			}else{
+				$type_remove_markers = array(
+					array("remove"=>"all","marker"=>"CONFIG"),
+					array("remove"=>"all","marker"=>"EXAM"),
+					array("remove"=>"tag_only","marker"=>"PRAC")
+				);
+			}
+		} else {
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"PRAC"),
+				array("remove"=>"all","marker"=>"EXAM"),
+				array("remove"=>"tag_only","marker"=>"CONFIG")
+			);
+		}
+	} else {
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(
 				array("remove"=>"all","marker"=>"CONFIG"),
@@ -17,27 +39,14 @@ if($POST_GET['action'] == "check") {
 				array("remove"=>"tag_only","marker"=>"PRAC")
 			);
 		}
-	} else {
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"PRAC"),
-			array("remove"=>"all","marker"=>"EXAM"),
-			array("remove"=>"tag_only","marker"=>"CONFIG")
-		);
 	}
 } else {
-	if($prac_exam == "exam"){
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"CONFIG"),
-			array("remove"=>"all","marker"=>"PRAC"),
-			array("remove"=>"tag_only","marker"=>"EXAM")
-		);
-	}else{
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"CONFIG"),
-			array("remove"=>"all","marker"=>"EXAM"),
-			array("remove"=>"tag_only","marker"=>"PRAC")
-		);
-	}
+	$return_json .= "\"pracFin\":\"undefined\",";
+	$type_remove_markers = array(
+		array("remove"=>"all","marker"=>"PRAC"),
+		array("remove"=>"all","marker"=>"EXAM"),
+		array("remove"=>"tag_only","marker"=>"CONFIG")
+	);
 }
 
 	/*function to determine the number of errors */
@@ -103,7 +112,7 @@ function done(){
 	global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $goalWPM, $errorPenalty, $percentPoints, $POST_GET;
 	$user_text =$POST_GET['ui'];
 	//$les_text=file_get_contents( "typingtext/0/0.txt" );
-	$time_start=($_SESSION["start"]);
+	$time_start=$_SESSION['start'];
 	$errorPenalty=$_SESSION['errorPenalty'];
 	$goalWPM=$_SESSION['goalWPM'];
 	$percentPoints=$_SESSION['percentPoints'];
@@ -140,7 +149,7 @@ function done(){
 function getScoreTable() {
 	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start, $grade, $percentPoints, $errorPenalty ;
 	$results = "";
-	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
+	$results .= "<table width='100%' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
     $results .= "         <th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>";
     $results .= "         <th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
@@ -186,8 +195,6 @@ function getScoreTable() {
     $results .= "         <td class='td'><b>penalty</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
     $results .= "   </tr>";
-	//
-	//$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
 	return $results;
 }

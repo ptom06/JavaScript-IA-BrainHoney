@@ -22,7 +22,7 @@ if(typeof loc == "undefined")
 
 var portalURL = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
 //if(loc.hostname == "localhost")
-	//portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
+//	portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
 //IsLog.c("IA: using: "+portalURL);
 
 if(!scriptsToLoadIA)
@@ -292,7 +292,8 @@ function parseAssessmentObjects() {
 					"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 					"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
 					"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
-					"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+					"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
+					"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID"
 				},
 				function(data){
 					IsLog.c("IA: POST to retrieve configuration succeeded. ("+(typeof data)+")");
@@ -356,6 +357,8 @@ function parseAssessmentObjects() {
 				}, "json"
 			).error(function() {
 				IsLog.c("IA: error loading initial config: " + arguments[2].message);
+				if(1==2) {
+				}
 				for(var i=0; i < arguments.length; i++) {
 					if(typeof arguments[i] == "object")
 						IsLog.c(objectKeys(arguments[i]));
