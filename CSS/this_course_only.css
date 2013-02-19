@@ -67,9 +67,11 @@ h2 {
 	font-family:arial;
 	font-size:14px;
 	line-height:150%;
+	width:100%;
+	padding:5px;
 }
 .eheading {
-	width:100%;
+	width:102%;
 	border-style:solid;
 	border-top-left-radius:25px;
 	border-top-right-radius:25px;
@@ -89,7 +91,7 @@ h2 {
 	line-height:200%;
 }
 .practice {
-	width:900px;
+	width:100%;
 	position:relative;
 	top:0px;
 	border:solid;
@@ -104,10 +106,12 @@ h2 {
 .ptext{
 	font-family:arial;
 	font-size:14px;
-	line-height:200%;
+	line-height:150%;
+	width:100%;
+	padding:5px;
 }
 .pheading {
-	width:100%;
+	width:102%;
 	border-style:solid;
 	border-top-left-radius:25px;
 	border-top-right-radius:25px;
