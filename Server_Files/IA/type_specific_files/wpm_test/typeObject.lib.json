@@ -103,6 +103,8 @@
 			"type": "click",
 			"id": "vStart",
 			"handler":"function(){
+				$('textarea#userText').attr(\"disabled\",false);
+				$('#vStart').attr(\"disabled\",true); 
 				$.post(
 					portalURL,
 					{
@@ -112,6 +114,7 @@
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 						\"action\": \"start\",
+						\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 					},
 					/*For when the files save properly*/
 					function(data){
@@ -167,7 +170,7 @@
 					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
 				if(event.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
-				updateTestDisplay();
+					window['mo'] = updateTestDisplay();
 				} 
 			}"
 		},
@@ -209,18 +212,22 @@
 			"id": "done",
 			"handler":"function(){
 				userInput = $('textarea#userText').val();
+				$('textarea#userText').attr(\"disabled\",true); 
 				var Jstring = JSON.stringify(userInput);
+				var gradeObj = JSON.stringify(window.mo);
 				StopTimer();
 				$.post(
 					portalURL,
 					{
-						\"ia_type\":		\"wpm_test\",
-						\"action\":		\"done\",
+						\"ia_type\":\"wpm_test\",
+						\"action\":	\"done\",
 						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
 						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"ui\":			userInput
+						\"ui\":	userInput,
+						\"gradingObj\": gradeObj,
+						\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 					},
 						function(data){
 							var table = JSON.parse(data);
@@ -245,7 +252,8 @@
 						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"action\": \"default_case\"
+						\"action\": \"default_case\",
+						\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 					},
 					function(data) {
 						var targetElement = $('#PracSelect');
@@ -279,6 +287,9 @@
 			"type": "click",
 			"id": "vStart",
 			"handler":"function(){
+				$('textarea#userText').attr(\"disabled\",false);
+				$('#vStart').attr(\"disabled\",true);
+				document.getElementById(\"scoreTable\").innerHTML = '';
 				$.post(
 					portalURL,
 					{
@@ -288,7 +299,8 @@
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 						\"action\": \"start\",
-						\"selectedPrac\": $('#PracSelect').val()
+						\"selectedPrac\": $('#PracSelect').val(),
+						\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 					},				
 					function(data){
 						if(typeof data === \"string\"){
@@ -356,7 +368,7 @@
 					return false;
 				}
 				if(e.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
-				updateTestDisplay();
+					window['mo'] = updateTestDisplay();
 				} 
 			}"
 		},
@@ -366,18 +378,23 @@
 			"id": "done",
 			"handler":"function(){
 				userInput = $('textarea#userText').val();
+				$('textarea#userText').attr(\"disabled\",true); 
+				$('#vStart').attr(\"disabled\",false);
 				var Jstring = JSON.stringify(userInput);
+				var gradeObj = JSON.stringify(window.mo);
 				StopTimer();
 				$.post(
 					portalURL,
 					{
-						\"ia_type\":		\"wpm_test\",
-						\"action\":		\"done\",
+						\"ia_type\":\"wpm_test\",
+						\"action\":	\"done\",
 						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
 						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"ui\":			userInput
+						\"ui\":	userInput,
+						\"gradingObj\": gradeObj,
+						\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 					},
 					function(data){
 						var table = JSON.parse(data);
@@ -475,7 +492,8 @@
 							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
 							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"action\":\"create\"
+							\"action\":\"create\",
+							\"studentID\":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:\"NOSTUDENTID\"
 						},
 						function(data) {
 							IsLog.c(JSONString);

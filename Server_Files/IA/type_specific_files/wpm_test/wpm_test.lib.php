@@ -110,25 +110,54 @@ function start() {
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
 	global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $goalWPM, $errorPenalty, $percentPoints, $POST_GET;
+	
+	$course_info=default_get_configuration_parameters("file");
+	$conf_obj = json_decode($course_info,true);
+	
+	$goalWPM=$conf_obj['expectedWPM'];
+	$errorPenalty=$conf_obj['errorValue'];
+	$percentPoints=$conf_obj['errorValueType'];	
 	$user_text =$POST_GET['ui'];
-	//$les_text=file_get_contents( "typingtext/0/0.txt" );
 	$time_start=$_SESSION['start'];
-	$errorPenalty=$_SESSION['errorPenalty'];
-	$goalWPM=$_SESSION['goalWPM'];
-	$percentPoints=$_SESSION['percentPoints'];
 	$les_text = $_SESSION['text'];
+	$gradingObj = json_decode($POST_GET['gradingObj'], true);
+	
+	$earliestTimestamp = 0;
+	$latestTimestamp = 10000000000000;
+	foreach($gradingObj["matches"] as $position => $matchData){
+		if(floatval($matchData["timestamp"]) < $earliestTimestamp)
+			$earliestTimestamp = $matchData["timestamp"];
+		if(floatval($matchData["timestamp"]) > $latestTimestamp)
+			$latestTimestamp = $matchData["timestamp"];
+		$error_code =($matchData["code"]);
+		switch ($error_code){
+			case "EM"://exact match- no penalty
+				break;
+			case "1L"://1 letter wrong
+				break;
+			case "EW"://extra word
+				break;
+			case "MW"://missing word
+				break;
+			case "2L":// 2 letters wrong
+				break;
+			default:// more than 2 letters
+			
+		}
+		
+	}
+	
 	$total_time=microtime(true)-$time_start;
 	$char=strlen($les_text);
 	$inputChar=strlen($user_text);
-	$totalError = (GetError($les_text,$user_text));
+	$totalError = 0;
 	$word=substr_count($les_text,' ') + 1;
 	//$word=($inputChar/5);
 	$wpm=round(($inputChar/5)/($total_time / 60));
 	$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
-	$totalWords = ($word);
+	$totalWords = substr_count($user_text,' ') + 1;
 	$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
-	$readonly='readonly="readonly"';
-	
+		
 	if($percentPoints == "percent"){
 		if(($wpm / $goalWPM) - ($errorPenalty * $totalError) > 1){
 			$grade = 1 - ($errorPenalty * $totalError);	
@@ -186,7 +215,7 @@ function getScoreTable() {
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>total</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";*/
+    $results .= "   </tr>";
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>grading</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$percentPoints."</b></td>";
@@ -194,7 +223,7 @@ function getScoreTable() {
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>penalty</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
-    $results .= "   </tr>";
+    $results .= "   </tr>";*/
     $results .= "</table>";
 	return $results;
 }
