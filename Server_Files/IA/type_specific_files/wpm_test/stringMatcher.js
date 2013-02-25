@@ -86,6 +86,7 @@ function updateTestDisplay() {
 		outputElement.html("");
 		outputElement.append(resultElement);
 	}
+	return matchObject;
 }
 
 function complexStringMatchRecursionSearch(coreObject) {

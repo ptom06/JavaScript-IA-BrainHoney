@@ -173,3 +173,7 @@ h2 {
 	background-position:left bottom;
 	padding-bottom:5px;
 }
+.hiddenSettings {
+	height:0px;
+	width:0px;	
+}

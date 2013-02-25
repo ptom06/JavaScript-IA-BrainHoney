@@ -75,17 +75,12 @@ function start() {
 	$course_info=default_get_configuration_parameters("file");
 	$conf_obj = json_decode($course_info,true);
 	
-	$goalWPM=$conf_obj['expectedWPM'];
-	$errorPenalty=$conf_obj['errorValue'];
-	$percentPoints=$conf_obj['errorValueType'];
 	$all_texts=$conf_obj['text'];
 	$timeLimit=$conf_obj['timeLimit'];
 	$prac_fin=$conf_obj['pracFin'];
 	
 	$time_start=microtime(true);
 	
-	
-		
 	if ($prac_fin=="exam"){
 		$les_text= $all_texts[array_rand($all_texts,1)];
 	}else{
@@ -98,8 +93,6 @@ function start() {
 	}
 	
 	$_SESSION['start'] = $time_start;
-	$_SESSION['errorPenalty'] = ($errorPenalty/100);
-	$_SESSION['percentPoints'] = $percentPoints;
 	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['text']=$les_text;
 	$readonly="";
@@ -115,63 +108,70 @@ function done(){
 	$conf_obj = json_decode($course_info,true);
 	
 	$goalWPM=$conf_obj['expectedWPM'];
-	$errorPenalty=$conf_obj['errorValue'];
-	$percentPoints=$conf_obj['errorValueType'];	
+	$missingWordError=$conf_obj['missedWord'];
+	$extraWordError=$conf_obj['extraWord'];	
+	$oneLetterError=$conf_obj['oneLetterError'];
+	$twoLetterError=$conf_obj['twoLetterError'];
+	$manyErrors=$conf_obj['manyErrors'];
+		
 	$user_text =$POST_GET['ui'];
 	$time_start=$_SESSION['start'];
 	$les_text = $_SESSION['text'];
 	$gradingObj = json_decode($POST_GET['gradingObj'], true);
+	$oneWrong=0;
+	$twoWrong=0;
+	$manyWrong=0;
+	$extraWord=0;
+	$missingWord=0;
+	$totalError=0;
 	
 	$earliestTimestamp = 0;
 	$latestTimestamp = 10000000000000;
 	foreach($gradingObj["matches"] as $position => $matchData){
-		if(floatval($matchData["timestamp"]) < $earliestTimestamp)
-			$earliestTimestamp = $matchData["timestamp"];
-		if(floatval($matchData["timestamp"]) > $latestTimestamp)
-			$latestTimestamp = $matchData["timestamp"];
 		$error_code =($matchData["code"]);
 		switch ($error_code){
 			case "EM"://exact match- no penalty
 				break;
 			case "1L"://1 letter wrong
+				$oneWrong++;
+				$totalError++;
 				break;
 			case "EW"://extra word
+				$extraWord++;
+				$totalError++;
 				break;
 			case "MW"://missing word
+				$missingWord++;
+				$totalError++;
 				break;
 			case "2L":// 2 letters wrong
+				$twoWrong++;
+				$totalError++;
 				break;
 			default:// more than 2 letters
+				$manyWrong++;
+				$totalError++;
 			
 		}
 		
 	}
+	$errorPenalty = ($oneWrong*$oneLetterError)+($extraWord*$extraWordError)+($missingWord*$missingWordError)+($twoWrong*$twoLetterError)+($manyWrong*$manyErrors);
 	
 	$total_time=microtime(true)-$time_start;
 	$char=strlen($les_text);
 	$inputChar=strlen($user_text);
-	$totalError = 0;
 	$word=substr_count($les_text,' ') + 1;
-	//$word=($inputChar/5);
 	$wpm=round(($inputChar/5)/($total_time / 60));
 	$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
 	$totalWords = substr_count($user_text,' ') + 1;
 	$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
 		
-	if($percentPoints == "percent"){
-		if(($wpm / $goalWPM) - ($errorPenalty * $totalError) > 1){
-			$grade = 1 - ($errorPenalty * $totalError);	
-		}else{
-			$grade = ($wpm / $goalWPM) - ($errorPenalty * $totalError);
-		}
+	if(($wpm / $goalWPM) - ($totalError) > 1){
+		$grade = 1-$errorPenalty;	
+	}else{
+		$grade = ($wpm / $goalWPM) - ($errorPenalty);
 	}
-	if($percentPoints == "points"){
-		if((($wpm - ($errorPenalty * $totalError)) / $goalWPM)>1){
-			$grade=1;	
-		}else{
-			$grade = (($wpm - ($errorPenalty * $totalError)) / $goalWPM);
-		}
-	}
+	
 	$return_json = "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
 	return $return_json;
 }
@@ -208,22 +208,6 @@ function getScoreTable() {
     $results .= "         <td class='td'><b>Grade</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$grade."</b></td>";
     $results .= "   </tr>";
-	/*$results .= "   <tr>";
-    $results .= "         <td class='td'><b>start</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$time_start."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>total</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>grading</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$percentPoints."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>penalty</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
-    $results .= "   </tr>";*/
     $results .= "</table>";
 	return $results;
 }
