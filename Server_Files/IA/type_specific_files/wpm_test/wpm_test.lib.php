@@ -155,22 +155,18 @@ function done(){
 		}
 		
 	}
-	$errorPenalty = ($oneWrong*$oneLetterError)+($extraWord*$extraWordError)+($missingWord*$missingWordError)+($twoWrong*$twoLetterError)+($manyWrong*$manyErrors);
-	
+		
 	$total_time=microtime(true)-$time_start;
 	$char=strlen($les_text);
 	$inputChar=strlen($user_text);
-	$word=substr_count($les_text,' ') + 1;
+	$word=$inputChar/5;
 	$wpm=round(($inputChar/5)/($total_time / 60));
 	$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
-	$totalWords = substr_count($user_text,' ') + 1;
+	$totalWords = $inputChar/5;
 	$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
-		
-	if(($wpm / $goalWPM) - ($totalError) > 1){
-		$grade = 1-$errorPenalty;	
-	}else{
-		$grade = ($wpm / $goalWPM) - ($errorPenalty);
-	}
+	
+	$grade = ($word/($total_time-($oneWrong*$oneLetterError)-($extraWord*$extraWordError)-($missingWord*$missingWordError)-($twoWrong*$twoLetterError)-($manyWrong*$manyErrors)));	
+	
 	
 	$return_json = "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
 	return $return_json;

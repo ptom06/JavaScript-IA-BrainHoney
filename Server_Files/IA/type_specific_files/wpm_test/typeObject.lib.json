@@ -9,7 +9,6 @@
 		"	<div class=\"etext\">Time remaining:" +
 		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
 		"	</div>" +
-		"	" +
 		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"	</div>" +
 		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
@@ -61,15 +60,6 @@
 		"</div>" +
 		"<div>" +
 		"	<input id=\"expectedWPM\" type=\"text\" class=\"options\" placeholder=\"Insert expected WPM\"/>" +
-		"</div>" +
-		"<div class=\"options\">" +
-		"	How to account for errors:" +
-		"	<select id=\"gradingType\" class=\"options\">" +
-		"		<option value=\"default\">default</option>" +
-		"		<option value=\"custom\">custom</option>" +
-		"	</select>" +
-		"</div>" +
-		"<div id=\"customSettings\" class=\"options\">" +
 		"</div>" +
 		"<div class=\"options\">" +
 		"	Number of Possible Texts:" +
@@ -480,6 +470,7 @@
 							}
 						}
 					}
+					
 					JSONString = JSON.stringify(formObject);
 					$.post(
 						portalURL,
@@ -508,27 +499,6 @@
 						shortText.insertBefore($(\"textarea\")[invalidIndex]);
 					} catch (err) {
 						alert('error:'+err.message);
-					}
-				}
-			}"
-		},{
-			"name": "customErrors",
-			"type": "change",
-			"id": "gradingType",
-			"handler": "function() {
-				var targetElement = $('#customSettings');
-				targetElement.empty();	
-				if($('#gradingType').val()==\"custom\"){
-					
-				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/><br/>\");
-				targetElement.append(textArea);
-				}
-				
-				if(this instanceof HTMLElement) {
-					for(var i=0; i < assessmentElements.length; i++) {
-						if(typeof assessmentElements[i].setEvents == \"function\") {
-							assessmentElements[i].setEvents();
-						}
 					}
 				}
 			}"
