@@ -502,7 +502,7 @@
 					}
 				}
 			}"
-		},{
+		}, {
 			"name": "addInput",
 			"type": "change",
 			"id": "numTexts",

@@ -1,13 +1,10 @@
-var mins, secs, TimerRunning=false, TimerID, TheElement, a;
+var mins, secs, TimerRunning=false, TimerID, TheElement;
 
  
  function InitTimer(seconds) //call the Init function when u need to start the timer
  {
-	IsLog.c("parseInt: "+"");
-	alert("parseInt: "+"");
 	if(seconds != 0){
-		a=(seconds/60);
-		IsLog.c("parseInt: "+"");
+		mins=parseInt(seconds/60);
 		secs=(seconds%60);
 	}else{
     	mins=2;
