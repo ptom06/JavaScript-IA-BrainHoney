@@ -8,7 +8,7 @@
 	border:1px solid #000000;
 	display:inline-block;
 	color:#ffffff;
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	font-weight:bold;
 	padding:6px 10px;
@@ -20,7 +20,7 @@
 	top:1px;
 }
 .options {
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	line-height:200%;
 }
@@ -43,7 +43,7 @@ h2 {
 	border-width:2px;
 	background-color:#cbccce;
 	color:black;
-	font-family:arial;
+	font-family:courier;
 	font-size:21px;
 	font-weight:bold;
 	padding-top:10px;
@@ -64,7 +64,7 @@ h2 {
 	padding-right:15px;
 }
 .etext{
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	line-height:150%;
 	width:100%;
@@ -78,7 +78,7 @@ h2 {
 	border-width:2px;
 	background-color:#cbccce;
 	color:black;
-	font-family:arial;
+	font-family:courier;
 	font-size:21px;
 	font-weight:bold;
 	padding-top:10px;
@@ -86,7 +86,7 @@ h2 {
 	padding-right:10px;
 }
 .ebutton {
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	line-height:200%;
 }
@@ -104,7 +104,7 @@ h2 {
 	padding-right:15px;
 }
 .ptext{
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	line-height:150%;
 	width:100%;
@@ -118,7 +118,7 @@ h2 {
 	border-width:2px;
 	background-color:#cbccce;
 	color:black;
-	font-family:arial;
+	font-family:courier;
 	font-size:21px;
 	font-weight:bold;
 	padding-top:10px;
@@ -126,7 +126,7 @@ h2 {
 	padding-right:10px;
 }
 .pbutton {
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	line-height:200%;
 }
@@ -138,7 +138,7 @@ h2 {
 	padding-bottom:5px;
 }
 .missing-word, .extra-word{
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	color: red;
 	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_red.png");
@@ -147,7 +147,7 @@ h2 {
 	padding-bottom:5px;
 }
 .mistyped-letter {
-	font-family:arial;
+	font-family:courier;
 	font-size:14px;
 	color: blue;
 	background-image:url("https://isdev.byu.edu/is/share/BrainHoney/IA/type_specific_files/wpm_test/SQUIGGLE_blue.png");
