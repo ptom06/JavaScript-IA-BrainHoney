@@ -1,5 +1,7 @@
 /* check 5 letters at a time and return colored text */
 function letterCompare(p,s){
+	IsLog.c(p);
+	IsLog.c(s);
 	var p_index=0;
 	var s_index=0;
 	var p_array=new Array();

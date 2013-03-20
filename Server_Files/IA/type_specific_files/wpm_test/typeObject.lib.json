@@ -2,7 +2,7 @@
 	"scripts": [
 		"timer.js",
 		"copyPaste.js",
-		"stringMatcher.js"
+		"NEWchecker.js"
 	],
 	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
 		"	<form class=\"exam\">" +
@@ -25,7 +25,7 @@
 		"	<div class=\"ptext\">Time remaining:" +
 		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
 		"	Practice #<select id=\"PracSelect\" class=\"pbutton\">" +
-		"		<option selected=\"selected\">--Select Practice--</option>" +
+		"		<option selected=\"selected\">-Select Practice-</option>" +
 		"	</select>" +
 		"	</div>" +
 		"	<input id=\"area1\" type=\"hidden\" />" +
@@ -299,6 +299,7 @@
 							text_area = data;
 						}
 						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
 						window[\"typingTextInputId\"] = \"userText\";
 						window[\"typingTextOutputId\"] = \"textCorrection\";
 						window[\"typingText\"] = text_area.welcome.les_text;
@@ -344,6 +345,9 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
+				userInput = $('textarea#userText').val();
+				originalText = $('#area1').val();
+				letterCompare(originalText,userInput);
 				if(e == null) {
 					e = arguments[0];
 				}
