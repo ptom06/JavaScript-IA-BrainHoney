@@ -1,12 +1,17 @@
-{"development-test": {
-	"inputElementsString": "interactionPage.html",
-	"methods": 
-		[
-			{
-				"name": "testHandler",
-				"type": "click",
-				"id": "noElementId",
-				"handler": "testFunction.js"
-			}
-		]
-}}
+{
+	"development-test": {
+		"conditional": {
+			"condition": {"variable":"action","value":"check"},
+			"inputElementsString": "interactionPage.html",
+			"methods": 
+				[
+					{
+						"name": "testHandler",
+						"type": "click",
+						"id": "noElementId",
+						"handler": "testFunction.js"
+					}
+				]
+		}
+	}
+}
