@@ -4,150 +4,186 @@
 		"checker.js",
 		"copyPaste.js"
 	],
-	#INPUT#"inputElementsString": "<form>Time  remaining:<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" name=\"disp\">\n" +
-		"	<br />\n" +
-		"	<div id=\"inputText\" style=\"position:static;  width:823px;  height:166px;\">\n" +
-		"	<textarea id=\"area1\"  onkeydown=\"return disableCtrlKeyCombination(event);\" onKeyUp=\"return disableCtrlKeyCombination(event);\"  style=\"font-family:Arial, Helvetica, sans-serif;\" readonly rows=\"10\" cols=\"133\"></textarea>"	+
-		"	 	<div id=\"textCorrection\" style=\"position:relative ;  z-index:999;  top:-168px;left:0px;  width:inherit;  height:inherit;  background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
-		"		</div>" +
-		"	 </div>" +
-		"	<br /> " + 
-		"	<input type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input type=\"button\" id=\"done\" value=\"Done\" />" +
+	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
+		"	<form class=\"exam\">" +
+		"	<div class=\"etext\">Time remaining:" +
+		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
+		"	</div>" +
+		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:100%;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	</div>" +
+		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input class=\"ebutton\" type=\"button\" id=\"done\" value=\"Done\" />" +
 		"	 <br /> " + 
-		"	<textarea id=\"userText\" onKeyDown=\"return disableCtrlKeyCombination(event); \" onKeyUp=\"diffString1(document.getElementById('area1').value,this.value);\" rows=\"10\" cols=\"100\" name=\"user_text\" ></textarea>" + 
+		"	<textarea id=\"userText\" class=\"etext\" rows=\"10\" cols=\"132\"></textarea>" + 
+		"	<br />  " +
+		"	<div id=\"scoreTable\" class=\"etext\">" +				 
+		" 	</div>"+
+		"	<input id=\"accesskey\" type=\"hidden\" name=\"accessKey\" >" + 
+		"	</div></form>"#EXAM#
+		#PRAC#"inputElementsString": "<div class=\"pheading\">Practice Typing Activity</div>" +
+		"	<form class=\"practice\">" +
+		"	<div class=\"ptext\">Time remaining:" +
+		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
+		"	Practice #<select id=\"PracSelect\" class=\"ptext\">" +
+		"		<option selected=\"selected\">--Select Practice--</option>" +
+		"	</select>" +
+		"	</div>" +
+		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	<div id=\"textCorrection\" class=\"ptext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
+		"	</div>" +
+		"	<br /> " + 
+		"	<input type=\"button\" class=\"pbutton\" id=\"vStart\" value=\"Start Test\" />" +
+		"	<input type=\"button\" class=\"pbutton\" id=\"done\" value=\"Done\" />" +
+		"	 <br /> " + 
+		"	<textarea id=\"userText\" class=\"ptext\" rows=\"10\" cols=\"132\"></textarea>" + 
 		"	<br />  " +
 		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>",#INPUT#
-	#CONFIG#"configurationElementString":"<form><h2 style=\"color:teal\">Test Type</h2>" +
-		"<label for=\"practiceRadio\"><input type=\"radio\" name=\"testType\" checked=\"checked\" value=\"false\" id=\"practiceRadio\" />Practice</label>" + 	
-		"<label for=\"finalRadio\"><input type=\"radio\" name=\"testType\" value=\"true\" id=\"finalRadio\" />Final</label>" +
-		"<div id=\"practiceDiv\">" +
-		"<h3 style=\"color:teal\">Practice Exam (Instructor Input)</h3>" + 
-		"<p>low and high WPM must be concentric around the midrange WPM</p>" +
-		"<p>These are only for the illustration that happens below and are not important to the test itself</p>" +
-		"<input id=\"lowWPM\" type=\"text\"  placeholder=\"low WPM...\" 	/>" +
-		"<br>" + 
-		"<input id=\"midWPM\" type=\"text\"  placeholder=\"midrange WPM...\" 	/>" + 
-		"<br>" + 
-		"<input id=\"highWPM\" type=\"text\" readonly=\"readonly\" placeholder=\"high WPM...\" 	/>" + 
-		"<br>" +
-		"<input id=\"PracticeTitle\" type=\"text\" name=\"title\" placeholder=\"Practice title...\" />" +
-		"<br>" +
-		"<p>Practice #</p>" +
-		"<select id=\"practiceNum\" >" +
-		"<option value=\"1\">1</option>" +
-		"<option value=\"2\">2</option>" +
-		"<option value=\"3\">3</option>" +
-		"<option value=\"4\">4</option>" +
-		"<option value=\"5\">5</option>" +
+		" 	</div></form>"#PRAC#
+	#CONFIG#"configurationElementString":"<h2>Typing Assessment Configurator</h2>" +
+		"<div class=\"everything\"<select id=\"pracFin\" class=\"options\">" +
+		"	<option value=\"practice\">Practice</option>" +
+		"	<option value=\"exam\">Exam</option>" +
 		"</select>" +
 		"<br/>" +
-		"<textarea id=\"practiceText\" name=\"assesment\" rows=\"8\" cols=\"64\" placeholder=\"the instructor will input the material for which the student will be assesed in this box\"></textarea>" +
-		"<br/>" +
-		"<br/>" +
-		"<input id=\"practiceSubmit\" type=\"button\" value=\"Finished\" />" +
-		"</div>" +
-		"<div id=\"finalDiv\" >" +
-		"<h3 style=\"color:teal\">Final Exam (Instructor Input)</h3>" +
-		"<div class=\"align-left\">" +
-		"Time limit (seconds):" +
+		"<div class=\"options\">" +
+		"	<div class=\"align-left\">" +
+		"		Time limit (seconds):" +
+		"	</div>" +
 		"</div>" +
 		"<div>" +
-		"<input id=\"timeLimit\" type=\"text\"  placeholder=\"time limit (seconds)...\" />" +
+		"	<input id=\"timeLimit\" type=\"text\" class=\"options\" placeholder=\"time limit (seconds)...\" 	/>" +
 		"</div>" +
-		"<div class=\"align-left\">" +
-		"Total  points:" +
-	"</div>"+
-	"<div>"+
-		"<input id=\"totalPoints\" type=\"text\" placeholder=\"Insert total point\"/>" +
-	"</div><br />" +
-	
-	"<h4 style=\"color:teal\">Grading Options</h4>" +
-	"<div class=\"align-left\">" +
-		"Expected words per  minute:" +
-	"</div>" +
-	"<div>" +
-		"<input id=\"ecpectedWPM\" type=\"text\" placeholder=\"Insert expected WPM\"/>" +
-	"</div>" +
-	"<div>" +
-		"<input type=\"checkbox\" id=\"incldueErrors\" />Account for errors?" +
-	"</div>" +
-	"<div id=\"spaceFill\" style=\"height:1.5em\">" +
-		"<div id=\"gradingOptions\" contenteditable=\"false\">" +
-			"Subtract <input type=\"text\" style=\"max-width:20px\" id=\"errorValue\" />" +
-			"<select id=\"errorValueType\">" +
-				"<option value=\"percent\">percent</option>" +
-				"<option value=\"points\">points</option>" +
-			"</select>" +
-			"per error" +
+		"<div class=\"options\">" +
+		"	<div class=\"align-left\">" +
+		"		Expected words per minute:" +
+		"	</div>" +
 		"</div>" +
-	"</div>" +
-	"<div>" +
-		"<span><textarea id=\"finalText\" rows=\"8\" cols=\"64\" placeholder=\"input test here...\"></textarea></span>" +
-	"</div>" +
-	"<div>" +
-		"<span><input id=\"finalSubmit\" type=\"button\"  value=\"Finished\" /></span>" +
-	"</div>" +
-"</div>" +
-"<div id=\"result\"></div>" +
-"<div id=\"jsonR\"></div></form>",#CONFIG#
+		"<div>" +
+		"	<input id=\"expectedWPM\" type=\"text\" class=\"options\" placeholder=\"Insert expected WPM\"/>" +
+		"</div>" +
+		"<div class=\"options\">" +
+		"	How to account for errors:" +
+		"	<select id=\"gradingType\" class=\"options\">" +
+		"		<option value=\"default\">default</option>" +
+		"		<option value=\"custom\">custom</option>" +
+		"	</select>" +
+		"</div>" +
+		"<div id=\"customSettings\" class=\"options\">" +
+		"</div>" +
+		"<div class=\"options\">" +
+		"	Number of Possible Texts:" +
+		"	<select id=\"numTexts\" class=\"options\">" +
+		"		<option value=\"1\">1</option>" +
+		"		<option value=\"2\">2</option>" +
+		"		<option value=\"3\">3</option>" +
+		"		<option value=\"4\">4</option>" +
+		"		<option value=\"5\">5</option>" +
+		"		<option value=\"6\">6</option>" +
+		"		<option value=\"7\">7</option>" +
+		"		<option value=\"8\">8</option>" +
+		"		<option value=\"9\">9</option>" +
+		"		<option value=\"10\">10</option>" +
+		"	</select>" +
+		"</div>" +
+		"<br/>" +
+		"<div id=\"tooShort\">" +
+		"</div>" +
+		"<div id=\"textfields\" >" +
+		"</div>" +
+		"<br/>" +
+		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" class=\"IAbutton\" />" +
+		"<div id=\"result\"></div>" +
+		"<div id=\"jsonR\"></div></div>"#CONFIG#,
 	"methods": 
 	[
-		{
-			"name":	"rightClick",
-			"fireAutomatically": "true",
-			"type": "click",
-			"handler": "function() {disableCtrlKeyCombination();}"
-		},
-		#INPUT#{
+		
+		#EXAM#{
 			"name": "startClick",
 			"type": "click",
 			"id": "vStart",
 			"handler":"function(){
-				startCount++;
-				if (startCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"action\": 		\"start\",
-							\"timeLimit\":	\"120\",
-							\"totalPoint\":	\"10\",
-							\"errorType\":	\"percent\",
-							\"pointsOff\":	\"1\",
-							\"expectedWPM\":	\"30\",
-							\"text\":			\"This is the final.\"
-						},
-						/*For when the files save properly*/
-						function(data){
-							if(typeof data === \"string\")
-								text_area = JSON.parse(data);
-							else
-								text_area = data;
-							document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
-							document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
-							var seconds = text_area.time; 
-							//IsLog.c(seconds);
-							InitTimer(seconds);
-						},
-						\"json\"
-					);
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"start\",
+					},
+					/*For when the files save properly*/
+					function(data){
+						if(typeof data === \"string\"){
+							text_area = JSON.parse(data);
+						}else{
+							text_area = data;
+						}
+						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						var seconds = text_area.time; 
+						IsLog.c(seconds);
+						InitTimer(seconds);
+						IsLog.c(\"Timer should have started\");
+					},
+					\"json\"
+				);			
+			}"
+		},
+		{
+			"name":	"keyCounter",
+			"id": "userText",
+			"type": "keydown",
+			"handler": "function(e) {
+				var counter = $(\"#accesskey\");
+				if(counter) {
+					var count = (typeof counter.val() == \"undefined\")?0:parseInt(counter.val(),16);
+					// IsLog.c(\"IA: wpm_test counter: \"+(counter.val()));
+					counter.val(((isNaN(count))?0:count+1).toString(16));
+				} else {
+					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
-				var message=\"Sorry, right-click has been disabled\"; 
-				function clickIE() {if (document.all) {(message);return false;}} 
-				function clickNS(e) {if 
-				(document.layers||(document.getElementById&&!document.all)) { 
-				if (e.which==2||e.which==3) {(message);return false;}}} 
-				if (document.layers) 
-					{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;} 
-				else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;} 
-				document.oncontextmenu=new Function(\"return false\");
-				function submitScores() {
-					if(initialized == true && doneClicked == true) {
-						setScore(cpm);
-						window.clearInterval(intervalVar);
+				var testString = $(\"#area1\").val();
+				if(testString) {
+					var inputString = $(\"this\").val();
+					if(inputString) {
+						penalty = complexMatchFunction(testString, inputString);
+						IsLog.c(\"IA: wpm_test; final penalty\"+penalty);
 					}
+				}
+			}"
+		},
+		{
+			"name":	"disableAllEvents",
+			"id":"area1",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				if(e == null) {
+					e = arguments[0];
+				}
+				IsLog.c(\"Disabled event type \"+e.type);
+				return false;
+			}"
+		},
+		{
+			"name":	"disableSpecificMouseandKeyboardEvents",
+			"id":"userText",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				diffString1($(\"#area1\").val(),$(this).val());
+				if(e == null) {
+					e = arguments[0];
+				}
+				//IsLog.c(e);
+				if(e.type == \"contextmenu\")
+					return false;
+				if(e.type.indexOf(\"mouse\") > -1) {
+					this.focus();
+					return false;
+				}
+				if(e.ctrlKey == true) {
+					return false;
 				}
 			}"
 		},
@@ -156,6 +192,7 @@
 			"type": "click",
 			"id": "done",
 			"handler":"function(){
+				var doneCount=0;
 				doneCount++;
 				userInput = $('textarea#userText').val();
 				var Jstring = JSON.stringify(userInput);
@@ -165,198 +202,354 @@
 						{
 							\"ia_type\":		\"wpm_test\",
 							\"action\":		\"done\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+							\"ui\":			userInput
+						},
+							function(data){
+								var table = JSON.parse(data);
+								document.getElementById(\"scoreTable\").innerHTML = table.scores;
+								StopTimer();
+								setScore(table.grade);
+							}
+					);
+				}
+				
+			}"
+		}#EXAM#
+		#PRAC#{
+			"name": "init",
+			"fireAutomatically": true,
+			"type": "change",
+			"tag": "infoGetter",
+			"handler":"function(){
+				$.post(
+					portalURL,
+					{
+						\"ia_type\": \"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"default_case\"
+					},
+					function(data) {
+						var targetElement = $('#PracSelect');
+						var numOfTexts;
+						var JSONobj;
+						if(typeof data === \"string\"){
+							JSONobj = JSON.parse(data);
+						}else{
+							JSONobj = data;
+						}
+						IsLog.c(JSONobj);
+						numOfTexts = parseInt(JSONobj.numTexts);	
+						for(i = 0; i < numOfTexts; i++) {
+							var textArea = $(\"<option value=\\\"\"+i+\"\\\">\"+(i+1)+\"</option>\");
+							targetElement.append(textArea);
+							/*	initAssessmentObjects();	*/
+						}
+						if(this instanceof HTMLElement) {
+							for(var i=0; i < assessmentElements.length; i++) {
+								if(typeof assessmentElements[i].setEvents == \"function\") {
+									assessmentElements[i].setEvents();
+								}
+							}
+						}
+					}
+				);
+			}"
+		},
+		{
+			"name": "startClick",
+			"type": "click",
+			"id": "vStart",
+			"handler":"function(){
+				$.post(
+					portalURL,
+					{
+						\"ia_type\":		\"wpm_test\",
+						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+						\"action\": \"start\",
+						\"selectedPrac\": $('#PracSelect').val()
+					},				
+					function(data){
+						if(typeof data === \"string\"){
+							text_area = JSON.parse(data);
+						}else{
+							text_area = data;
+						}
+						
+						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
+						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
+						var seconds = text_area.time; 
+						InitTimer(seconds);
+					},
+					\"json\"
+				);
+			}"
+		},
+		{
+			"name":	"disableAllEvents",
+			"id":"area1",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				if(e == null) {
+					e = arguments[0];
+				}
+				IsLog.c(\"Disabled event type \"+e.type);
+				return false;
+			}"
+		},
+		{
+			"name":	"disableSpecificMouseandKeyboardEvents",
+			"id":"userText",
+			"type": "click change keypress keydown update contextmenu",
+			"handler": "function(e) {
+				diffString1($(\"#area1\").val(),$(this).val());
+				if(e == null) {
+					e = arguments[0];
+				}
+				//IsLog.c(e);
+				if(e.type == \"contextmenu\")
+					return false;
+				if(e.type.indexOf(\"mouse\") > -1) {
+					this.focus();
+					return false;
+				}
+				if(e.ctrlKey == true) {
+					return false;
+				}
+			}"
+		},
+		{
+			"name": "doneClick",
+			"type": "click",
+			"id": "done",
+			"handler":"function(){
+				var doneCount=0;
+				doneCount++;
+				userInput = $('textarea#userText').val();
+				var Jstring = JSON.stringify(userInput);
+				if (doneCount == 1){
+					$.post(
+						portalURL,
+						{
+							\"ia_type\":		\"wpm_test\",
+							\"action\":		\"done\",
+							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
+							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
+							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
 							\"ui\":			userInput
 						},
 						function(data){
-							table = JSON.parse(data);
+							var table = JSON.parse(data);
 							document.getElementById(\"scoreTable\").innerHTML = table.scores;
 							StopTimer();
+							setScore(table.grade);
 						}
 					);
 				}
-				setScore(table.grade);
+				
 			}"
-		}#INPUT#
+		}#PRAC#
 		#CONFIG#{
 			"name": "startup",
 			"fireAutomatically": true,
 			"type": "change",
-			"id": "practiceRadio",
-			"handler":"function(e){
-				var optionsChecked = false;
-				$(\"#finalDiv\").hide(); 		/*	initally hides the final input information	*/
-				$(\"#gradingOptions\").hide();	/*	initially hides the grading options */
-				$(\".align-left\").css(\"float\",\"left\");	/*	formats the text so it ligns up */
+			"id": "numTexts",
+			"handler": "function(){
+				var textStrings= new Array();
+	
+				$(\".align-left\").css(\"float\",\"left\");			/*	formats the text so it ligns up	*/
 				$(\".align-left\").css(\"min-width\",\"200px\");
-				$(\"#incldueErrors\").change( 		/*	hides and shows grading options based on whether or not the checkbox is checked	*/
-					function(){
-						if(this.checked){
-							$(\"#gradingOptions\").show(\"fast\");
-							optionsChecked = true;
-						}else{
-							$(\"#gradingOptions\").hide();
-							optionsChecked = false;
+				
+				if(window['textStrings'] == undefined)
+					window['textStrings'] = [];				
+			}"
+		},{
+			"name": "finished",
+			"type": "click",
+			"id": "assessmentSubmit",
+			"handler": "function() {
+				var validTimeLimit = true;
+				var maxLoops = 10;
+				var loopCount = 0;
+				while(maxLoops > loopCount && $(\".error-text\").length > 0) {
+					$(\".error-text\").remove();
+				}
+				if(typeof window['textStrings'] != \"object\") {
+					IsLog.c(\"textStrings reset: \"+(typeof window['textStrings']));
+					IsLog.c(window['textStrings']);
+					window['textStrings'] = [];
+				} else {
+					IsLog.c(\"textStrings found, not reset: \"+window['textStrings']);
+				}
+				var time = $(\"#timeLimit\").val();
+				var invalidIndex = -1;
+				for(i = 0; i < $('#numTexts').val(); i++){
+					IsLog.c(window['textStrings']);
+					if(window['textStrings'].length > i) {
+						strLen=(window['textStrings'][i].length) / 5;
+						if (strLen < (time * 2)){
+							validTimeLimit = false;
+							invalidIndex = i;
+							break;
 						}
-					}
-				);
-				$(\"#finalRadio\").change( 		/* when \"final\" radio is chosen, the practice information is hidden and the final information is shown */
-					function(){
-						if(this.checked){
-							$(\"#practiceDiv\").hide();
-							$(\"#finalDiv\").show();
-						}	
-					}
-				);
-				$(\"#practiceRadio\").change( 	/* when \"final\" radio is chosen, the practice information is hidden and the final information is shown */
-					function(){
-						if(this.checked){
-							$(\"#finalDiv\").hide();
-							$(\"#practiceDiv\").show();
-						}	
-					}
-				);
-//the low, mid and high WPM values need to be concesntric around the mid, for the purpose the game, so the high is calculated to avoid confusion and errors
-				$(\"#lowWPM\").change(changeValue); 
-				$(\"#midWPM\").change(changeValue);
-				function changeValue(){
-					var lowWPM = $(\"#lowWPM\").val() * 1;		/*	multiplied by 1 to convert from a string to an int	*/
-					var midWPM = $(\"#midWPM\").val() * 1;
-					if( lowWPM != \"\" && midWPM != \"\"){
-						if(lowWPM  <=  midWPM )
-							$(\"#highWPM\").val(2*midWPM - lowWPM); 
+					} else {
+						validTimeLimit = false;
+						invalidIndex = 0;
 					}
 				}
-				$(\"#practiceSubmit\").click(stringToJSONPractice);	/*	attaching event to the submit buttons	*/
-				$(\"#finalSubmit\").click(stringToJSONFinal);
-				function stringToJSONPractice(){					/*	creates a JSON string to be submitted to the portal, and then becomes a text file. Specifically for Practice as it has different inputs	*/
-					var error = false;										/*	error originally set to false. If a field is not filled out properly, error will be set to true and a message will be displayed	*/
-					var errorMessage = \"These fields cannot be blank:\\n\";
-					var JSONString = \"\";
-					var lowWPM = $(\"#lowWPM\").val();
-					var midWPM = $(\"#midWPM\").val();
-					var title = $(\"#PracticeTitle\").val();
-					var text = $(\"#practiceText\").val();
-					if(lowWPM == \"\"){
-						errorMessage += \"low WPM\\n\";
-						error = true;	
-					}
-					if( midWPM == \"\"){
-						errorMessage += \"mid WPM\\n\";
-						error = true;	
-					}
-					if( title == \"\"){
-						errorMessage += \"title\\n\";
-						error = true;	
-					}
-					if( text == \"\"){
-						errorMessage += \"text\\n\";
-						error = true;	
-					}
-					if(!error){
-						//JSON string created with all the necessary information
-						jsonString = \"\" +
-							'{ ' + 
-								'\"lowWPM\":' +	JSON.stringify(lowWPM) + ', ' +
-								'\"midWPM\":' + JSON.stringify(midWPM) +', ' +
-								'\"highWPM\":' + JSON.stringify($(\"#highWPM\").val()) + ', ' +
-								'\"title\":' + JSON.stringify(title) + ', ' + 
-								'\"practiceNum\":' + JSON.stringify($(\"#practiceNum\").val()) + ', ' +
-								'\"text\":' + JSON.stringify(text) + ', ' +
-								'\"userID\":' + JSON.stringify(window.parent.bhUserId) +
-							'}';
-						/*	posting to PHP portal which saves file	*/
-						$.post(
-							portalURL,
-							{
-								\"ia_type\":\"wpm_test\",
-								\"type\":\"practice\",
-								\"action\":\"create\",
-								\"JSONString\":jsonString,
-								\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-								\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-								\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-								\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
-							},
-							function(data) {
-								IsLog.c(data);			//posts success or failure to console
-								$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
-							}
-						);
-					}else{
-						alert(errorMessage);		//creates an alert dialogue with fields needing to be filled out
-					}
-				}
-				function stringToJSONFinal(){
-					/*	same comments as above but adjusted for final	*/
+
+				if(validTimeLimit == true) {
 					var error = false;
-					var errorMessage = \"These fields cannot be blank:\\n\";
+					var errorMessage = \"These fields cannot be blank: \";
 					var JSONString = \"\";
-					var timeLimit = $(\"#timeLimit\").val();
-					var totalPoints = $(\"#totalPoints\").val();
-					var finalText = $(\"#finalText\").val();
-					var expectedWPM = $(\"#ecpectedWPM\").val();
-					var errorValue = $(\"#errorValue\").val();
-					var errorType = $(\"#errorValueType\").val();
-					if(timeLimit == \"\"){
-						errorMessage += \"time limit\\n\";
-						error = true;	
-					}
-					if(totalPoints == \"\"){
-						errorMessage += \"total points\\n\";
-						error = true;	
-					}
-					if(finalText == \"\"){
-						errorMessage += \"text\\n\";
-						error = true;	
-					}
-					if(expectedWPM == \"\"){
-						errorMessage += \"expected words per minute\\n\";
-						error = true;	
-					}
-					if(optionsChecked){
-						if(errorValue == \"\"){
-							errorMessage += \"error value\\n\";
-							error = true;	
+					
+					var formInputs = $(\"input,textarea,select\");
+					
+					var requiredFields = {
+						\"timeLimit\":\"You need a time limit.\",
+						\"expectedWPM\":\"You need an expected words per min.\",
+						\"errorValue\":\"You need to penalize errors (you could put zero).\",
+						\"errorValue\":\"You need to penalize errors (you could put zero).\",
+					};
+					
+					var formObject = {};					
+					for(var i=0; i < formInputs.length; i++) {
+						if(([\"assessmentSubmit\"]).indexOf($(formInputs[i]).attr(\"id\")) == -1) {
+							var objectKey = (($(formInputs[i]).attr(\"id\"))?$(formInputs[i]).attr(\"id\"):$(formInputs[i]).attr(\"name\"));
+							if(formObject[objectKey] == null)
+								formObject[objectKey] = ($(formInputs[i]).val().trim());
+							else if($(formInputs[i]).val() != \"\") {
+								if(typeof formObject[objectKey] == \"string\")
+									formObject[objectKey] = [formObject[objectKey]];
+								formObject[objectKey].push($(formInputs[i]).val().trim());
+							}
 						}
-					}else{
-						errorValue = null;
-						errorType = null;
-					}		
-					if(!error){
-							jsonString = '{ ' +
-								'\"timeLimit\":' + JSON.stringify(timeLimit)  + ', ' +
-								'\"totalPoint\":' + JSON.stringify(totalPoints) + ', ' +
-								'\"errorType\":' + JSON.stringify(errorType)  + ', ' +
-								'\"errorValue\":' + JSON.stringify(errorValue) + ', ' +
-								'\"expectedWPM\":' + JSON.stringify(expectedWPM) + ', ' +
-								'\"text\":' + JSON.stringify(finalText) + ', ' +
-								'\"userID\":' + JSON.stringify(window.parent.bhUserId) +
-							'}';
-						var postVars = {
+					}
+					JSONString = JSON.stringify(formObject);
+					$.post(
+						portalURL,
+						{
 							\"ia_type\":\"wpm_test\",
-							\"type\":\"final\",
-							\"JSONString\":jsonString, /*\"bhCourseId\":window.parent.bhCourseId,*/
-							\"bhCourseID\":\"practiceClass\",
-							\"action\":\"create\",
+							\"type\":$(\"#pracFin\").val(),
+							\"JSONString\":JSONString,
 							\"domain\": bhDomain,
 							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
 							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
 							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
-						};
-						IsLog.c(postVars);
-						$.post(
-							portalURL,
-							postVars,
-							function(data) {
-								IsLog.c(data);
-								$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
-							}
-						);
-					}else{
-						alert(errorMessage);	
+							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
+							\"action\":\"create\"
+						},
+						function(data) {
+							IsLog.c(JSONString);
+							$(\"body\").append($(\"<h2>Assesment created successsfully</h2>\"));
+						}
+					);
+				} else {
+					var shortText = $(\"<h2 class=\\\"error-text\\\" style=\\\"color:red\\\" >A text field is not long enough or the time limit is so long that students could finish before time expires.</h2>\");
+					try {
+						IsLog.c($(\"textarea\"));
+						IsLog.c(invalidIndex);
+						shortText.insertBefore($(\"textarea\")[invalidIndex]);
+					} catch (err) {
+						alert('error:'+err.message);
 					}
 				}
+			}"
+		},{
+			"name": "customErrors",
+			"type": "change",
+			"id": "gradingType",
+			"handler": "function() {
+				var targetElement = $('#customSettings');
+				targetElement.empty();	
+				if($('#gradingType').val()==\"custom\"){
+					
+				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/><br/>\");
+				targetElement.append(textArea);
+				}
+				
+				if(this instanceof HTMLElement) {
+					for(var i=0; i < assessmentElements.length; i++) {
+						if(typeof assessmentElements[i].setEvents == \"function\") {
+							assessmentElements[i].setEvents();
+						}
+					}
+				}
+			}"
+		},{
+			"name": "addInput",
+			"type": "change",
+			"id": "numTexts",
+			"fireAutomatically": true,
+			"handler": "function() {
+				var targetElement = (($('#textfields').length > 0)?$($('#textfields')[0]):null);
+				if(!targetElement)
+					return -1;
+				var loopCount = 0;
+				var maxLoops = 10;
+				var textArea = $(\"textarea\")[$(\"textarea\").length-1];
+				while(loopCount <= maxLoops && textArea) {
+					if($(textArea).val())
+						window['textStrings'][$(\"textarea\").length-1] = $(textArea).val();
+					textArea.parentElement.removeChild(textArea);
+					loopCount++;
+					textArea = $(\"textarea\")[$(\"textarea\").length-1];
+				}
+				
+				targetElement.empty();
+				
+				for(i = 0; i < $('#numTexts').val(); i++) {
+					var textArea = $(\"<textarea rows=\\\"8\\\" cols=\\\"64\\\" placeholder=\\\"the instructor will input the material for which the student will be assesed in this box\\\"></textarea>\");
+					textArea.attr(\"name\", \"text\");
+					var additionalFormatting = $(\"<br/>\");
+					if(textStrings[i])
+						textArea.val(window['textStrings'][i]);
+					targetElement.append(textArea);
+					targetElement.append(additionalFormatting);
+					/*	initAssessmentObjects();	*/
+				}
+				if(this instanceof HTMLElement) {
+					for(var i=0; i < assessmentElements.length; i++) {
+						if(typeof assessmentElements[i].setEvents == \"function\") {
+							assessmentElements[i].setEvents();
+						}
+					}
+				}
+			}"
+		},{
+			"name": "updateTextStrings",
+			"type": "keyup",
+			"tag": "textarea",
+			"handler": "function() {
+				if(typeof window['textStrings'] != \"object\")
+					window['textStrings'] = [];
+				var targetElement = this;
+				var allTextareas = $(\"textarea\");
+				var targetElementIndex = -1;
+				for(var i=allTextareas.length-1; i >= 0; i--) {
+					if(targetElement == allTextareas[i]) {
+						targetElementIndex = i;
+						IsLog.c(\"Found textarea target\");
+						break;
+					}
+				}
+				if(targetElementIndex > -1) {
+					IsLog.c(\"textStrings index:\"+targetElementIndex);
+					window['textStrings'][targetElementIndex] = this.value;
+				} else {
+					IsLog.c(\"textStrings is not found.\");
+				}
+				IsLog.c(window['textStrings']);
 			}"
 		}#CONFIG#	
 	]

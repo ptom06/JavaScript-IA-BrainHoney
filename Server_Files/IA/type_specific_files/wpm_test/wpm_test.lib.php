@@ -1,5 +1,44 @@
 <?PHP
-
+$json_conf = json_decode(default_get_configuration_parameters("file"), true);
+$prac_exam = $json_conf['pracFin'];
+$return_json .= "\"pracFin\":\"".$prac_exam."\",";
+if($POST_GET['action'] == "check") {
+	if(in_array("pracFin", array_keys($json_conf))) {
+		if($prac_exam == "exam"){
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"CONFIG"),
+				array("remove"=>"all","marker"=>"PRAC"),
+				array("remove"=>"tag_only","marker"=>"EXAM")
+			);
+		}else{
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"CONFIG"),
+				array("remove"=>"all","marker"=>"EXAM"),
+				array("remove"=>"tag_only","marker"=>"PRAC")
+			);
+		}
+	} else {
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"PRAC"),
+			array("remove"=>"all","marker"=>"EXAM"),
+			array("remove"=>"tag_only","marker"=>"CONFIG")
+		);
+	}
+} else {
+	if($prac_exam == "exam"){
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"CONFIG"),
+			array("remove"=>"all","marker"=>"PRAC"),
+			array("remove"=>"tag_only","marker"=>"EXAM")
+		);
+	}else{
+		$type_remove_markers = array(
+			array("remove"=>"all","marker"=>"CONFIG"),
+			array("remove"=>"all","marker"=>"EXAM"),
+			array("remove"=>"tag_only","marker"=>"PRAC")
+		);
+	}
+}
 
 	/*function to determine the number of errors */
 function GetError($str1,$str2){
@@ -21,24 +60,38 @@ function startup($les_text){
 }
 
 	/* if you hit start, timer starts and text is adjusted */
-function start(){
-	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID;
-	//$bhCourseID=$POST_GET['bhCourseID'];
-	//only needed for testing
-	$les_text = $POST_GET['text'];
-	$timeLimit = $POST_GET['timeLimit'];
-	$errorPenalty=$POST_GET['pointsOff'];
-	$goalWPM=$POST_GET['expectedWPM'];
-	$percentPoints=$POST_GET['errorType'];
-	//
+function start() {
+	global $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID, $time_start, $_SESSION, $les_text, $timeLimit, $errorPenalty, $goalWPM, $percentPoints, $bhCourseID,$POST_GET;
+	
+	$course_info=default_get_configuration_parameters("file");
+	$conf_obj = json_decode($course_info,true);
+	
+	$goalWPM=$conf_obj['expectedWPM'];
+	$errorPenalty=$conf_obj['errorValue'];
+	$percentPoints=$conf_obj['errorValueType'];
+	$all_texts=$conf_obj['text'];
+	$timeLimit=$conf_obj['timeLimit'];
+	$prac_fin=$conf_obj['pracFin'];
+	
 	$time_start=microtime(true);
-	//$courseInfo=file_get_contents( "courses.".$bhCourseID.".txt" );
-	//$obj = json_decode($courseInfo);
-	$time_start = 
+	
+	
+		
+	if ($prac_fin=="exam"){
+		$les_text= $all_texts[array_rand($all_texts,1)];
+	}else{
+		$i=$POST_GET['selectedPrac'];
+		if(is_numeric($i)){
+			$les_text= $all_texts[$i];
+		}else{
+			$les_text= $all_texts[array_rand($all_texts,1)];
+		}
+	}
+	
 	$_SESSION['start'] = $time_start;
 	$_SESSION['errorPenalty'] = ($errorPenalty/100);
-	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['percentPoints'] = $percentPoints;
+	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['text']=$les_text;
 	$readonly="";
 	$welcome="";
@@ -113,18 +166,18 @@ function getScoreTable() {
     $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
     $results .= "   </tr>";
 	//testing only
-	/*$results .= "   <tr>";
+	$results .= "   <tr>";
     $results .= "         <td class='td'><b>Grade</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$grade."</b></td>";
     $results .= "   </tr>";
-	$results .= "   <tr>";
+	/*$results .= "   <tr>";
     $results .= "         <td class='td'><b>start</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$time_start."</b></td>";
     $results .= "   </tr>";
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>total</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";
+    $results .= "   </tr>";*/
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>grading</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$percentPoints."</b></td>";
@@ -132,10 +185,20 @@ function getScoreTable() {
 	$results .= "   <tr>";
     $results .= "         <td class='td'><b>penalty</b> (%)</td>";
     $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
-    $results .= "   </tr>";*/
+    $results .= "   </tr>";
 	//
-	$results .= "   <td>&nbsp;</td>";
+	//$results .= "   <td>&nbsp;</td>";
     $results .= "</table>";
 	return $results;
+}
+$default_case_set = true;
+function default_case() {
+	global $json_conf;
+	$retString = "";
+	$retString .= "\"default-case\":\"success\"";
+	
+	$retString .= ",\"numTexts\":\"".$json_conf['numTexts']."\"";
+	
+	return $retString;
 }
 ?>

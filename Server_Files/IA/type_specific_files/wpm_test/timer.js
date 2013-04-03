@@ -1,13 +1,16 @@
-var mins, secs, TimerRunning=false, TimerID, TheElement;
+var mins, secs, TimerRunning=false, TimerID, TheElement, a;
 
  
  function InitTimer(seconds) //call the Init function when u need to start the timer
  {
+	IsLog.c("parseInt: "+"");
+	alert("parseInt: "+"");
 	if(seconds != 0){
-		mins=(seconds/60);
+		a=(seconds/60);
+		IsLog.c("parseInt: "+"");
 		secs=(seconds%60);
 	}else{
-    	mins=5;
+    	mins=2;
     	secs=0;
 	}
     StopTimer();
@@ -64,4 +67,3 @@ function Pad(number) //pads the mins/secs with a 0 if its less than 10
        number=0 + "" + number;
     return number;
  }
-

@@ -18,8 +18,15 @@
 	<link rel="stylesheet" type="text/css" href="https://is.byu.edu/is/share/HTML_Resources/CSS/boilerplate.css">
 	<link rel="stylesheet" type="text/css" href="https://isdev.byu.edu/is/share/HTML_Resources/CSS/layout.css">
 	<link rel="stylesheet" type="text/css" href="https://isdev.byu.edu/is/share/HTML_Resources/CSS/typography.css">
+	<link rel="stylesheet" type="text/css" href="CSS/this_course_only.css">
+	<script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/objectKeys.lib.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
     <script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/debug.lib.js" type="text/javascript"></script>
+    <script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/ErrorNet/errorNet.lib.js" type="text/javascript"></script>
+    <script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/Array.indexOf.lib.js" type="text/javascript"></script>
+    <script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/id.lib.js" type="text/javascript"></script>
+    <script src="http://isdev.byu.edu/is/share/HTML_Resources/JavaScript/json2.lib.js" type="text/javascript"></script>
+    
 	
 	<!-- 
 	To learn more about the conditional comments around the html tags at the top of the file:
@@ -34,9 +41,14 @@
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+	<script>
+		window.parent.bhItemTitle = "demo-dev1";
+	</script>
+	<script language="javascript" >if (!String.prototype.trim) { String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');}; }</script>
 	<script language="javascript" src="Server_Files/InlineAssessment.lib.js" ></script>
 </head>
 <body>
+
     <div class="gridContainer clearfix">
 <div class="HeaderGraphic"><img src="https://isdev.byu.edu/is/share/HTML_Resources/Media/Images/Placeholder-LessonBanner.jpg" alt="Placeholder for LessonBanner"></div>
     </div>
@@ -45,8 +57,8 @@
         <div class="MainContent">
 <h1 class="LessonNumber">Lesson Number</h1>
           	<h1 class="LessonName">Lesson Name</h1>
-            <p></p>
-			<div class="inline-assessment" type="wpm_test"></div>
+            <p>This is a sample question. The text can be changed simply by changing the HTML page in which the interaction is placed.</p>
+			<div class="inline-assessment" type="listening"></div>
         </div>
     </div>
     

@@ -10,19 +10,20 @@
 		"<label for=\"deviance\"><span class=\"input-label\">Deviation breakpoint: </span><input type=\"text\" id=\"deviance\" placeholder=\"Deviation breakpoint\"/><div>The above is the interval at which the penalty is compounded</div></label>\n" + 
 		"<label for=\"penalty\"><span class=\"input-label\">Penalty: </span><input type=\"text\" id=\"penalty\" placeholder=\"Deviation penalty\"/><div>The above is the number of points lost at each breakpoint</div></label>\n" + 
 		"</div><input type=\"button\" id=\"submitButton\" value=\" Save \"/>" +
+		"<div id=\"saveResponse\"></div>" + 
 		"<h4>The numbers above are calculated to score according to the following formula:</h4>" + 
-		"<div style=\"display: table;\">" +
+		"<div style=\"display: table; font-size: 0.65em;\">" +
 			"<div style=\"height: 2.5em; display: table-cell; vertical-align: middle;\">" + 
 				"Points = Full Points + " + 
 					"<span style=\"position: relative; top: -0.6em;\">Deviation Penalty</span>" + 
-					"<span style=\"display: inline-block; position: relative; top: 0.55em; left: -6.8em; margin-right: -6.8em; border-top: 1px solid black;\">Deviation breakpoint</span> &times; " + 
+					"<span style=\"display: inline-block; position: relative; top: 0.55em; left: -8em; margin-right: -8em; border-top: 1px solid black;\">Deviation breakpoint</span> &times; " + 
 					"<span style=\"\">(</span>" +
 						"Allowed Deviation - | Student Answer - Correct Answer |" +
 					"<span style=\"\">)</span>" + 
 			"</div>" + 
 		"</div>\n" +
 		"<h4>You may test the formula here:</h4>" + 
-		"<div style=\"display: table;\">" + 
+		"<div style=\"display: table; font-size: 1em;\">" + 
 			"<div style=\"height: 2.5em; display: table-cell; vertical-align: middle;\">" + 
 				"<span class=\"score\">??</span> = <span class=\"points\">??</span> + " + 
 					"<span style=\"position: relative; top: -0.6em;display: inline-block; width: 2em; text-align: center;\"><span class=\"penalty\">??</span></span>" + 
@@ -51,7 +52,7 @@
 					}
 					/*for(var i=0; i < $(\"input\").length; i++) {
 						var key = (($(\"input\")[i].name!=\"\")?$(\"input\")[i].name:$(\"input\")[i].id);
-						IsLog.c(\"Key:\"+key);
+						//IsLog.c(\"Key:\"+key);
 						formInputs[key] = $($(\"input\")[i]).val();
 					}*/
 					$.post(
@@ -67,8 +68,9 @@
 							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\"
 						},
 						function(data) {
-							IsLog.c(data);			/*	posts success or failure to console	*/
-							$(\"#inputBody\").html(\"<h2>Assesment created successsfully</h2>\");
+							data = JSON.parse(data);
+							//IsLog.c(data);			/*	posts success or failure to console	*/
+							$(\"#saveResponse\").html(((data.file_lock.status == \"success\")?\"<h2>Assesment created successsfully</h2>\":\"<h2>Failed to save your configuration. Please contact Luke to determine the problem.</h2>\"));
 						}
 					);
 					
@@ -134,9 +136,9 @@
 								$($(\"#inputField\")[0].parentElement).append($(responseData));
 							}
 							var messageKey = null;
-							for(var d=0; d < Object.keys(data).length; d++) {
-								if( isNaN(data[Object.keys(data)[d]]) && (Object.keys(data)[d]).toLowerCase() != \"error\")
-									messageKey = Object.keys(data)[d];
+							for(var d=0; d < objectKeys(data).length; d++) {
+								if( isNaN(data[objectKeys(data)[d]]) && (objectKeys(data)[d]).toLowerCase() != \"error\")
+									messageKey = objectKeys(data)[d];
 							}
 							$(\"#responseData\").html(
 								((data.ERROR)?\"<span style=\\\"color: red\\\">\"+data.ERROR+\"</span>\":\"\")+((messageKey)?\"<span>\"+data[messageKey]+\"</span>\":\"\")
