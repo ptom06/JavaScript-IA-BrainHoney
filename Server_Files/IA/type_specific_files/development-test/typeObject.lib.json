@@ -1,0 +1,12 @@
+{"development-test": {
+	"inputElementsString": "interactionPage.html",
+	"methods": 
+		[
+			{
+				"name": "testHandler",
+				"type": "click",
+				"id": "noElementId",
+				"handler": "testFunction.js"
+			}
+		]
+}}

@@ -28,7 +28,8 @@ if(!isset($POST_GET['ia_type'])) {
 
 try {
 	$get_typeObject = null;
-	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
+	if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php"))
+		include_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
 	if($POST_GET['action'] == "check" || !is_null($get_typeObject)) {
 		$typePbjectFP = "type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json";	//	Here's the file!
 		$typeObjectFH = fopen($typePbjectFP, "r");									//	Open the file
@@ -184,7 +185,7 @@ switch($POST_GET['action']) {
 		} else if(function_exists("default_get_configuration_parameters")) {
 			$return_json .= default_get_configuration_parameters();
 		} else {
-			$return_json .= "\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
+			$return_json .= ",\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
 		}
 		//	I'd like to see this whole section be replaced with a more elegant configuration method. The heavily escaped strings could probably be moved into their own files to be automatically escaped...
 		if(isset($type_remove_markers)) {
@@ -198,6 +199,40 @@ switch($POST_GET['action']) {
 					}
 				}
 			}
+		}
+		//	Detect file names and load the file instead of the name...
+		try {
+			$typeObject = json_decode($typeObject, true);
+			foreach($typeObject as $typeName=>$typeData) {
+				foreach($typeData['methods'] as $methodI=>$methodObject) {
+					if(preg_match("/.+\.\w+/",$methodObject['handler'],$matches)) {
+						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+							$handler_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
+						} else
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = "function() { IsLog.c(\"IA: Error: handler file not found!\"); }";
+					}
+				}
+				foreach($typeData as $dataName=>$dataObject) {
+					if(is_string($dataObject)) {
+						if(preg_match("/.+\.\w+/",$dataObject,$matches)) {
+							//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+							if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+								$file_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+								$typeObject[$typeName][$dataName] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
+							} else
+								$typeObject[$typeName][$dataName] = "ERROR: file not found!";
+						}
+					}
+				}
+			}
+			$typeObject = json_encode($typeObject);
+		} catch(Exception $e) {
+			$return_json .= "\"ERROR\": \"".$e."\"";
+			echo $return_json."}";
+			session_write_close();
+			exit;
 		}
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;
