@@ -21,8 +21,8 @@ if(typeof loc == "undefined")
 	var isserver = (!devRegEx.test(loc.hostname))?"":"dev";
 
 var portalURL = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
-//if(loc.hostname == "localhost")
-	//portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
+if(loc.hostname == "localhost")
+	portalURL = "Server_Files/IA/portal.php";
 //IsLog.c("IA: using: "+portalURL);
 
 if(!scriptsToLoadIA)

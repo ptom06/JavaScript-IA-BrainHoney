@@ -16,6 +16,8 @@ if(isset($HTTP_RAW_POST_DATA)) {
 }
 $POST_GET = array_merge($_POST, $_GET);
 
+date_default_timezone_set('America/Denver');
+
 //	The following will ensure that the properly library of functions is called and exists
 if(!isset($POST_GET['ia_type'])) {
 	$return_json .= "\"ERROR\":\"IA Type undefined!\"";
