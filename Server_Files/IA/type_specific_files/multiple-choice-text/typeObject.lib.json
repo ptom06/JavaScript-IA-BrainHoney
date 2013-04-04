@@ -1,0 +1,26 @@
+{"multiple-choice-text": {
+	"inputElementsString": "" +
+		"<div><label><input type=\"radio\" id=\"radioButton1\" name=\"radios\" value=\"option 1\"/> Option 1</label></div>" +
+		"<div><label><input type=\"radio\" id=\"radioButton2\" name=\"radios\" value=\"option 2\"/> Option 2</label></div>" +
+		"<div><label><input type=\"radio\" id=\"radioButton3\" name=\"radios\" value=\"option 3\"/> Option 3</label></div>" +
+		"<div><label><input type=\"radio\" id=\"radioButton4\" name=\"radios\" value=\"option 4\"/> Option 4</label></div>" +
+		"<input type=\"button\" id=\"submitButton\" value=\"submit\"/>" +
+		"",
+	"methods": 
+		[
+			{
+				"name": "playing",
+				"type": "click",
+				"id": "radioButton1",
+				"handler": "function() {
+					var response = $(\"<span></span>\");
+					response.attr(\"id\", \"response\");
+					response.text(\"this is just a test\");
+					$(\"#radioButton1\").parent().append(response);
+					
+					
+					
+				}"
+			}
+		]
+}}
