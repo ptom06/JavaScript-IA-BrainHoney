@@ -5,7 +5,7 @@
 			{
 				"name": "playing",
 				"type": "click",
-				"id": "radioButton1",
+				"class": "radio-buttons",
 				"handler": "playing.js"
 			}
 		]
