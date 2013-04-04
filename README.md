@@ -36,3 +36,46 @@ It is included with the HTML Template with the following code:
 	<h4>What is the Mean Length of Utterance (MLU) for the above audio file?</h4>
 </div>
 ```
+Creation of new types
+=========================
+in the server folder structure there are 2 folders you need to understand before you make a new type;
+* courses
+* type_specific_files
+
+These folders hold files loaded for very different purposes. "Courses" holds configuration files for instances of types and "type_specific_files" holds the files that define the type in general. In short, since these types are meant to be reused, they are intentionally kept generic and anything not perfectly generic is reserved for the instance-specific configuration file.
+
+Now we'll cover the creation of a new type from generic to specific.
+
+Inside the "type_specific_files" folder there is a folder for each type. The name is always the same as the name of the type, so make one (please don't use spaces or non-standard characers like "@", "#" or "$"). Inside the type folder there is only one required file; "typeObject.lib.json"
+
+The contents of this file are JSON formatted as follows:
+```JSON
+{
+	"development-test": {								/*	This MUST be the type name (the same as the folder which contains it)	*/
+		"inputElementsString": "interactionPage.html",	/*	the inputElementsString is the HTML added to the page to provide the user elements with which to interact	*/
+		"conditionals": [{								/*	The conditional section contains objects added to the main trunk under indicated conditions (variables passed to the portal)	*/
+			"condition": {"variable":"action","value":"check"},	/*	This is an example condition that sends the configuration HTML property only when the "action" is "check"	*/
+			"configurationElementsString": "configurationPage.html",	/*	this specifies the file which contains the HTML to load into this property	*/
+			"methods": 									/*	Methods are described in detail in the main trunk section	*/
+				[
+					{
+						"name": "testHandler",
+						"type": "click",
+						"id": "noElementId",
+						"handler": "testFunction.js"
+					}
+				]
+		}],
+		"methods":										/*	methods are functions. Do not put more than one function into this property. The function is usually a hander, but can also be called outside of an event when necessary.	*/ 
+			[
+				{
+					"name": "testHandler",				/*	The name is not specifically important, but giving it a helpful name will simplify debug if something goes wrong.	*/
+					"type": "click",					/*	The type is used to define what event type to attach the handler to (This property is required, even if the function is not used as an event handler)	*/
+					"id": "noElementId",				/*	This property is semi-optional. It can be "id", "tag" or "class" and is used to attach the handler to the element upon which the event will fire.	*/
+					"handler": "testFunction.js"		/*	This property is required. It is either the function in text or the file name which contains the function.	*/
+					"fireAutomatically": true,			/*	This property is optional. If you want the function to be executed as soon as the elements are on the page, then add it and set it to 'true'. This is the only way to get code to execute at that time.	*/
+				}
+			]
+	}
+}
+```
