@@ -186,14 +186,19 @@ function InlineAssessment(elementArg) {
 			}
 		}
 		//	Detect if the SCORM+ API is loaded and then check to see if the assessment has been completed
-		if(! $.isReady ) {
-			$(window).ready(function(){
+		if((typeof this.allTypes[this.getType()].scorm) == "undefined" || this.allTypes[this.getType()].scorm) {
+			IsLog.c(this);
+			IsLog.c(typeof this.allTypes[this.getType()].scorm);
+			IsLog.c(this.allTypes[this.getType()].scorm);
+			if(! $.isReady ) {
+				$(window).ready(function(){
+					window.setTimeout("checkGradeCompletion();", 250);
+					window.setTimeout("checkAPIErrors();", 1000);
+				});
+			} else {
 				window.setTimeout("checkGradeCompletion();", 250);
 				window.setTimeout("checkAPIErrors();", 1000);
-			});
-		} else {
-			window.setTimeout("checkGradeCompletion();", 250);
-			window.setTimeout("checkAPIErrors();", 1000);
+			}
 		}
 		this.element = $(this.element);
 		return this.element;
@@ -292,6 +297,7 @@ function parseAssessmentObjects() {
 	IsLog.c("IA: found "+assessmentElements.length+" assessment element(s).");
 	for(var a=0; a < assessmentElements.length; a++) {
 		if(typeof assessmentElements[a]['nodeType'] != "undefined") {
+			var itemTitle = $($(assessmentElements[a])[0]).attr("item-title") || ((window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE");
 			$.post(
 				//"portal.php",
 				portalURL,
@@ -302,7 +308,7 @@ function parseAssessmentObjects() {
 					"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 					"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
 					"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
-					"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+					"itemTitle":	itemTitle
 				},
 				function(data){
 					IsLog.c("IA: POST to retrieve configuration succeeded. ("+(typeof data)+")");
@@ -323,6 +329,11 @@ function parseAssessmentObjects() {
 					if(assessmentInfo['typeObject'] != null) {
 						var typeName = objectKeys(assessmentInfo['typeObject'])[0];
 						InlineAssessment.prototype.allTypes[typeName] = assessmentInfo['typeObject'][typeName];
+						if(typeof assessmentInfo['SCORM'] != "undefined") {
+							InlineAssessment.prototype.allTypes[typeName].scorm = (assessmentInfo['SCORM'] == true);
+							IsLog.c("IA: assessmentInfo['SCORM'] is "+assessmentInfo['SCORM']+" and InlineAssessment.prototype.allTypes["+typeName+"].scorm is "+InlineAssessment.prototype.allTypes[typeName].scorm);
+						} else
+							InlineAssessment.prototype.allTypes[typeName].scorm = true;
 						InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Student";
 						if(assessmentInfo.courseID == false || assessmentInfo.courseID == "false")
 							InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
@@ -338,11 +349,13 @@ function parseAssessmentObjects() {
 									IsLog.c("IA: "+uments[2].getResponseHeader("ETag") + ": " + textStatus);
 								});
 							}
-							if(typeof initializeAPI != "function") {
-								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
-								$.cachedScript(scriptLoc).done(function(script, textStatus) {
-									IsLog.c("IA "+arguments[2].getResponseHeader("ETag") + ": " + textStatus);
-								});
+							if(InlineAssessment.prototype.allTypes[typeName].scorm) {
+								if(typeof initializeAPI != "function") {
+									var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
+									$.cachedScript(scriptLoc).done(function(script, textStatus) {
+										IsLog.c("IA "+arguments[2].getResponseHeader("ETag") + ": " + textStatus);
+									});
+								}
 							}
 							if(InlineAssessment.prototype.allTypes[typeName].scripts) {
 								InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;

@@ -49,7 +49,8 @@ try {
 		$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);					//	Remove all tabs and newline characters
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns (these are from concatenating the lines)
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns again (in case there were doubles)
-		$typeObject = preg_replace("/\/\*[.\r\n\s]+\*\//imU","",$typeObject);		//	Remove all comments (from "/*" to "*/")
+		$typeObject = preg_replace("/\/\*.+\*\//imU","",$typeObject);		//	Remove all comments (from "/*" to "*/")
+		//echo $typeObject;
 	} else if($POST_GET['action'] !== "check" && $POST_GET['action'] !== "create") {
 		$return_json .= "\"ERROR\": \"json config file not found.\"";
 		echo $return_json."}";
@@ -154,7 +155,9 @@ function default_get_configuration_parameters($return_val="json"){
 	switch (strtolower(substr($return_val,0,4))) {
 		case "stud":
 		case "bool":
-			return file_exists($filename);
+			$return_val = file_exists($filename);
+			//var_dump($return_val);
+			return $return_val;
 		break;
 		case "json":
 			return "\"courseID\":".json_encode(file_exists($filename)).",\"filename\":\"".$filename."\"";
@@ -169,6 +172,7 @@ function default_get_configuration_parameters($return_val="json"){
 			return $filename;
 		break;
 	}
+	return -1;
 }
 
 //	This is used in the file names... we don't want weird characters causing the file to not be written, do we?
@@ -213,43 +217,89 @@ switch($POST_GET['action']) {
 			}
 		}
 		try {
-			$typeObject = json_decode($typeObject, true);
+			$typeObjectString = $typeObject;
+			$typeObject = json_decode($typeObjectString, true);
+			if($typeObject === null)
+				throw new Exception('Critical error; Failed parsing JSON type configuration.');
+			$typeNames = array_keys($typeObject);
+			$return_json .= ",\"object-read\": true,\"types-added\":[\"".implode("\",\"",$typeNames)."\"]";
 		} catch(Exception $e) {
-			$return_json .= ",\"ERROR\": \"".$e."\"";
-			echo $return_json."}";
+			$return_json .= ",\"ERROR\": \"".$e->getMessage()."\"";
+			echo $return_json;	//."}";
+			print_r($typeObjectString);
+			echo "}";
 			session_write_close();
 			exit;
 		}
 		//	Process conditional data
 		foreach($typeObject as $typeName=>$typeData) {
-			if(isset($typeObject[$typeName]['conditional'])) {
-				if(isset($typeObject[$typeName]['conditional']['condition'])) {
-					if(isset($typeObject[$typeName]['conditional']['condition']['variable'])) {
-						if(isset($POST_GET[$typeObject[$typeName]['conditional']['condition']['variable']])) {
-							if($POST_GET[$typeObject[$typeName]['conditional']['condition']['variable']] == $typeObject[$typeName]['conditional']['condition']['value']) {
-								foreach($typeObject[$typeName]['conditional'] as $key=>$value)
-									$typeObject[$typeName][$key] = $value;
-								unset($typeObject[$typeName]['condition']);
+			if(is_array($typeObject[$typeName]['conditionals'])) {
+				for($i=0;$i<count($typeObject[$typeName]['conditionals']);$i++) {
+					//echo $i."\n";
+					if(isset($typeObject[$typeName]['conditionals'][$i]['condition'])) {
+						$condition_met = false;
+						if(isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable'])) {
+							if(isset($POST_GET[$typeObject[$typeName]['conditionals'][$i]['condition']['variable']])) {
+								if($POST_GET[$typeObject[$typeName]['conditionals'][$i]['condition']['variable']] == $typeObject[$typeName]['conditionals'][$i]['condition']['value']) {
+									$condition_met = true;
+								}
 							} else {
-								$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditional']['condition']['variable']." is not ".$typeObject[$typeName]['conditional']['condition']['value']."\"";
+								$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditionals'][$i]['condition']['variable']." can not be used as a condition because it is not set.\"";
 								echo $return_json."}";
 								session_write_close();
 								exit;
 							}
+						}
+						if(isset($typeObject[$typeName]['conditionals'][$i]['condition']['function'])) {
+							try {
+								$eval_result = eval("return ".$typeObject[$typeName]['conditionals'][$i]['condition']['function'].";");
+							} catch (Exception $e) {
+								$return_json .= ",\"ERROR\": \"Eval on conditional function failed: \\\"".$typeObject[$typeName]['conditionals'][$i]['condition']['function']."\\\".\"";
+								echo $return_json."}";
+								session_write_close();
+								exit;
+							}
+							if($eval_result === $typeObject[$typeName]['conditionals'][$i]['condition']['value']) {
+								$condition_met = true;
+							}
+						}
+						if($condition_met) {
+							foreach($typeObject[$typeName]['conditionals'][$i] as $key=>$value) {
+								//echo $key."\n";
+								if(!isset($typeObject[$typeName][$key])) {
+									$typeObject[$typeName][$key] = $value;
+								} else {
+									if(is_array($typeObject[$typeName][$key])) {
+										//print_r($typeObject[$typeName][$key]);
+										if(is_array($value)) {
+											//echo "value is array\n";
+											$typeObject[$typeName][$key] = array_merge($typeObject[$typeName][$key], $value);
+										} else
+											$typeObject[$typeName][$key][] = $value;
+										//print_r($typeObject[$typeName][$key]);
+									} else
+										$return_json .= ",\"ERROR\": \"conditional ".$i." can't be added, it is already set!";
+								}
+							}
+							unset($typeObject[$typeName]['condition']);
 						} else {
-							$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditional']['condition']['variable']." can not be used as a condition because it is not set.\"";
+							//	Condition not met... don't add it to the return.
+							/*$return_json .= ",\"condition-type\":\"".((isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable']))?"variable":"function")."\"";
+							$return_json .= ",\"ERROR\": \"".((isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable']))?$typeObject[$typeName]['conditionals'][$i]['condition']['variable']:eval($typeObject[$typeName]['conditionals'][$i]['condition']['function'].";"))." is not ".$typeObject[$typeName]['conditionals'][$i]['condition']['value']."\"";
+							echo $return_json."}";
+							session_write_close();
+							exit;*/
+						}
+						/*} else {
+							$return_json .= ",\"ERROR\": \"Condition variable not set.\"";
 							echo $return_json."}";
 							session_write_close();
 							exit;
-						}
-					} else {
-						$return_json .= ",\"ERROR\": \"Condition variable not set.\"";
-						echo $return_json."}";
-						session_write_close();
-						exit;
+						}*/
 					}
+					unset($typeObject[$typeName]['conditionals'][$i]);
 				}
-				unset($typeObject[$typeName]['conditional']);
+				unset($typeObject[$typeName]['conditionals']);
 			}
 		}
 		//	Detect file names and load the file instead of the name...
