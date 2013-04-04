@@ -84,8 +84,16 @@ function InlineAssessment(elementArg) {
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
 		if(this.allTypes[this.type].teacherStudent == "Teacher" && typeof this.allTypes[this.type].configurationElementString == "string"){
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
-		}else{
+		} else {
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		}
+		if(typeof inputElementString == "undefined") {
+			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
+		}
+		//	Detect errors and display them before continuing.
+		if(typeof this.allTypes['error'] != "undefined") {
+			IsLog.c(this.allTypes['error']);
+			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">"+this.allTypes['error']+"</b>";
 		}
 		
 		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
@@ -216,7 +224,7 @@ function InlineAssessment(elementArg) {
 				if(this.allTypes[this.type].methods[i]['tag'])
 					inputElement = $(""+this.allTypes[this.type].methods[i]['tag']);
 			//IsLog.c("IA: Found element to attach handler ("+inputElement.attr("id")+")");
-			if(inputElement != null) {
+			if(typeof inputElement != "undefined" && inputElement.length !== 0) {
 				for(var j=0; j < inputElement.length; j++) {
 					switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
 					//Onload has already been run.
@@ -233,6 +241,8 @@ function InlineAssessment(elementArg) {
 						break;
 					}
 				}
+			} else {
+				IsLog.c("IA: NOTICE! handler assignment notice; element not found! ("+inputElement.selector+")");
 			}
 		}
 	}
@@ -302,6 +312,12 @@ function parseAssessmentObjects() {
 						var assessmentInfo = (typeof this.responseText == "string")?JSON.parse(this.responseText):this.responseText;
 					}*/ else {
 						var assessmentInfo = data;
+					}
+					if(assessmentInfo['error'] || assessmentInfo['ERROR']) {
+						var error = assessmentInfo['error'] || assessmentInfo['ERROR'];
+						InlineAssessment.prototype.allTypes['error'] = error;
+						initAssessmentObjects();
+						return false;
 					}
 					IsLog.c("IA: assessmentInfo["+(typeof assessmentInfo)+"] contains "+objectKeys(assessmentInfo).join(","));
 					if(assessmentInfo['typeObject'] != null) {

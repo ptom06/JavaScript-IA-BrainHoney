@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
 header("Access-Control-Allow-Headers: *");
 
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors','On');
 $return_json ="{";
 
@@ -26,11 +26,19 @@ if(!isset($POST_GET['ia_type'])) {
 	exit;
 }
 
+if(!is_dir("type_specific_files/".$POST_GET['ia_type'])) {
+	$return_json .= "\"ERROR\": \"Misconfiguration; Invalid type (\\\"".$POST_GET['ia_type']."\\\").\"";
+	echo $return_json."}";
+	session_write_close();
+	exit;
+}
+
 try {
 	$get_typeObject = null;
-	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
-	if($POST_GET['action'] == "check" || !is_null($get_typeObject)) {
-		$typePbjectFP = "type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json";	//	Here's the file!
+	if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php"))
+		include_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
+	$typePbjectFP = "type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json";	//	Here's the file!
+	if(($POST_GET['action'] == "check" || !is_null($get_typeObject)) && @file_exists($typePbjectFP)) {
 		$typeObjectFH = fopen($typePbjectFP, "r");									//	Open the file
 		$typeObject = fread($typeObjectFH, filesize($typePbjectFP));				//	Read the file
 		$return_json .= "\"file-modified-time\":\"".date("r", filemtime($typePbjectFP))."\",";	//	Put some evidence in the JSON that things are working.
@@ -42,6 +50,11 @@ try {
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns (these are from concatenating the lines)
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns again (in case there were doubles)
 		$typeObject = preg_replace("/\/\*[.\r\n\s]+\*\//imU","",$typeObject);		//	Remove all comments (from "/*" to "*/")
+	} else if($POST_GET['action'] !== "check" && $POST_GET['action'] !== "create") {
+		$return_json .= "\"ERROR\": \"json config file not found.\"";
+		echo $return_json."}";
+		session_write_close();
+		exit;
 	}
 } catch(Exception $e) {
 	$return_json .= "\"ERROR\": \"".$e."\"";
@@ -184,7 +197,7 @@ switch($POST_GET['action']) {
 		} else if(function_exists("default_get_configuration_parameters")) {
 			$return_json .= default_get_configuration_parameters();
 		} else {
-			$return_json .= "\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
+			$return_json .= ",\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
 		}
 		//	I'd like to see this whole section be replaced with a more elegant configuration method. The heavily escaped strings could probably be moved into their own files to be automatically escaped...
 		if(isset($type_remove_markers)) {
@@ -199,6 +212,76 @@ switch($POST_GET['action']) {
 				}
 			}
 		}
+		try {
+			$typeObject = json_decode($typeObject, true);
+		} catch(Exception $e) {
+			$return_json .= ",\"ERROR\": \"".$e."\"";
+			echo $return_json."}";
+			session_write_close();
+			exit;
+		}
+		//	Process conditional data
+		foreach($typeObject as $typeName=>$typeData) {
+			if(isset($typeObject[$typeName]['conditional'])) {
+				if(isset($typeObject[$typeName]['conditional']['condition'])) {
+					if(isset($typeObject[$typeName]['conditional']['condition']['variable'])) {
+						if(isset($POST_GET[$typeObject[$typeName]['conditional']['condition']['variable']])) {
+							if($POST_GET[$typeObject[$typeName]['conditional']['condition']['variable']] == $typeObject[$typeName]['conditional']['condition']['value']) {
+								foreach($typeObject[$typeName]['conditional'] as $key=>$value)
+									$typeObject[$typeName][$key] = $value;
+								unset($typeObject[$typeName]['condition']);
+							} else {
+								$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditional']['condition']['variable']." is not ".$typeObject[$typeName]['conditional']['condition']['value']."\"";
+								echo $return_json."}";
+								session_write_close();
+								exit;
+							}
+						} else {
+							$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditional']['condition']['variable']." can not be used as a condition because it is not set.\"";
+							echo $return_json."}";
+							session_write_close();
+							exit;
+						}
+					} else {
+						$return_json .= ",\"ERROR\": \"Condition variable not set.\"";
+						echo $return_json."}";
+						session_write_close();
+						exit;
+					}
+				}
+				unset($typeObject[$typeName]['conditional']);
+			}
+		}
+		//	Detect file names and load the file instead of the name...
+		foreach($typeObject as $typeName=>$typeData) {
+			if(isset($typeData['methods'])) {
+				foreach($typeData['methods'] as $methodI=>$methodObject) {
+					if(preg_match("/^[^\r\n\s]+\.\w+$/",$methodObject['handler'],$matches)) {
+						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+							$handler_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
+						} else
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = "function() { IsLog.c(\"IA: Error: handler file not found!\"); }";
+					}
+				}
+			}
+			foreach($typeData as $dataName=>$dataObject) {
+				if(is_string($dataObject)) {
+					if(preg_match("/^[^\r\n\s]+\.\w+$/",$dataObject,$matches)) {
+						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+							$file_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+							$typeObject[$typeName][$dataName] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
+						} else
+							$typeObject[$typeName][$dataName] = "ERROR: file not found!";
+					}
+				}
+			}
+		}
+		//	Put the typeObject into a string (like it was before)
+		$typeObject = json_encode($typeObject);
+		//	Add the type object to the output (finally!)
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;
 	default:
