@@ -1,4 +1,3 @@
 function() {
-	alert("it worked, again!");
-	
+	alert("loaded configuration javascrpt!");
 }

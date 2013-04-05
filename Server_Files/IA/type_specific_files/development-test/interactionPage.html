@@ -1,1 +1,19 @@
-<input type="text" id="inputField"/><input type="button" id="submitButton" value="submit"/>
+<style>
+	textarea {
+		border-width: medium;
+	}
+	#feedback {
+		height: 0em;
+		overflow:hidden;
+		transition: height 1s;
+		-moz-transition: height 1s; /* Firefox 4 */
+		-webkit-transition: height 1s; /* Safari and Chrome */
+		-o-transition: height 1s; /* Opera */
+	}
+	.feedback-shown {
+		height: 1em !important;
+	}
+</style>
+<textarea rows="15" cols="50"></textarea>
+<div id="feedback">NA</div>
+<input type="button" value="submit" id="submit">

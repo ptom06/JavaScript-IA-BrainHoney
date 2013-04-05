@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: *");
 
 error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors','On');
-$return_json ="{";
+$return_json = "{";
 
 /*	IE will only "POST" with a content-type of text/plain - therefore we have to parse it out of the raw header (which we custom-built into our IE $.post	*/
 /*	reference: https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest	*/
@@ -49,7 +49,7 @@ try {
 		$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);					//	Remove all tabs and newline characters
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns (these are from concatenating the lines)
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns again (in case there were doubles)
-		$typeObject = preg_replace("/\/\*.+\*\//imU","",$typeObject);		//	Remove all comments (from "/*" to "*/")
+		$typeObject = preg_replace("/\/\*.+\*\//imU","",$typeObject);				//	Remove all comments (from "/*" to "*/")
 		//echo $typeObject;
 	} else if($POST_GET['action'] !== "check" && $POST_GET['action'] !== "create") {
 		$return_json .= "\"ERROR\": \"json config file not found.\"";
@@ -58,7 +58,7 @@ try {
 		exit;
 	}
 } catch(Exception $e) {
-	$return_json .= "\"ERROR\": \"".$e."\"";
+	$return_json .= "\"ERROR\": \"".$e->getMessage()."\"";
 	echo $return_json."}";
 	session_write_close();
 	exit;
@@ -297,7 +297,7 @@ switch($POST_GET['action']) {
 							exit;
 						}*/
 					}
-					unset($typeObject[$typeName]['conditionals'][$i]);
+					//unset($typeObject[$typeName]['conditionals'][$i]);
 				}
 				unset($typeObject[$typeName]['conditionals']);
 			}
