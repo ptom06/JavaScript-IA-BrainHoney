@@ -136,7 +136,7 @@ this file can be named whatever is desired, but must be set in the typeObject.li
 					"name": "testHandler",				/*	The name is not specifically important, but giving it a helpful name will simplify debug if something goes wrong.	*/
 					"type": "click",					/*	The type is used to define what event type to attach the handler to (This property is required, even if the function is not used as an event handler)	*/
 					"id": "noElementId",				/*	This property is semi-optional. It can be "id", "tag" or "class" and is used to attach the handler to the element upon which the event will fire.	*/
---->		--->		----->	"handler": "testFunction.js"		/*	This property is required. It is either the function in text or the file name which contains the function.	*/
+--->			-->		"handler": "testFunction.js"		/*	This property is required. It is either the function in text or the file name which contains the function.	*/
 					"fireAutomatically": true,			/*	This property is optional. If you want the function to be executed as soon as the elements are on the page, then add it and set it to 'true'. This is the only way to get code to execute at that time.	*/
 				}
 			]
