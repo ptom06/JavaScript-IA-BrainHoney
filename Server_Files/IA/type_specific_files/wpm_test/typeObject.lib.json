@@ -2,13 +2,14 @@
 	"scripts": [
 		"timer.js",
 		"copyPaste.js",
-		"NEWchecker.js"
+		"NEWchecker.js?v=1.4"
 	],
 	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
 		"	<form class=\"exam\">" +
 		"	<div class=\"etext\">Time remaining:" +
 		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
 		"	</div>" +
+		"	<textarea id=\"area1\" style=\"visibility:hidden; height:0px;\" />" +
 		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"	</div>" +
 		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
@@ -28,7 +29,7 @@
 		"		<option selected=\"selected\">-Select Practice-</option>" +
 		"	</select>" +
 		"	</div>" +
-		"	<input id=\"area1\" type=\"hidden\" />" +
+		"	<textarea id=\"area1\" style=\"visibility:hidden; height:0px;\" />" +
 		"	<div id=\"textCorrection\" class=\"ptext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
 		"	</div>" +
 		"	<br /> " + 
@@ -159,9 +160,6 @@
 				} else {
 					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
-				if(event.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
-					window['mo'] = updateTestDisplay();
-				} 
 			}"
 		},
 		{
@@ -181,6 +179,13 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
+				
+				userInput = $('textarea#userText').val();
+				originalText = $('textarea#area1').val();
+				if(userInput.length % 5 == 0 ){
+					letterCompare(originalText,userInput);
+				}
+				
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -226,6 +231,10 @@
 							setScore(table.grade);
 						}
 				);
+				userInput = $('textarea#userText').val();
+				originalText = $('textarea#area1').val();
+				var score=letterCompare(originalText,userInput);
+				setScore(score);
 			}"
 		}#EXAM#
 		#PRAC#{
@@ -279,7 +288,9 @@
 			"handler":"function(){
 				$('textarea#userText').attr(\"disabled\",false);
 				$('#vStart').attr(\"disabled\",true);
-				document.getElementById(\"scoreTable\").innerHTML = '';
+				$(\"#scoreTable\").html(\"\");
+				$(\"#userText\").val(\"\");
+				IsLog.c($(\"#userText\").val());
 				$.post(
 					portalURL,
 					{
@@ -345,9 +356,14 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
+				
 				userInput = $('textarea#userText').val();
-				originalText = $('#area1').val();
-				letterCompare(originalText,userInput);
+				originalText = $('textarea#area1').val();
+				
+					letterCompare(originalText,userInput);
+				//if(userInput.length % 5 == 0 ){}
+				
+				
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -361,9 +377,6 @@
 				if(e.ctrlKey == true) {
 					return false;
 				}
-				if(e.keyCode == 32 || this.originalEvent instanceof MouseEvent || this.originalEvent instanceof TouchEvent) {
-					window['mo'] = updateTestDisplay();
-				} 
 			}"
 		},
 		{
@@ -392,10 +405,14 @@
 					},
 					function(data){
 						var table = JSON.parse(data);
-						document.getElementById(\"scoreTable\").innerHTML = table.scores;
-						setScore(table.grade);
+						$(\"#scoreTable\").html(table.scores);
+						
 					}
-				);				
+				);	
+				userInput = $('textarea#userText').val();
+				originalText = $('textarea#area1').val();
+				var score=letterCompare(originalText,userInput);
+				setScore(score);			
 			}"
 		}#PRAC#
 		#CONFIG#{
