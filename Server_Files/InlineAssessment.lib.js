@@ -87,7 +87,7 @@ function InlineAssessment(elementArg) {
 		} else {
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		}
-		if(typeof inputElementString == "undefined") {
+		if((typeof inputElementString) == "undefined" && (typeof configurationElementsString) == "undefined") {
 			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
 		}
 		//	Detect errors and display them before continuing.
