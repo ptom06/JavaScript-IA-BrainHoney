@@ -85,10 +85,10 @@ Steps to creating your own configuration
 demo-localhost_dev.html
 
 -----
-typeObject.lib.json
+typeObject.lib.json - 
 
 -----
-configurationPage.html
+configurationPage.html - 
 We can call these pages by whatever name is most appealing, but must be set in the typeObject.lib.json file as explained below
 	The configurationPage.html needs to contain the inputs that are needed for the page.
 ```HTML
@@ -97,7 +97,7 @@ We can call these pages by whatever name is most appealing, but must be set in t
 	after the configurationPage.html file has been created the file name needs to be added to the configurationElementsString area of the typeObject.lib.json file
 
 -----
-InteractionPage.html
+InteractionPage.html - 
 	This file needs to contain the infromation used for ... and then put the filename into the "inputElementsString" area of the typeObject.lib.json file
 the following is an example of creating a text box that has a submit button below it, a feedback text line between the 
 	box and submit button. 
@@ -110,7 +110,7 @@ the functionality is carried out in the "testFunction.js"
 	
 
 -----
-testFunciton.js
+testFunciton.js - 
 this file can be named whatever is desired, but must be set in the typeObject.lib.json file under the inputElementString section and as the handler method
 
 ```JSON
