@@ -82,21 +82,23 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
-		if(this.allTypes[this.type].teacherStudent == "Teacher" && typeof this.allTypes[this.type].configurationElementString == "string"){
-			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		if(this.allTypes[this.type].teacherStudent == "Teacher" && (typeof this.allTypes[this.type].configurationElementsString) == "string"){
+			var inputElementsStringVar = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		} else {
-			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+			var inputElementsStringVar = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		}
-		if((typeof inputElementString) == "undefined" && (typeof configurationElementsString) == "undefined") {
-			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
+		if((typeof inputElementsStringVar) == "undefined") {
+			IsLog.c(this.allTypes[this.type]);
+			IsLog.c(inputElementsStringVar);
+			var inputElementsStringVar = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
 		}
 		//	Detect errors and display them before continuing.
 		if(typeof this.allTypes['error'] != "undefined") {
 			IsLog.c(this.allTypes['error']);
-			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">"+this.allTypes['error']+"</b>";
+			var inputElementsStringVar = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">"+this.allTypes['error']+"</b>";
 		}
 		
-		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
+		var DOMNodesCreate = $("<div>"+inputElementsStringVar+"</div>"); 		//wraps element string in a div
 		this.DOMNodes = DOMNodesCreate;										//adds to the proper place in the HTML page
 		//IsLog.c("IA: Type set to "+this.type+" and created "+((this.DOMNodes.length)?this.DOMNodes.length:this.DOMNodes));
 		return this.type;
