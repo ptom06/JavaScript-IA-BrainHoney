@@ -84,12 +84,14 @@ function InlineAssessment(elementArg) {
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
 		if(
 			this.allTypes[this.type].teacherStudent == "Teacher" &&
-			(typeof this.allTypes[this.type].configurationElementsString) == "string" &&
-			(typeof this.allTypes[this.type].configurationElementString) == "string"
+			(
+				(typeof this.allTypes[this.type].configurationElementsString) == "string" ||
+				(typeof this.allTypes[this.type].configurationElementString) == "string"
+			)
 		){
-			var inputElementsStringVar = (this.allTypes[this.type]) ? ((this.allTypes[this.type].configurationElementsString)?this.allTypes[this.type].configurationElementsString:this.allTypes[this.type].configurationElementString) : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+			var inputElementsStringVar = (this.allTypes[this.type]) ? ((this.allTypes[this.type].configurationElementsString)?this.allTypes[this.type].configurationElementsString:this.allTypes[this.type].configurationElementString) : "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</b>";
 		} else {
-			var inputElementsStringVar = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+			var inputElementsStringVar = (this.allTypes[this.type]) ? ((this.allTypes[this.type].inputElementsString)?this.allTypes[this.type].inputElementsString:this.allTypes[this.type].inputElementString) : "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</b>";
 		}
 		if((typeof inputElementsStringVar) == "undefined") {
 			IsLog.c(this.allTypes[this.type]);

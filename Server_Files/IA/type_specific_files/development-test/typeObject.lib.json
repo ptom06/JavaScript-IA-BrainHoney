@@ -13,19 +13,17 @@
 						"handler": "testFunction2.js"
 					}
 				]
-		},{
-			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":true},
-			"inputElementsString": "interactionPage.html",
-			"methods":
-				[
-					{
-						"name": "showHideFeedback",
-						"type": "click",
-						"id": "submit",
-						"fireAutomatically": false,
-						"handler": "testFunction.js"
-					}
-				]
-		}]
+		}],
+		"inputElementsString": "interactionPage.html",
+		"methods":
+			[
+				{
+					"name": "showHideFeedback",
+					"type": "click",
+					"id": "submit",
+					"fireAutomatically": false,
+					"handler": "testFunction.js"
+				}
+			]
 	}
 }
