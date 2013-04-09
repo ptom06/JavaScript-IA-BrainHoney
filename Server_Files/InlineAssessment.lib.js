@@ -82,8 +82,12 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
-		if(this.allTypes[this.type].teacherStudent == "Teacher" && (typeof this.allTypes[this.type].configurationElementsString) == "string"){
-			var inputElementsStringVar = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		if(
+			this.allTypes[this.type].teacherStudent == "Teacher" &&
+			(typeof this.allTypes[this.type].configurationElementsString) == "string" &&
+			(typeof this.allTypes[this.type].configurationElementString) == "string"
+		){
+			var inputElementsStringVar = (this.allTypes[this.type]) ? ((this.allTypes[this.type].configurationElementsString)?this.allTypes[this.type].configurationElementsString:this.allTypes[this.type].configurationElementString) : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		} else {
 			var inputElementsStringVar = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
 		}
