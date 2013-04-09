@@ -1,4 +1,4 @@
-{
+var obj = {
 	"development-test": {
 		"conditionals": [{
 			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},

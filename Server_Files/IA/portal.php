@@ -43,6 +43,7 @@ try {
 		$typeObject = fread($typeObjectFH, filesize($typePbjectFP));				//	Read the file
 		$return_json .= "\"file-modified-time\":\"".date("r", filemtime($typePbjectFP))."\",";	//	Put some evidence in the JSON that things are working.
 		fclose($typeObjectFH);														//	Close the file
+		$typeObject = preg_replace("/^(var )?(\w+\s*=\s*)?/","",$typeObject);		//	Remove beginning stuffs
 		//$typeObject = preg_replace("/\\/","\\\\",$typeObject);					//	Escape slashes	(introduces some problems. don't use this.)
 		//$typeObject = preg_replace("/\"/","\\\"",$typeObject);					//	Escape quotes (doesn't work. don't do it.)
 		$typeObject = preg_replace("/\/\/[^\n\r]+[\r\n]/i","",$typeObject);			//	Remove all comments (from "//" to the end of the line)
