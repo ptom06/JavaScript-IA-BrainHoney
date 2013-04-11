@@ -1,141 +1,33 @@
 {"wpm_test": {
 	"scripts": [
 		"timer.js",
-		"checker.js",
-		"copyPaste.js"
+		"copyPaste.js",
+		"NEWchecker.js?v=1.6"
 	],
-	#EXAM#"inputElementsString": "<div class=\"eheading\">Typing Exam</div>" +
-		"	<form class=\"exam\">" +
-		"	<div class=\"etext\">Time remaining:" +
-		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
-		"	</div>" +
-		"	<input id=\"area1\" type=\"hidden\" />" +
-		"	<div id=\"textCorrection\" class=\"etext\" style=\"position:relative ; height:100%;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
-		"	</div>" +
-		"	<input class=\"ebutton\" type=\"button\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input class=\"ebutton\" type=\"button\" id=\"done\" value=\"Done\" />" +
-		"	 <br /> " + 
-		"	<textarea id=\"userText\" class=\"etext\" rows=\"10\" cols=\"132\"></textarea>" + 
-		"	<br />  " +
-		"	<div id=\"scoreTable\" class=\"etext\">" +				 
-		" 	</div>"+
-		"	<input id=\"accesskey\" type=\"hidden\" name=\"accessKey\" >" + 
-		"	</div></form>"#EXAM#
-		#PRAC#"inputElementsString": "<div class=\"pheading\">Practice Typing Activity</div>" +
-		"	<form class=\"practice\">" +
-		"	<div class=\"ptext\">Time remaining:" +
-		"	<input id=\"txt\" readonly type=\"text\" value=\"\" border=\"0\" >" +
-		"	Practice #<select id=\"PracSelect\" class=\"ptext\">" +
-		"		<option selected=\"selected\">--Select Practice--</option>" +
-		"	</select>" +
-		"	</div>" +
-		"	<input id=\"area1\" type=\"hidden\" />" +
-		"	<div id=\"textCorrection\" class=\"ptext\" style=\"position:relative ; height:180px;    background:white;  overflow:auto;  border:thin;  border-style:solid;  border-color:#B4B4B4;\">Type the text that appears here in the box below. Click Start to begin.	" +
-		"	</div>" +
-		"	<br /> " + 
-		"	<input type=\"button\" class=\"pbutton\" id=\"vStart\" value=\"Start Test\" />" +
-		"	<input type=\"button\" class=\"pbutton\" id=\"done\" value=\"Done\" />" +
-		"	 <br /> " + 
-		"	<textarea id=\"userText\" class=\"ptext\" rows=\"10\" cols=\"132\"></textarea>" + 
-		"	<br />  " +
-		"	<div id=\"scoreTable\" >" +				 
-		" 	</div></form>"#PRAC#
-	#CONFIG#"configurationElementString":"<h2>Typing Assessment Configurator</h2>" +
-		"<div class=\"everything\"<select id=\"pracFin\" class=\"options\">" +
-		"	<option value=\"practice\">Practice</option>" +
-		"	<option value=\"exam\">Exam</option>" +
-		"</select>" +
-		"<br/>" +
-		"<div class=\"options\">" +
-		"	<div class=\"align-left\">" +
-		"		Time limit (seconds):" +
-		"	</div>" +
-		"</div>" +
-		"<div>" +
-		"	<input id=\"timeLimit\" type=\"text\" class=\"options\" placeholder=\"time limit (seconds)...\" 	/>" +
-		"</div>" +
-		"<div class=\"options\">" +
-		"	<div class=\"align-left\">" +
-		"		Expected words per minute:" +
-		"	</div>" +
-		"</div>" +
-		"<div>" +
-		"	<input id=\"expectedWPM\" type=\"text\" class=\"options\" placeholder=\"Insert expected WPM\"/>" +
-		"</div>" +
-		"<div class=\"options\">" +
-		"	How to account for errors:" +
-		"	<select id=\"gradingType\" class=\"options\">" +
-		"		<option value=\"default\">default</option>" +
-		"		<option value=\"custom\">custom</option>" +
-		"	</select>" +
-		"</div>" +
-		"<div id=\"customSettings\" class=\"options\">" +
-		"</div>" +
-		"<div class=\"options\">" +
-		"	Number of Possible Texts:" +
-		"	<select id=\"numTexts\" class=\"options\">" +
-		"		<option value=\"1\">1</option>" +
-		"		<option value=\"2\">2</option>" +
-		"		<option value=\"3\">3</option>" +
-		"		<option value=\"4\">4</option>" +
-		"		<option value=\"5\">5</option>" +
-		"		<option value=\"6\">6</option>" +
-		"		<option value=\"7\">7</option>" +
-		"		<option value=\"8\">8</option>" +
-		"		<option value=\"9\">9</option>" +
-		"		<option value=\"10\">10</option>" +
-		"	</select>" +
-		"</div>" +
-		"<br/>" +
-		"<div id=\"tooShort\">" +
-		"</div>" +
-		"<div id=\"textfields\" >" +
-		"</div>" +
-		"<br/>" +
-		"<input id=\"assessmentSubmit\" type=\"button\" value=\"Finished\" class=\"IAbutton\" />" +
-		"<div id=\"result\"></div>" +
-		"<div id=\"jsonR\"></div></div>"#CONFIG#,
+	#EXAM#"inputElementsString": "inputElementsExam.html"#EXAM#
+		#PRAC#"inputElementsString": "inputElementsPractice.html"#PRAC#
+	#CONFIG#"configurationElementString":"configureElements.html"#CONFIG#,
 	"methods": 
 	[
 		
 		#EXAM#{
+			"name": "init",
+			"fireAutomatically": true,
+			"type": "change",
+			"tag": "infoGetter",
+			"handler":"examInit.js"
+		},
+		{
 			"name": "startClick",
 			"type": "click",
 			"id": "vStart",
-			"handler":"function(){
-				$.post(
-					portalURL,
-					{
-						\"ia_type\":		\"wpm_test\",
-						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"action\": \"start\",
-					},
-					/*For when the files save properly*/
-					function(data){
-						if(typeof data === \"string\"){
-							text_area = JSON.parse(data);
-						}else{
-							text_area = data;
-						}
-						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
-						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
-						var seconds = text_area.time; 
-						IsLog.c(seconds);
-						InitTimer(seconds);
-						IsLog.c(\"Timer should have started\");
-					},
-					\"json\"
-				);			
-			}"
+			"handler":"examStartClick.js"
 		},
 		{
 			"name":	"keyCounter",
 			"id": "userText",
 			"type": "keydown",
-			"handler": "function(e) {
+			"handler": "function(event) {
 				var counter = $(\"#accesskey\");
 				if(counter) {
 					var count = (typeof counter.val() == \"undefined\")?0:parseInt(counter.val(),16);
@@ -144,14 +36,6 @@
 				} else {
 					IsLog.c(\"IA: wpm_test; ERROR: no count element found.\");
 				}
-				var testString = $(\"#area1\").val();
-				if(testString) {
-					var inputString = $(\"this\").val();
-					if(inputString) {
-						penalty = complexMatchFunction(testString, inputString);
-						IsLog.c(\"IA: wpm_test; final penalty\"+penalty);
-					}
-				}
 			}"
 		},
 		{
@@ -171,7 +55,13 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
-				diffString1($(\"#area1\").val(),$(this).val());
+				
+				userInput = $('textarea#userText').val();
+				originalText = $('textarea#area1').val();
+				
+				letterCompare(originalText,userInput);
+				
+				
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -191,108 +81,20 @@
 			"name": "doneClick",
 			"type": "click",
 			"id": "done",
-			"handler":"function(){
-				var doneCount=0;
-				doneCount++;
-				userInput = $('textarea#userText').val();
-				var Jstring = JSON.stringify(userInput);
-				if (doneCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"action\":		\"done\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"ui\":			userInput
-						},
-							function(data){
-								var table = JSON.parse(data);
-								document.getElementById(\"scoreTable\").innerHTML = table.scores;
-								StopTimer();
-								setScore(table.grade);
-							}
-					);
-				}
-				
-			}"
+			"handler":"examDoneClick.js"
 		}#EXAM#
 		#PRAC#{
 			"name": "init",
 			"fireAutomatically": true,
 			"type": "change",
 			"tag": "infoGetter",
-			"handler":"function(){
-				$.post(
-					portalURL,
-					{
-						\"ia_type\": \"wpm_test\",
-						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"action\": \"default_case\"
-					},
-					function(data) {
-						var targetElement = $('#PracSelect');
-						var numOfTexts;
-						var JSONobj;
-						if(typeof data === \"string\"){
-							JSONobj = JSON.parse(data);
-						}else{
-							JSONobj = data;
-						}
-						IsLog.c(JSONobj);
-						numOfTexts = parseInt(JSONobj.numTexts);	
-						for(i = 0; i < numOfTexts; i++) {
-							var textArea = $(\"<option value=\\\"\"+i+\"\\\">\"+(i+1)+\"</option>\");
-							targetElement.append(textArea);
-							/*	initAssessmentObjects();	*/
-						}
-						if(this instanceof HTMLElement) {
-							for(var i=0; i < assessmentElements.length; i++) {
-								if(typeof assessmentElements[i].setEvents == \"function\") {
-									assessmentElements[i].setEvents();
-								}
-							}
-						}
-					}
-				);
-			}"
+			"handler":"practiceInit.js"
 		},
 		{
 			"name": "startClick",
 			"type": "click",
 			"id": "vStart",
-			"handler":"function(){
-				$.post(
-					portalURL,
-					{
-						\"ia_type\":		\"wpm_test\",
-						\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-						\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-						\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-						\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-						\"action\": \"start\",
-						\"selectedPrac\": $('#PracSelect').val()
-					},				
-					function(data){
-						if(typeof data === \"string\"){
-							text_area = JSON.parse(data);
-						}else{
-							text_area = data;
-						}
-						
-						document.getElementById(\"area1\").innerHTML = text_area.welcome.les_text;
-						document.getElementById(\"textCorrection\").innerHTML = text_area.welcome.les_text;
-						var seconds = text_area.time; 
-						InitTimer(seconds);
-					},
-					\"json\"
-				);
-			}"
+			"handler":"practiceStartClick.js"
 		},
 		{
 			"name":	"disableAllEvents",
@@ -311,7 +113,12 @@
 			"id":"userText",
 			"type": "click change keypress keydown update contextmenu",
 			"handler": "function(e) {
-				diffString1($(\"#area1\").val(),$(this).val());
+				
+				userInput = $('textarea#userText').val();
+				originalText = $('textarea#area1').val();
+				
+				letterCompare(originalText,userInput);
+				
 				if(e == null) {
 					e = arguments[0];
 				}
@@ -331,33 +138,7 @@
 			"name": "doneClick",
 			"type": "click",
 			"id": "done",
-			"handler":"function(){
-				var doneCount=0;
-				doneCount++;
-				userInput = $('textarea#userText').val();
-				var Jstring = JSON.stringify(userInput);
-				if (doneCount == 1){
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":		\"wpm_test\",
-							\"action\":		\"done\",
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"ui\":			userInput
-						},
-						function(data){
-							var table = JSON.parse(data);
-							document.getElementById(\"scoreTable\").innerHTML = table.scores;
-							StopTimer();
-							setScore(table.grade);
-						}
-					);
-				}
-				
-			}"
+			"handler":"practiceDoneClick.js"
 		}#PRAC#
 		#CONFIG#{
 			"name": "startup",
@@ -377,116 +158,8 @@
 			"name": "finished",
 			"type": "click",
 			"id": "assessmentSubmit",
-			"handler": "function() {
-				var validTimeLimit = true;
-				var maxLoops = 10;
-				var loopCount = 0;
-				while(maxLoops > loopCount && $(\".error-text\").length > 0) {
-					$(\".error-text\").remove();
-				}
-				if(typeof window['textStrings'] != \"object\") {
-					IsLog.c(\"textStrings reset: \"+(typeof window['textStrings']));
-					IsLog.c(window['textStrings']);
-					window['textStrings'] = [];
-				} else {
-					IsLog.c(\"textStrings found, not reset: \"+window['textStrings']);
-				}
-				var time = $(\"#timeLimit\").val();
-				var invalidIndex = -1;
-				for(i = 0; i < $('#numTexts').val(); i++){
-					IsLog.c(window['textStrings']);
-					if(window['textStrings'].length > i) {
-						strLen=(window['textStrings'][i].length) / 5;
-						if (strLen < (time * 2)){
-							validTimeLimit = false;
-							invalidIndex = i;
-							break;
-						}
-					} else {
-						validTimeLimit = false;
-						invalidIndex = 0;
-					}
-				}
-
-				if(validTimeLimit == true) {
-					var error = false;
-					var errorMessage = \"These fields cannot be blank: \";
-					var JSONString = \"\";
-					
-					var formInputs = $(\"input,textarea,select\");
-					
-					var requiredFields = {
-						\"timeLimit\":\"You need a time limit.\",
-						\"expectedWPM\":\"You need an expected words per min.\",
-						\"errorValue\":\"You need to penalize errors (you could put zero).\",
-						\"errorValue\":\"You need to penalize errors (you could put zero).\",
-					};
-					
-					var formObject = {};					
-					for(var i=0; i < formInputs.length; i++) {
-						if(([\"assessmentSubmit\"]).indexOf($(formInputs[i]).attr(\"id\")) == -1) {
-							var objectKey = (($(formInputs[i]).attr(\"id\"))?$(formInputs[i]).attr(\"id\"):$(formInputs[i]).attr(\"name\"));
-							if(formObject[objectKey] == null)
-								formObject[objectKey] = ($(formInputs[i]).val().trim());
-							else if($(formInputs[i]).val() != \"\") {
-								if(typeof formObject[objectKey] == \"string\")
-									formObject[objectKey] = [formObject[objectKey]];
-								formObject[objectKey].push($(formInputs[i]).val().trim());
-							}
-						}
-					}
-					JSONString = JSON.stringify(formObject);
-					$.post(
-						portalURL,
-						{
-							\"ia_type\":\"wpm_test\",
-							\"type\":$(\"#pracFin\").val(),
-							\"JSONString\":JSONString,
-							\"domain\": bhDomain,
-							\"courseTitle\": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:\"UNTITLED\",
-							\"courseID\": (window.parent.bhCourseId)?window.parent.bhCourseId:\"NOCOURSEID\",
-							\"itemID\": (window.parent.bhItemId)?window.parent.bhItemId:\"NOTIEMID\",
-							\"itemTitle\": (window.parent.bhItemTitle)?window.parent.bhItemTitle:\"NOTITLE\",
-							\"action\":\"create\"
-						},
-						function(data) {
-							IsLog.c(JSONString);
-							$(\"body\").append($(\"<h2>Assesment created successsfully</h2>\"));
-						}
-					);
-				} else {
-					var shortText = $(\"<h2 class=\\\"error-text\\\" style=\\\"color:red\\\" >A text field is not long enough or the time limit is so long that students could finish before time expires.</h2>\");
-					try {
-						IsLog.c($(\"textarea\"));
-						IsLog.c(invalidIndex);
-						shortText.insertBefore($(\"textarea\")[invalidIndex]);
-					} catch (err) {
-						alert('error:'+err.message);
-					}
-				}
-			}"
-		},{
-			"name": "customErrors",
-			"type": "change",
-			"id": "gradingType",
-			"handler": "function() {
-				var targetElement = $('#customSettings');
-				targetElement.empty();	
-				if($('#gradingType').val()==\"custom\"){
-					
-				var textArea = $(\"<h3>Deductions for:</h3><div class=\\\"align-left\\\">Missed words:</div><input id=\\\"missedWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">Extra Words:</div><input id=\\\"extraWord\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"2.5\\\"/><br/><div class=\\\"align-left\\\">One Letter Errors:</div><input id=\\\"oneLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\".5\\\"/><br/><div class=\\\"align-left\\\">Two Letter Errors:</div><input id=\\\"twoLetterError\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"1\\\"/><br/><div class=\\\"align-left\\\">Many Errors:</div><input id=\\\"manyErrors\\\" type=\\\"text\\\" style=\\\"max-width:50px\\\" placeholder=\\\"5\\\"/><br/><br/>\");
-				targetElement.append(textArea);
-				}
-				
-				if(this instanceof HTMLElement) {
-					for(var i=0; i < assessmentElements.length; i++) {
-						if(typeof assessmentElements[i].setEvents == \"function\") {
-							assessmentElements[i].setEvents();
-						}
-					}
-				}
-			}"
-		},{
+			"handler": "configDoneClick.js"
+		}, {
 			"name": "addInput",
 			"type": "change",
 			"id": "numTexts",

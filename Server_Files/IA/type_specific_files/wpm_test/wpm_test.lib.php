@@ -1,9 +1,32 @@
 <?PHP
+$get_typeObject = true;
 $json_conf = json_decode(default_get_configuration_parameters("file"), true);
-$prac_exam = $json_conf['pracFin'];
-$return_json .= "\"pracFin\":\"".$prac_exam."\",";
-if($POST_GET['action'] == "check") {
-	if(in_array("pracFin", array_keys($json_conf))) {
+if($json_conf) {
+	$prac_exam = (in_array("pracFin",array_keys($json_conf)))?$json_conf['pracFin']:"pracFin not in array";
+	$return_json .= "\"pracFin\":\"".$prac_exam."\",";
+	if($POST_GET['action'] == "check") {
+		if(in_array("pracFin", array_keys($json_conf))) {
+			if($prac_exam == "exam"){
+				$type_remove_markers = array(
+					array("remove"=>"all","marker"=>"CONFIG"),
+					array("remove"=>"all","marker"=>"PRAC"),
+					array("remove"=>"tag_only","marker"=>"EXAM")
+				);
+			}else{
+				$type_remove_markers = array(
+					array("remove"=>"all","marker"=>"CONFIG"),
+					array("remove"=>"all","marker"=>"EXAM"),
+					array("remove"=>"tag_only","marker"=>"PRAC")
+				);
+			}
+		} else {
+			$type_remove_markers = array(
+				array("remove"=>"all","marker"=>"PRAC"),
+				array("remove"=>"all","marker"=>"EXAM"),
+				array("remove"=>"tag_only","marker"=>"CONFIG")
+			);
+		}
+	} else {
 		if($prac_exam == "exam"){
 			$type_remove_markers = array(
 				array("remove"=>"all","marker"=>"CONFIG"),
@@ -17,41 +40,16 @@ if($POST_GET['action'] == "check") {
 				array("remove"=>"tag_only","marker"=>"PRAC")
 			);
 		}
-	} else {
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"PRAC"),
-			array("remove"=>"all","marker"=>"EXAM"),
-			array("remove"=>"tag_only","marker"=>"CONFIG")
-		);
 	}
 } else {
-	if($prac_exam == "exam"){
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"CONFIG"),
-			array("remove"=>"all","marker"=>"PRAC"),
-			array("remove"=>"tag_only","marker"=>"EXAM")
-		);
-	}else{
-		$type_remove_markers = array(
-			array("remove"=>"all","marker"=>"CONFIG"),
-			array("remove"=>"all","marker"=>"EXAM"),
-			array("remove"=>"tag_only","marker"=>"PRAC")
-		);
-	}
+	$return_json .= "\"pracFin\":\"undefined\",";
+	$type_remove_markers = array(
+		array("remove"=>"all","marker"=>"PRAC"),
+		array("remove"=>"all","marker"=>"EXAM"),
+		array("remove"=>"tag_only","marker"=>"CONFIG")
+	);
 }
 
-	/*function to determine the number of errors */
-function GetError($str1,$str2){
-		$error=0;
-		for($i=0;$i<strlen($str1);$i++){
-			if(isset($str2[$i])){
-				if($str1[$i] !=$str2[$i])
-				$error++;
-				} else
-			$error++;
-		}
-		return $error;
-	}
 	/*Necessary for returning the json strings*/
 function startup($les_text){	
 	$wpmObj = new stdClass;
@@ -66,17 +64,13 @@ function start() {
 	$course_info=default_get_configuration_parameters("file");
 	$conf_obj = json_decode($course_info,true);
 	
-	$goalWPM=$conf_obj['expectedWPM'];
-	$errorPenalty=$conf_obj['errorValue'];
-	$percentPoints=$conf_obj['errorValueType'];
 	$all_texts=$conf_obj['text'];
 	$timeLimit=$conf_obj['timeLimit'];
 	$prac_fin=$conf_obj['pracFin'];
+	$goalWPM=$conf_obj['expectedWPM'];
 	
 	$time_start=microtime(true);
 	
-	
-		
 	if ($prac_fin=="exam"){
 		$les_text= $all_texts[array_rand($all_texts,1)];
 	}else{
@@ -89,8 +83,6 @@ function start() {
 	}
 	
 	$_SESSION['start'] = $time_start;
-	$_SESSION['errorPenalty'] = ($errorPenalty/100);
-	$_SESSION['percentPoints'] = $percentPoints;
 	$_SESSION['goalWPM'] = $goalWPM;
 	$_SESSION['text']=$les_text;
 	$readonly="";
@@ -100,47 +92,33 @@ function start() {
 }
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
-	global $word, $wpm, $totalError, $cpm, $accuracy, $user_text, $total_time, $time_start, $_SESSION, $grade, $goalWPM, $errorPenalty, $percentPoints, $POST_GET;
-	$user_text =$POST_GET['ui'];
-	//$les_text=file_get_contents( "typingtext/0/0.txt" );
-	$time_start=($_SESSION["start"]);
-	$errorPenalty=$_SESSION['errorPenalty'];
+	global $word, $wpm, $totalError,  $_SESSION, $grade, $goalWPM, $POST_GET, $total_time, $time_start, $end_time;
+		
 	$goalWPM=$_SESSION['goalWPM'];
-	$percentPoints=$_SESSION['percentPoints'];
-	$les_text = $_SESSION['text'];
-	$total_time=microtime(true)-$time_start;
-	$char=strlen($les_text);
-	$inputChar=strlen($user_text);
-	$totalError = (GetError($les_text,$user_text));
-	$word=substr_count($les_text,' ') + 1;
-	//$word=($inputChar/5);
-	$wpm=round(($inputChar/5)/($total_time / 60));
-	$cpm=round((($inputChar/5)/($total_time / 60))- $totalError);
-	$totalWords = ($word);
-	$accuracy=100-round(GetError($les_text,$user_text) * 100 /$char);
-	$readonly='readonly="readonly"';
+	$grade_obj = $POST_GET['gradingObj'];
+	$time_start=$_SESSION['start'];
+	//var_dump($grade_obj);
+	$wpm=$grade_obj[0];
+	$word=$grade_obj[2];
+	$totalError=$grade_obj[1];
+	$end_time=microtime(true);
+	$total_time=$time_start - $end_time;
 	
-	if($percentPoints == "percent"){
-		if(($wpm / $goalWPM) - ($errorPenalty * $totalError) > 1){
-			$grade = 1 - ($errorPenalty * $totalError);	
-		}else{
-			$grade = ($wpm / $goalWPM) - ($errorPenalty * $totalError);
-		}
+	$wpm=$wpm/($total_time);
+	
+	if(($wpm / $goalWPM) > 1){
+		$grade = 1;	
+	}else{
+		$grade = ($wpm / $goalWPM);
 	}
-	if($percentPoints == "points"){
-		if((($wpm - ($errorPenalty * $totalError)) / $goalWPM)>1){
-			$grade=1;	
-		}else{
-			$grade = (($wpm - ($errorPenalty * $totalError)) / $goalWPM);
-		}
-	}
-	$return_json = "\"scores\":".json_encode(getScoreTable()).", \"grade\":".json_encode($grade)."";
+	
+	$return_json = "\"scores\":".json_encode(getScoreTable()).",\"time\":".json_encode($grade)."";
 	return $return_json;
 }
 function getScoreTable() {
-	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start, $grade, $percentPoints, $errorPenalty ;
+	global $word, $wpm, $totalError, $cpm, $accuracy, $user_obj, $total_time, $time_start, $grade, $percentPoints, $errorPenalty, $end_time;
 	$results = "";
-	$results .= "<table width='449' cellpadding='6' cellspacing='0' class='ta'>";
+	$results .= "<table width='100%' cellpadding='6' cellspacing='0' class='ta'>";
     $results .= "	<tr>";
     $results .= "         <th width='162' class='th' style='width: 10%'><div align='left'>Parameter</div></th>";
     $results .= "         <th width='131' class='th' style='width: 10%'><div align='left'>Your result</div></th>";
@@ -157,39 +135,19 @@ function getScoreTable() {
     $results .= "         <td class='td'><b>Errors</b> (#)</td>";
     $results .= "         <td class='td' id='totalError'><b>".$totalError."</b></td>";
     $results .= "   </tr>";
-    $results .= "   <tr>";
-    $results .= "         <td class='td'><b>CWPM</b> (correct words per minutes)</td>"; 
-    $results .= "         <td class='td' id='cpm'><b>".$cpm."</b></td>";
-    $results .= "   </tr>";
-    $results .= "   <tr>";
-    $results .= "         <td class='td'><b>Accuracy</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$accuracy."</b></td>";
-    $results .= "   </tr>";
-	//testing only
 	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>Grade</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$grade."</b></td>";
-    $results .= "   </tr>";
-	/*$results .= "   <tr>";
-    $results .= "         <td class='td'><b>start</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$time_start."</b></td>";
+    $results .= "         <td class='td'><b>Time</b> (#)</td>";
+    $results .= "         <td class='td' id='totalError'><b>".$total_time."</b></td>";
     $results .= "   </tr>";
 	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>total</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";*/
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>grading</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$percentPoints."</b></td>";
+    $results .= "         <td class='td'><b>Time</b> (#)</td>";
+    $results .= "         <td class='td' id='totalError'><b>".$time_start."</b></td>";
     $results .= "   </tr>";
 	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>penalty</b> (%)</td>";
-    $results .= "         <td class='td' id='accuracy'><b>".$errorPenalty."</b></td>";
+    $results .= "         <td class='td'><b>Time</b> (#)</td>";
+    $results .= "         <td class='td' id='totalError'><b>".$end_time."</b></td>";
     $results .= "   </tr>";
-	//
-	//$results .= "   <td>&nbsp;</td>";
-    $results .= "</table>";
-	return $results;
+    return $results;
 }
 $default_case_set = true;
 function default_case() {
