@@ -82,7 +82,6 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
-<<<<<<< HEAD
 		if(
 			this.allTypes[this.type].teacherStudent == "Teacher" &&
 			(
@@ -103,12 +102,6 @@ function InlineAssessment(elementArg) {
 		if(typeof this.allTypes['error'] != "undefined") {
 			IsLog.c(this.allTypes['error']);
 			var inputElementsStringVar = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">"+this.allTypes['error']+"</b>";
-=======
-		if(this.allTypes[this.type].teacherStudent == "Teacher" && typeof this.allTypes[this.type].configurationElementString == "string"){
-			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
-		} else {
-			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
->>>>>>> origin/1/22/13-david
 		}
 		if((typeof inputElementString) == "undefined" && (typeof configurationElementsString) == "undefined") {
 			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
@@ -331,12 +324,8 @@ function parseAssessmentObjects() {
 					"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 					"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
 					"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
-<<<<<<< HEAD
-					"itemTitle":	itemTitle
-=======
 					"itemTitle":	itemTitle,
 					"sessionID":	getSessionId()
->>>>>>> origin/1/22/13-david
 				},
 				function(data){
 					IsLog.c("IA: POST to retrieve configuration succeeded. ("+(typeof data)+")");
@@ -443,11 +432,7 @@ function loadAssessmentMethods() {
 						} catch (err) {
 							IsLog.c("IA: Error: type method string failed eval(): " + err.message);
 							IsLog.c(defineString);
-<<<<<<< HEAD
 							//throw new Error("IA Error: "+typeName+" type method string failed eval(): " + err.message);
-=======
-							//throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
->>>>>>> origin/1/22/13-david
 						}
 						if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
 							IsLog.c("IA: Error: Failed to assign handler!");

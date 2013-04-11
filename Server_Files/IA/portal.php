@@ -19,10 +19,6 @@ header("Access-Control-Allow-Headers: *");
 
 error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors','On');
-<<<<<<< HEAD
-$return_json = "{";
-=======
->>>>>>> origin/1/22/13-david
 
 /*	IE will only "POST" with a content-type of text/plain - therefore we have to parse it out of the raw header (which we custom-built into our IE $.post	*/
 /*	reference: https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest	*/
@@ -325,11 +321,7 @@ switch($POST_GET['action']) {
 						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
 						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
 							$handler_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
-<<<<<<< HEAD
 							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=\r\n]*=? *function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
-=======
-							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
->>>>>>> origin/1/22/13-david
 						} else
 							$typeObject[$typeName]['methods'][$methodI]['handler'] = "function() { IsLog.c(\"IA: Error: handler file not found!\"); }";
 					}
@@ -341,11 +333,7 @@ switch($POST_GET['action']) {
 						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
 						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
 							$file_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
-<<<<<<< HEAD
 							$typeObject[$typeName][$dataName] = preg_replace("/^[^=\r\n]*=? *function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
-=======
-							$typeObject[$typeName][$dataName] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
->>>>>>> origin/1/22/13-david
 						} else
 							$typeObject[$typeName][$dataName] = "ERROR: file not found!";
 					}
