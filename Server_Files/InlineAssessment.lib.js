@@ -422,7 +422,8 @@ function loadAssessmentMethods() {
 							eval(defineString);
 						} catch (err) {
 							IsLog.c("IA: Error: type method string failed eval(): " + err.message);
-							throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
+							IsLog.c(defineString);
+							//throw new Error("IA Error: "+typeName+" type method string failed eval(): " + err.message);
 						}
 						if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
 							IsLog.c("IA: Error: Failed to assign handler!");

@@ -43,7 +43,6 @@ try {
 		$typeObject = fread($typeObjectFH, filesize($typePbjectFP));				//	Read the file
 		$return_json .= "\"file-modified-time\":\"".date("r", filemtime($typePbjectFP))."\",";	//	Put some evidence in the JSON that things are working.
 		fclose($typeObjectFH);														//	Close the file
-		$typeObject = preg_replace("/^(var )?(\w+\s*=\s*)?/","",$typeObject);		//	Remove beginning stuffs
 		//$typeObject = preg_replace("/\\/","\\\\",$typeObject);					//	Escape slashes	(introduces some problems. don't use this.)
 		//$typeObject = preg_replace("/\"/","\\\"",$typeObject);					//	Escape quotes (doesn't work. don't do it.)
 		$typeObject = preg_replace("/\/\/[^\n\r]+[\r\n]/i","",$typeObject);			//	Remove all comments (from "//" to the end of the line)
@@ -311,7 +310,7 @@ switch($POST_GET['action']) {
 						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
 						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
 							$handler_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
-							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=\r\n]*=? *function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
 						} else
 							$typeObject[$typeName]['methods'][$methodI]['handler'] = "function() { IsLog.c(\"IA: Error: handler file not found!\"); }";
 					}
@@ -323,7 +322,7 @@ switch($POST_GET['action']) {
 						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
 						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
 							$file_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
-							$typeObject[$typeName][$dataName] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
+							$typeObject[$typeName][$dataName] = preg_replace("/^[^=\r\n]*=? *function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
 						} else
 							$typeObject[$typeName][$dataName] = "ERROR: file not found!";
 					}
