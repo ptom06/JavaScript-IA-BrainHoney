@@ -1,34 +1,33 @@
 <?PHP
+$return_json = "{";
 $POST_GET = array_merge($_POST, $_GET);
 
-$bh_student_id = $POST_GET["studentID"];
-$current_session = session_id($POST_GET["studentID"]);
-if(empty($current_session)){
-	session_start();
-	$current_session = session_id($POST_GET["studentID"]);
-} else {
-	//	Session has already been started?
-}
+date_default_timezone_set('America/Denver');
 
+$sessionID=$POST_GET['sessionID'];
+if($sessionID) {
+	session_id($sessionID);
+	session_start();
+	$return_json .= "\"get-sid\":\"".$sessionID."\",\"sid\":\"".session_id()."\",\"sobj\":".json_encode($_SESSION).",";
+} else {
+	session_start();
+}
 // This file is meant to be called using Ajax from anywhere. It adds lines to a log file, so some injection attacks should be cleaned out...
 header("Access-Control-Allow-Origin: *");
-//header("Access-Control-Allow-Origin: https://byuisdevelopment.brainhoney.com");
-//header("Access-Control-Allow-Origin: https://isdev.byu.edu");
 header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE");
 header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Credentials: true");
-//header("Access-Control-Expose-Headers: COOKIE, SET-COOKIE");
 
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors','On');
-$return_json ="{\"session\":\"".$current_session."\",";
 
 /*	IE will only "POST" with a content-type of text/plain - therefore we have to parse it out of the raw header (which we custom-built into our IE $.post	*/
 /*	reference: https://github.com/MoonScript/jQuery-ajaxTransport-XDomainRequest	*/
 if(isset($HTTP_RAW_POST_DATA)) {
 	parse_str($HTTP_RAW_POST_DATA, $_POST);
 }
+$POST_GET = array_merge($_POST, $_GET);
 
+date_default_timezone_set('America/Denver');
 
 //	The following will ensure that the properly library of functions is called and exists
 if(!isset($POST_GET['ia_type'])) {
@@ -38,11 +37,19 @@ if(!isset($POST_GET['ia_type'])) {
 	exit;
 }
 
+if(!is_dir("type_specific_files/".$POST_GET['ia_type'])) {
+	$return_json .= "\"ERROR\": \"Misconfiguration; Invalid type (\\\"".$POST_GET['ia_type']."\\\").\"";
+	echo $return_json."}";
+	session_write_close();
+	exit;
+}
+
 try {
 	$get_typeObject = null;
-	require_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
-	if($POST_GET['action'] == "check" || !is_null($get_typeObject)) {
-		$typePbjectFP = "type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json";	//	Here's the file!
+	if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php"))
+		include_once("type_specific_files/".$POST_GET['ia_type']."/".$POST_GET['ia_type'].".lib.php");
+	$typePbjectFP = "type_specific_files/".$POST_GET['ia_type']."/typeObject.lib.json";	//	Here's the file!
+	if(($POST_GET['action'] == "check" || !is_null($get_typeObject)) && @file_exists($typePbjectFP)) {
 		$typeObjectFH = fopen($typePbjectFP, "r");									//	Open the file
 		$typeObject = fread($typeObjectFH, filesize($typePbjectFP));				//	Read the file
 		$return_json .= "\"file-modified-time\":\"".date("r", filemtime($typePbjectFP))."\",";	//	Put some evidence in the JSON that things are working.
@@ -53,10 +60,16 @@ try {
 		$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);					//	Remove all tabs and newline characters
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns (these are from concatenating the lines)
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns again (in case there were doubles)
-		$typeObject = preg_replace("/\/\*[.\r\n\s]+\*\//imU","",$typeObject);		//	Remove all comments (from "/*" to "*/")
+		$typeObject = preg_replace("/\/\*.+\*\//imU","",$typeObject);				//	Remove all comments (from "/*" to "*/")
+		//echo $typeObject;
+	} else if($POST_GET['action'] !== "check" && $POST_GET['action'] !== "create") {
+		$return_json .= "\"ERROR\": \"json config file not found.\"";
+		echo $return_json."}";
+		session_write_close();
+		exit;
 	}
 } catch(Exception $e) {
-	$return_json .= "\"ERROR\": \"".$e."\"";
+	$return_json .= "\"ERROR\": \"".$e->getMessage()."\"";
 	echo $return_json."}";
 	session_write_close();
 	exit;
@@ -153,7 +166,9 @@ function default_get_configuration_parameters($return_val="json"){
 	switch (strtolower(substr($return_val,0,4))) {
 		case "stud":
 		case "bool":
-			return file_exists($filename);
+			$return_val = file_exists($filename);
+			//var_dump($return_val);
+			return $return_val;
 		break;
 		case "json":
 			return "\"courseID\":".json_encode(file_exists($filename)).",\"filename\":\"".$filename."\"";
@@ -168,6 +183,7 @@ function default_get_configuration_parameters($return_val="json"){
 			return $filename;
 		break;
 	}
+	return -1;
 }
 
 //	This is used in the file names... we don't want weird characters causing the file to not be written, do we?
@@ -196,7 +212,7 @@ switch($POST_GET['action']) {
 		} else if(function_exists("default_get_configuration_parameters")) {
 			$return_json .= default_get_configuration_parameters();
 		} else {
-			$return_json .= "\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
+			$return_json .= ",\"error\":\"\\\"default_get_configuration_parameters\\\" function not defined in lib\"";
 		}
 		//	I'd like to see this whole section be replaced with a more elegant configuration method. The heavily escaped strings could probably be moved into their own files to be automatically escaped...
 		if(isset($type_remove_markers)) {
@@ -211,6 +227,122 @@ switch($POST_GET['action']) {
 				}
 			}
 		}
+		try {
+			$typeObjectString = $typeObject;
+			$typeObject = json_decode($typeObjectString, true);
+			if($typeObject === null)
+				throw new Exception('Critical error; Failed parsing JSON type configuration.');
+			$typeNames = array_keys($typeObject);
+			$return_json .= ",\"object-read\": true,\"types-added\":[\"".implode("\",\"",$typeNames)."\"]";
+		} catch(Exception $e) {
+			$return_json .= ",\"ERROR\": \"".$e->getMessage()."\"";
+			echo $return_json;	//."}";
+			print_r($typeObjectString);
+			echo "}";
+			session_write_close();
+			exit;
+		}
+		//	Process conditional data
+		foreach($typeObject as $typeName=>$typeData) {
+			if(is_array($typeObject[$typeName]['conditionals'])) {
+				for($i=0;$i<count($typeObject[$typeName]['conditionals']);$i++) {
+					//echo $i."\n";
+					if(isset($typeObject[$typeName]['conditionals'][$i]['condition'])) {
+						$condition_met = false;
+						if(isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable'])) {
+							if(isset($POST_GET[$typeObject[$typeName]['conditionals'][$i]['condition']['variable']])) {
+								if($POST_GET[$typeObject[$typeName]['conditionals'][$i]['condition']['variable']] == $typeObject[$typeName]['conditionals'][$i]['condition']['value']) {
+									$condition_met = true;
+								}
+							} else {
+								$return_json .= ",\"ERROR\": \"".$typeObject[$typeName]['conditionals'][$i]['condition']['variable']." can not be used as a condition because it is not set.\"";
+								echo $return_json."}";
+								session_write_close();
+								exit;
+							}
+						}
+						if(isset($typeObject[$typeName]['conditionals'][$i]['condition']['function'])) {
+							try {
+								$eval_result = eval("return ".$typeObject[$typeName]['conditionals'][$i]['condition']['function'].";");
+							} catch (Exception $e) {
+								$return_json .= ",\"ERROR\": \"Eval on conditional function failed: \\\"".$typeObject[$typeName]['conditionals'][$i]['condition']['function']."\\\".\"";
+								echo $return_json."}";
+								session_write_close();
+								exit;
+							}
+							if($eval_result === $typeObject[$typeName]['conditionals'][$i]['condition']['value']) {
+								$condition_met = true;
+							}
+						}
+						if($condition_met) {
+							foreach($typeObject[$typeName]['conditionals'][$i] as $key=>$value) {
+								//echo $key."\n";
+								if(!isset($typeObject[$typeName][$key])) {
+									$typeObject[$typeName][$key] = $value;
+								} else {
+									if(is_array($typeObject[$typeName][$key])) {
+										//print_r($typeObject[$typeName][$key]);
+										if(is_array($value)) {
+											//echo "value is array\n";
+											$typeObject[$typeName][$key] = array_merge($typeObject[$typeName][$key], $value);
+										} else
+											$typeObject[$typeName][$key][] = $value;
+										//print_r($typeObject[$typeName][$key]);
+									} else
+										$return_json .= ",\"ERROR\": \"conditional ".$i." can't be added, it is already set!";
+								}
+							}
+							unset($typeObject[$typeName]['condition']);
+						} else {
+							//	Condition not met... don't add it to the return.
+							/*$return_json .= ",\"condition-type\":\"".((isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable']))?"variable":"function")."\"";
+							$return_json .= ",\"ERROR\": \"".((isset($typeObject[$typeName]['conditionals'][$i]['condition']['variable']))?$typeObject[$typeName]['conditionals'][$i]['condition']['variable']:eval($typeObject[$typeName]['conditionals'][$i]['condition']['function'].";"))." is not ".$typeObject[$typeName]['conditionals'][$i]['condition']['value']."\"";
+							echo $return_json."}";
+							session_write_close();
+							exit;*/
+						}
+						/*} else {
+							$return_json .= ",\"ERROR\": \"Condition variable not set.\"";
+							echo $return_json."}";
+							session_write_close();
+							exit;
+						}*/
+					}
+					//unset($typeObject[$typeName]['conditionals'][$i]);
+				}
+				unset($typeObject[$typeName]['conditionals']);
+			}
+		}
+		//	Detect file names and load the file instead of the name...
+		foreach($typeObject as $typeName=>$typeData) {
+			if(isset($typeData['methods'])) {
+				foreach($typeData['methods'] as $methodI=>$methodObject) {
+					if(preg_match("/^[^\r\n\s]+\.\w+$/",$methodObject['handler'],$matches)) {
+						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+							$handler_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $handler_data);
+						} else
+							$typeObject[$typeName]['methods'][$methodI]['handler'] = "function() { IsLog.c(\"IA: Error: handler file not found!\"); }";
+					}
+				}
+			}
+			foreach($typeData as $dataName=>$dataObject) {
+				if(is_string($dataObject)) {
+					if(preg_match("/^[^\r\n\s]+\.\w+$/",$dataObject,$matches)) {
+						//$return_json .= ",\"external-file\":\"".$matches[0]."\"";
+						if(file_exists("type_specific_files/".$POST_GET['ia_type']."/".$matches[0])) {
+							$file_data = file_get_contents("type_specific_files/".$POST_GET['ia_type']."/".$matches[0]);
+							$typeObject[$typeName][$dataName] = preg_replace("/^[^=]*=?\s*function[^\(]*(\([^\)]*\))/", "function$1", $file_data);
+						} else
+							$typeObject[$typeName][$dataName] = "ERROR: file not found!";
+					}
+				}
+			}
+		}
+		//	Put the typeObject into a string (like it was before)
+		$typeObject = json_encode($typeObject);
+		//	Add the type object to the output (finally!)
 		$return_json .= ",\"typeObject\":".$typeObject;
 	break;
 	default:
@@ -223,5 +355,5 @@ switch($POST_GET['action']) {
 }
 $return_json = preg_replace('/([\:,\[])\s*null\s*([,\}\]])/i', '\1"null"\2', $return_json);
 echo $return_json."}";
-//session_write_close();
+session_write_close();
 ?>

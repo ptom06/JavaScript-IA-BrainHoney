@@ -3,6 +3,7 @@ function letterCompare(p,s){
 	var p_index=0;
 	var s_index=0;
 	var p_array=new Array();
+	var score=[0,0,0];
 	var i=0;
 	var x=0;
 	var y=0;
@@ -23,47 +24,61 @@ function letterCompare(p,s){
 		p_index=p_index +5;
 		i++;
 	}
+	var beginOfLastMatch = 0;
+	var endOfLastMatch = 0;
 	while(p_array.length > matches.length){
 		currentMatch = s.indexOf(p_array[x],((matches.length*5)-5));
 		IsLog.c(p_array[x]);
-		if(currentMatch == lastMatch || currentMatch == lastMatch+5){
-			matches[x] = currentMatch;
-			lastMatch = currentMatch;
-			IsLog.c("Matches["+ x +"]:" + matches[x] + " Perfect Match");
-		}else if(currentMatch == badMatch+5){
-			matches[x] = currentMatch;
-			lastMatch = currentMatch;
-			matches[x-1] = badMatch;
-			IsLog.c("Matches[" +x+ "]:" + matches[x] + " Perfect from Bad");
-		}else if(currentMatch < lastMatch + 11 && matches[x-1] == -1){
-			matches[x] = currentMatch;
-			lastMatch = currentMatch;
-			IsLog.c("Matches["+x+"]:" + matches[x] + " Good after wrong");
-		}else if(currentMatch < badMatch+11 && matches[x-1] == -1){
-			matches[x] = currentMatch;
-			lastMatch = currentMatch;
-			matches[x-1] = badMatch;
-			IsLog.c("Matches["+x+"]:"+ matches[x]+" Good from Bad after wrong");
-		}else if(currentMatch < lastMatch + 11 && matches[x-1] != -1){
-			matches[x] = -1;
-			lastMatch = currentMatch;
-			IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH because extra letters from good");
-		}else if(currentMatch < badMatch+11 && matches[x-1] != -1){
-			matches[x] = -1;
-			lastMatch = currentMatch;
-			matches[x-1] = badMatch;
-			IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH because extra letters from bad");
-		}else if(currentMatch != -1 && currentMatch > lastMatch + 11){
-			matches[x] = -1;
-			badMatch = currentMatch;
-			IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH but match found after 10+");
-		}else{
+		if(currentMatch != -1) {
+			if(currentMatch == lastMatch || currentMatch == lastMatch+5){
+				matches[x] = currentMatch;
+				lastMatch = currentMatch;
+				IsLog.c("Matches["+ x +"]:" + matches[x] + " Perfect Match");
+				IsLog.c(currentMatch);
+				IsLog.c(lastMatch);
+			}else if(currentMatch == badMatch+5){
+				matches[x] = currentMatch;
+				lastMatch = currentMatch;
+				matches[x-1] = badMatch;
+				IsLog.c("Matches[" +x+ "]:" + matches[x] + " Perfect from Bad");
+			}else if(currentMatch < lastMatch + 11 && matches[x-1] == -1){
+				matches[x] = currentMatch;
+				lastMatch = currentMatch;
+				IsLog.c("Matches["+x+"]:" + matches[x] + " Good after wrong");
+			}else if(currentMatch < badMatch+11 && matches[x-1] == -1){
+				matches[x] = currentMatch;
+				lastMatch = currentMatch;
+				matches[x-1] = badMatch;
+				IsLog.c("Matches["+x+"]:"+ matches[x]+" Good from Bad after wrong");
+			}else if(currentMatch < lastMatch + 11 && matches[x-1] != -1){
+				matches[x] = -1;
+				lastMatch = currentMatch;
+				IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH because extra letters from good");
+			}else if(currentMatch < badMatch+11 && matches[x-1] != -1){
+				matches[x] = -1;
+				lastMatch = currentMatch;
+				matches[x-1] = badMatch;
+				IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH because extra letters from bad");
+			}else if(currentMatch != -1 && currentMatch > lastMatch + 11){
+				matches[x] = -1;
+				badMatch = currentMatch;
+				IsLog.c("Matches["+x+"]:"+ matches[x]+" NO MATCH but match found after 10+");
+			}else{
+				matches[x] = -1;
+				IsLog.c("Matches["+x+"]:"+ matches[x]+" No Match");	
+			}
+		} else {
 			matches[x] = -1;
 			IsLog.c("Matches["+x+"]:"+ matches[x]+" No Match");	
 		}
 		x++;
 	}
-	
+	var x = matches.length-1;
+	while(matches[x] == -1) {
+		matches.pop();
+		x--;
+	}
+	IsLog.c(matches);
 	while(y < matches.length){
 		if(matches[y] == -1){
 			str += '<span style="background:#'+ colors[0] + '">'+ p_array[y] +"</span>"
@@ -76,15 +91,17 @@ function letterCompare(p,s){
 	str+= '<span style="background:#'+ colors[1] + '">'+p.substr(matches.length*5)+"</span>";
 	document.getElementById("textCorrection").innerHTML = str;
 	
-	var score=0;
 	x=0;
 	while(x < matches.length){
 		if(matches[x] != -1){
-			score++;	
+			score[0]++;	
+		}else{
+			score[1]++;
 		}
 		x++;
+		score[2]++;
 	}
-	IsLog.c("Score "+ score);
+	
 	return score;
 }
 

@@ -21,8 +21,8 @@ if(typeof loc == "undefined")
 	var isserver = (!devRegEx.test(loc.hostname))?"":"dev";
 
 var portalURL = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/IA/portal.php";
-//if(loc.hostname == "localhost")
-//	portalURL = loc.protocol+"//localhost/JavaScript-IA-BrainHoney/Server_Files/IA/portal.php";
+if(loc.hostname == "localhost")
+	portalURL = "Server_Files/IA/portal.php";
 //IsLog.c("IA: using: "+portalURL);
 
 if(!scriptsToLoadIA)
@@ -84,8 +84,16 @@ function InlineAssessment(elementArg) {
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
 		if(this.allTypes[this.type].teacherStudent == "Teacher" && typeof this.allTypes[this.type].configurationElementString == "string"){
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].configurationElementString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
-		}else{
+		} else {
 			var inputElementString = (this.allTypes[this.type]) ? this.allTypes[this.type].inputElementsString : "<span>Inline assessment input element type not found (" + this.type + "). Please define them before using this tool.</span>";
+		}
+		if((typeof inputElementString) == "undefined" && (typeof configurationElementsString) == "undefined") {
+			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">Error loading configuration.</b>";
+		}
+		//	Detect errors and display them before continuing.
+		if(typeof this.allTypes['error'] != "undefined") {
+			IsLog.c(this.allTypes['error']);
+			var inputElementString = "<b style=\"font-size: 150%; font-weight: normal; color: red;\">"+this.allTypes['error']+"</b>";
 		}
 		
 		var DOMNodesCreate = $("<div>"+inputElementString+"</div>"); 		//wraps element string in a div
@@ -178,14 +186,19 @@ function InlineAssessment(elementArg) {
 			}
 		}
 		//	Detect if the SCORM+ API is loaded and then check to see if the assessment has been completed
-		if(! $.isReady ) {
-			$(window).ready(function(){
+		if((typeof this.allTypes[this.getType()].scorm) == "undefined" || this.allTypes[this.getType()].scorm) {
+			IsLog.c(this);
+			IsLog.c(typeof this.allTypes[this.getType()].scorm);
+			IsLog.c(this.allTypes[this.getType()].scorm);
+			if(! $.isReady ) {
+				$(window).ready(function(){
+					window.setTimeout("checkGradeCompletion();", 250);
+					window.setTimeout("checkAPIErrors();", 1000);
+				});
+			} else {
 				window.setTimeout("checkGradeCompletion();", 250);
 				window.setTimeout("checkAPIErrors();", 1000);
-			});
-		} else {
-			window.setTimeout("checkGradeCompletion();", 250);
-			window.setTimeout("checkAPIErrors();", 1000);
+			}
 		}
 		this.element = $(this.element);
 		return this.element;
@@ -216,7 +229,7 @@ function InlineAssessment(elementArg) {
 				if(this.allTypes[this.type].methods[i]['tag'])
 					inputElement = $(""+this.allTypes[this.type].methods[i]['tag']);
 			//IsLog.c("IA: Found element to attach handler ("+inputElement.attr("id")+")");
-			if(inputElement != null) {
+			if(typeof inputElement != "undefined" && inputElement.length !== 0) {
 				for(var j=0; j < inputElement.length; j++) {
 					switch(this.allTypes[this.type].methods[i].type.toLowerCase()) {	///only two types of events are included but more can be added. "Click" event is default. 
 					//Onload has already been run.
@@ -233,6 +246,8 @@ function InlineAssessment(elementArg) {
 						break;
 					}
 				}
+			} else {
+				IsLog.c("IA: NOTICE! handler assignment notice; element not found! ("+inputElement.selector+")");
 			}
 		}
 	}
@@ -282,6 +297,7 @@ function parseAssessmentObjects() {
 	IsLog.c("IA: found "+assessmentElements.length+" assessment element(s).");
 	for(var a=0; a < assessmentElements.length; a++) {
 		if(typeof assessmentElements[a]['nodeType'] != "undefined") {
+			var itemTitle = $($(assessmentElements[a])[0]).attr("item-title") || ((window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE");
 			$.post(
 				//"portal.php",
 				portalURL,
@@ -292,8 +308,8 @@ function parseAssessmentObjects() {
 					"courseTitle":	(window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 					"courseID":		(window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
 					"itemID":		(window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
-					"itemTitle":	(window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
-					"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID"
+					"itemTitle":	itemTitle,
+					"sessionID":	getSessionId()
 				},
 				function(data){
 					IsLog.c("IA: POST to retrieve configuration succeeded. ("+(typeof data)+")");
@@ -304,10 +320,21 @@ function parseAssessmentObjects() {
 					}*/ else {
 						var assessmentInfo = data;
 					}
+					if(assessmentInfo['error'] || assessmentInfo['ERROR']) {
+						var error = assessmentInfo['error'] || assessmentInfo['ERROR'];
+						InlineAssessment.prototype.allTypes['error'] = error;
+						initAssessmentObjects();
+						return false;
+					}
 					IsLog.c("IA: assessmentInfo["+(typeof assessmentInfo)+"] contains "+objectKeys(assessmentInfo).join(","));
 					if(assessmentInfo['typeObject'] != null) {
 						var typeName = objectKeys(assessmentInfo['typeObject'])[0];
 						InlineAssessment.prototype.allTypes[typeName] = assessmentInfo['typeObject'][typeName];
+						if(typeof assessmentInfo['SCORM'] != "undefined") {
+							InlineAssessment.prototype.allTypes[typeName].scorm = (assessmentInfo['SCORM'] == true);
+							IsLog.c("IA: assessmentInfo['SCORM'] is "+assessmentInfo['SCORM']+" and InlineAssessment.prototype.allTypes["+typeName+"].scorm is "+InlineAssessment.prototype.allTypes[typeName].scorm);
+						} else
+							InlineAssessment.prototype.allTypes[typeName].scorm = true;
 						InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Student";
 						if(assessmentInfo.courseID == false || assessmentInfo.courseID == "false")
 							InlineAssessment.prototype.allTypes[typeName].teacherStudent = "Teacher";
@@ -323,11 +350,13 @@ function parseAssessmentObjects() {
 									IsLog.c("IA: "+uments[2].getResponseHeader("ETag") + ": " + textStatus);
 								});
 							}
-							if(typeof initializeAPI != "function") {
-								var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
-								$.cachedScript(scriptLoc).done(function(script, textStatus) {
-									IsLog.c("IA "+arguments[2].getResponseHeader("ETag") + ": " + textStatus);
-								});
+							if(InlineAssessment.prototype.allTypes[typeName].scorm) {
+								if(typeof initializeAPI != "function") {
+									var scriptLoc = loc.protocol+"//is" + isserver + ".byu.edu/is/share/BrainHoney/ScormGrader.js";
+									$.cachedScript(scriptLoc).done(function(script, textStatus) {
+										IsLog.c("IA "+arguments[2].getResponseHeader("ETag") + ": " + textStatus);
+									});
+								}
 							}
 							if(InlineAssessment.prototype.allTypes[typeName].scripts) {
 								InlineAssessment.prototype.allTypes[typeName].scriptIndex = 0;
@@ -357,8 +386,6 @@ function parseAssessmentObjects() {
 				}, "json"
 			).error(function() {
 				IsLog.c("IA: error loading initial config: " + arguments[2].message);
-				if(1==2) {
-				}
 				for(var i=0; i < arguments.length; i++) {
 					if(typeof arguments[i] == "object")
 						IsLog.c(objectKeys(arguments[i]));
@@ -388,7 +415,8 @@ function loadAssessmentMethods() {
 							eval(defineString);
 						} catch (err) {
 							IsLog.c("IA: Error: type method string failed eval(): " + err.message);
-							throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
+							IsLog.c(defineString);
+							//throw new Error("Error: "+typeName+" type method string failed eval(): " + err.message);
 						}
 						if(typeof InlineAssessment.prototype.allTypes[typeName].methods[b].handler != "function")
 							IsLog.c("IA: Error: Failed to assign handler!");
@@ -497,6 +525,26 @@ function getScriptIA() {
 			getScriptIA();
 		});
 	}
+}
+
+function getSessionId() {
+	IsLog.timerOn();
+	if(typeof window['IA-Data'] == "undefined")
+		window['IA-Data'] = {};
+	if(typeof window['IA-Data']['sessionId'] == "undefined" || window['IA-Data']['sessionId'] == "") {
+		var a = Math.floor((Math.random()*10000)+1);
+		var b = new Date().getTime();
+		var ahex= a.toString(16);
+		var bhex= b.toString(16);
+		var sesID= ""+ bhex + "" + ahex;
+		IsLog.c(sesID);
+		window['IA-Data']['sessionId'] = sesID;
+		IsLog.c("Generated session id: "+window['IA-Data']['sessionId']);
+	} else {
+		IsLog.c("Using Pre-Existing session id: "+window['IA-Data']['sessionId']);
+	}
+	return window['IA-Data']['sessionId'];
+	
 }
 
 if( typeof jQuery.cachedScript != "function" ) {
