@@ -8,7 +8,6 @@ $sessionID=$POST_GET['sessionID'];
 if($sessionID) {
 	session_id($sessionID);
 	session_start();
-	$return_json .= "\"get-sid\":\"".$sessionID."\",\"sid\":\"".session_id()."\",\"sobj\":".json_encode($_SESSION).",";
 } else {
 	session_start();
 }

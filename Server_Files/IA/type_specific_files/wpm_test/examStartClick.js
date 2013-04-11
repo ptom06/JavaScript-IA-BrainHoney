@@ -11,7 +11,7 @@ function(){
 			"itemTitle": (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
 			"action": "start",
 			"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID",
-			"sessionID": (window.parent.sessionID)?window.parent.sessionID:"NOSESSIONID"
+			"sessionID":	getSessionId()
 		},
 		/*For when the files save properly*/
 		function(data){

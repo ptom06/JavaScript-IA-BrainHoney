@@ -547,13 +547,12 @@ function getSessionId() {
 	IsLog.timerOn();
 	if(typeof window['IA-Data'] == "undefined")
 		window['IA-Data'] = {};
-	if(typeof window['IA-Data']['sessionId'] == "undefined" || window['IA-Data']['sessionId'] == "") {
+	if(typeof window['IA-Data']['sessionId'] == "undefined") {
 		var a = Math.floor((Math.random()*10000)+1);
 		var b = new Date().getTime();
 		var ahex= a.toString(16);
 		var bhex= b.toString(16);
 		var sesID= ""+ bhex + "" + ahex;
-		IsLog.c(sesID);
 		window['IA-Data']['sessionId'] = sesID;
 		IsLog.c("Generated session id: "+window['IA-Data']['sessionId']);
 	} else {

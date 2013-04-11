@@ -19,7 +19,7 @@ function(){
 			"ui":	userInput,
 			"gradingObj": score,
 			"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID",
-			"sessionID": (window.parent.sessionID)?window.parent.sessionID:"NOSESSIONID"
+			"sessionID": 	getSessionId()
 		},
 			function(data){
 				var table = JSON.parse(data);

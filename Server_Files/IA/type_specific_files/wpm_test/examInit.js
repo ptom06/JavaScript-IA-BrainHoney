@@ -9,7 +9,7 @@ function() {
 			"itemTitle": (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
 			"action": "default_case",
 			"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID",
-			"sessionID": window['IA-DATA']['sessionId']||getSessionId()
+			"sessionID": getSessionId()
 		},
 		function(data) {
 			

@@ -88,6 +88,7 @@ function start() {
 	$readonly="";
 	$welcome="";
 	$return_json = "\"welcome\":".json_encode(startup($les_text)).", \"time\":".json_encode($timeLimit)."";
+	$return_json .= ",\"get-sid\":\"".$sessionID."\",\"sid\":\"".session_id()."\",\"sobj\":".json_encode($_SESSION)."";
 	return $return_json;
 }
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
@@ -102,9 +103,9 @@ function done(){
 	$word=$grade_obj[2];
 	$totalError=$grade_obj[1];
 	$end_time=microtime(true);
-	$total_time=$time_start - $end_time;
+	$total_time=($end_time - $time_start);
 	
-	$wpm=$wpm/($total_time);
+	$wpm=round(($wpm/($total_time))*60);
 	
 	if(($wpm / $goalWPM) > 1){
 		$grade = 1;	
@@ -113,6 +114,7 @@ function done(){
 	}
 	
 	$return_json = "\"scores\":".json_encode(getScoreTable()).",\"time\":".json_encode($grade)."";
+	$return_json .= ",\"get-sid\":\"".$sessionID."\",\"sid\":\"".session_id()."\",\"sobj\":".json_encode($_SESSION)."";
 	return $return_json;
 }
 function getScoreTable() {
@@ -134,18 +136,6 @@ function getScoreTable() {
     $results .= "   <tr>";
     $results .= "         <td class='td'><b>Errors</b> (#)</td>";
     $results .= "         <td class='td' id='totalError'><b>".$totalError."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>Time</b> (#)</td>";
-    $results .= "         <td class='td' id='totalError'><b>".$total_time."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>Time</b> (#)</td>";
-    $results .= "         <td class='td' id='totalError'><b>".$time_start."</b></td>";
-    $results .= "   </tr>";
-	$results .= "   <tr>";
-    $results .= "         <td class='td'><b>Time</b> (#)</td>";
-    $results .= "         <td class='td' id='totalError'><b>".$end_time."</b></td>";
     $results .= "   </tr>";
     return $results;
 }

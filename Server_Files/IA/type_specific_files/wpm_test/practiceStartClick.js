@@ -15,7 +15,7 @@ function() {
 			"action": "start",
 			"selectedPrac": $('#PracSelect').val(),
 			"studentID":	(window.parent.bhEnrollmentId)?window.parent.bhEnrollmentId:"NOSTUDENTID",
-			"sessionID": (window.parent.sessionID)?window.parent.sessionID:"NOSESSIONID"
+			"sessionID":	getSessionId()
 		},				
 		function(data){
 			if(typeof data === "string"){
