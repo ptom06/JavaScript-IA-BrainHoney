@@ -20,10 +20,16 @@ var obj = {
 					},
 					{
 						"name":		"updateFeedback",
-						"type":		"keypress",	
-						"tag":		"textarea input",
+						"type":		"keypress blur",	
+						"class":	"user-input",
 						"handler":	"feedbackUpdater.js",
 						"fireAutomatically":	false
+					},{
+						"name":		"submitConfiguration",
+						"type":		"click",	
+						"id":		"submitMe",
+						"handler":	"configSubmit.js",
+						"fireAutomatically":	false	
 					}
 				]
 		}],
