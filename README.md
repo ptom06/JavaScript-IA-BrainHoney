@@ -121,7 +121,7 @@ Steps to creating your own configuration
 
 
 -----
-Step 1: Design the HTML
+<h3>Step 1: Design the HTML</h3>
 
 There are 2 HTML pages you'll need
 1. The HTML for the interaction itself.
@@ -148,7 +148,7 @@ Don't be confused! Yes, they are identical. The only difference between them CAN
 Now let's take a look at those handlers;
 
 -----
-Step 2: write the JavaScript configuration event handlers
+<h3>Step 2: write the JavaScript configuration event handlers</h3>
 
 
 At this point it may pay to remind you that the file names used in "typeObject.lib.json" must be located with it (in the same folder). Also - the handlers we are about to write can only be attached if the id/class/tag specified in "typeObject.lib.json" exist in the HTML that is loaded. It is potentially helpful to format your "typeObject.lib.json" into ONLY conditionals (nothing outside that property) to help keep it clear which HTML and which handlers go together. If your handlers are meant to be used in both HTMLs, then be sure the id/class/tag are the same.
@@ -206,7 +206,7 @@ The "file_lock" property contains the success or failure, so the $.post success 
 Once you have a working configuration page you're ready to build that feedback provider into your "##.lib.php" file.
 
 -----
-Step 3: write the "done" action into your "##.lib.php" file
+<h3>Step 3: write the "done" action into your "##.lib.php" file</h3>
 
 
 
