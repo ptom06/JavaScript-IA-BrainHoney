@@ -3,8 +3,10 @@ $return_json = "{";
 $POST_GET = array_merge($_POST, $_GET);
 
 date_default_timezone_set('America/Denver');
-
-$sessionID=$POST_GET['sessionID'];
+if(in_array("sessionID",array_keys($POST_GET)))
+	$sessionID=$POST_GET['sessionID'];
+else
+	$sessionID = dechex(strtotime("now")) . dechex(round(rand()*100));
 if($sessionID) {
 	session_id($sessionID);
 	session_start();
@@ -55,6 +57,7 @@ try {
 		fclose($typeObjectFH);														//	Close the file
 		//$typeObject = preg_replace("/\\/","\\\\",$typeObject);					//	Escape slashes	(introduces some problems. don't use this.)
 		//$typeObject = preg_replace("/\"/","\\\"",$typeObject);					//	Escape quotes (doesn't work. don't do it.)
+		$typeObject = preg_replace("/^(var )? *\w+ *= */","",$typeObject);			//	Remove leading "var obj = " stuff.
 		$typeObject = preg_replace("/\/\/[^\n\r]+[\r\n]/i","",$typeObject);			//	Remove all comments (from "//" to the end of the line)
 		$typeObject = preg_replace("/[\t\n\r]/i","",$typeObject);					//	Remove all tabs and newline characters
 		$typeObject = preg_replace("/\"\s*\+\s*\"/i","",$typeObject);				//	Remove all " + " patterns (these are from concatenating the lines)
@@ -235,8 +238,8 @@ switch($POST_GET['action']) {
 			$return_json .= ",\"object-read\": true,\"types-added\":[\"".implode("\",\"",$typeNames)."\"]";
 		} catch(Exception $e) {
 			$return_json .= ",\"ERROR\": \"".$e->getMessage()."\"";
-			echo $return_json;	//."}";
-			print_r($typeObjectString);
+			echo $return_json;	//.",\"to-out\":";	//."}";
+			//print_r($typeObjectString);
 			echo "}";
 			session_write_close();
 			exit;
