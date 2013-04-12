@@ -79,16 +79,138 @@ The contents of this file are JSON formatted as follows:
 	}
 }
 ```
-=============
+
+The other primary file you need to know about is the "##TYPE-NAME##.lib.php" file (EG; "development-test.lib.php". This file is used to modify the default "actions" of the portal and to provide a location for any other coding required for the portal to provide processing not appropriate for the client.
+The most useful options (and commonly required for accurate function) are in this example:
+```PHP
+<?PHP
+//	This turns the "SCORM" javascript connection to BrainHoney's API on or off. If it is missing, then the API is initialized be default, which produces errors when the file is loaded outside of BrainHoney (since the API will not be available)
+$return_json .= "\"SCORM\":false,";
+//	This sets the portal to always include the typeObject in its response. This is useful to avoid getting "json config file not found." errors. These errors are thrown if the instance-specific file is not read and the action is neither "check" nor "create"
+$get_typeObject = true;
+?>
+```
+If you create any of the following functions (by name) in your "##.lib.php" file they will replace the default action defined in the portal:
+* write_configuration_json_file
+* get_configuration_parameters
+* ANY function matching your "action" other than "create", "check" and anything listed above
+
+Therefore... you can design your own sequence by chaining $.post requests with specific "action"s with one major limitation; the first request is always "check" and will load the typeObject. That is coded into the InlineAssessment.lib.js and will not be changable.
+
+However the sequence I had in mind with the defaults were;
+<ol>
+	<li>"check" - which loads the page (either the interaction page or the configuration page, depending on wether or not there is a configuration file)
+		<ol>
+			<li>"create" - if the configuration page was loaded
+				<ol>
+					<li>END OF CHAIN</li>
+				</ol>
+			</li>
+			<li>"done" - type-specific function that provides the feedback, grades and other information to complete the interaction.<br/>
+				<span>Please note: this would have to be included in the "##.lib.php" file!</span>
+				<ol>
+					<li>END OF CHAIN</li>
+				</ol>
+			</li>
+		</ol>
+	</li>
+</ol>
+
 Steps to creating your own configuration
 ---------
-demo-localhost_dev.html
+
 
 -----
-typeObject.lib.json - 
+Step 1: Design the HTML
+
+There are 2 HTML pages you'll need
+1. The HTML for the interaction itself.
+2. The HTML to configure the parameters used in the interaction and its grading/feedback.
+
+For the sake of simplicity I'll use "interactionPage.html" and "configurationPage.html" mentioned in the above JSON sample.
+
+interactionPage.html
+```HTML
+<input type="text" id="inputField"/><input type="button\" id="submitButton" value="submit\"/>
+```
+
+Pretty basic. The configuration page is always a little more complicated, so I'll describe it a little more than I did that one.
+
+Every interaction is going to follow a basic assumption; the user will interact with it in some way and it will change in some way to indicate the result of the input. So at a minimum the portal will need some information to send to the user to indicate that the response was received. Our sample configuration page will provide for that input only.
+
+configurationPage.html
+```HTML
+<input type="text" id="inputField"/><input type="button\" id="submitButton" value="submit\"/>
+```
+
+Don't be confused! Yes, they are identical. The only difference between them CAN be the handlers you attach with your "configObject.lib.json".
+
+Now let's take a look at those handlers;
 
 -----
-configurationPage.html - 
+Step 2: write the JavaScript configuration event handlers
+
+
+At this point it may pay to remind you that the file names used in "typeObject.lib.json" must be located with it (in the same folder). Also - the handlers we are about to write can only be attached if the id/class/tag specified in "typeObject.lib.json" exist in the HTML that is loaded. It is potentially helpful to format your "typeObject.lib.json" into ONLY conditionals (nothing outside that property) to help keep it clear which HTML and which handlers go together. If your handlers are meant to be used in both HTMLs, then be sure the id/class/tag are the same.
+
+Now let's get down to brass tacks, shall we? In our sample we have the most basic input imaginable (outside of NO input, which would be ludacris). To keep things consistently idyllic we'll assume we don't even want to validate the input at all! Now we're living dangerously, aren't we?
+
+Our simple-as-it-can-be handler would look like this:
+```JavaScript
+function() {
+	var formInputs = {};
+	var gatherValues = ["inputField"];
+	for(var i=0; i < gatherValues.length; i++) {
+		formInputs[gatherValues[i]] = $("#"+gatherValues[i]).val();
+		if(formInputs[gatherValues[i]] === "") {
+			alert("Can't save settings until they are all filled out.\n"+$("#"+gatherValues[i]).attr("placeholder")+" is currently empty.");
+			return false;
+		}
+	}
+	/*
+	//	This one looks good if you want all the "input" tags, but don't want to validate.
+	for(var i=0; i < $("input").length; i++) {
+		var key = (($("input")[i].name!="")?$("input")[i].name:$("input")[i].id);
+		formInputs[key] = $($("input")[i]).val();
+	}*/
+	$.post(
+		portalURL,
+		{
+			"ia_type":		"development-test",
+			"action":		"create",
+			"JSONString":	JSON.stringify(formInputs),
+			"domain": bhDomain,
+			"courseTitle": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
+			"courseID": (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
+			"itemID": getIAObject($(this)).getItemId(),
+			"itemTitle": (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE"
+		},
+		function(data) {
+			data = JSON.parse(data);
+			//IsLog.c(data);			/*	posts success or failure to console	*/
+			$(($("#saveResponse").length > 0)?"#saveResponse":"body").html(((data.file_lock.status == "success")?"<h2>Assesment created successsfully</h2>":"<h2>Failed to save your configuration. Please contact Luke to determine the problem.</h2>"));
+		}
+	);
+}
+```
+
+Alright, I'm sorry. I put in some validation. I couldn't help myself. I don't enjoy bad data or weird configurations. It isn't simple-as-it-can-be either. It's actually quite a bit more functional than that. Deal with it.
+
+If you did it right and you clicked on that submit button you should get a response from portal that looks like this:
+```JSON
+{"SCORM":false,"filename":"courses\/UNTITLED\/demo-dev1.json","file_lock":{"status":"success","bytes_written":"101"}}
+```
+
+The "file_lock" property contains the success or failure, so the $.post success handler looks there to determine if it worked or not.
+
+Once you have a working configuration page you're ready to build that feedback provider into your "##.lib.php" file.
+
+-----
+Step 3: write the "done" action into your "##.lib.php" file
+
+
+
+-------
 We can call these pages by whatever name is most appealing, but must be set in the typeObject.lib.json file as explained below
 	The configurationPage.html needs to contain the inputs that are needed for the page.
 ```HTML
