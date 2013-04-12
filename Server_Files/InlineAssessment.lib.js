@@ -42,6 +42,7 @@ function InlineAssessment(elementArg) {
 	
 	this.type;
 	this.id = inlineAssessmentIdCounter++;
+	this.itemId = (new Date()).getTime().toString()+Math.round(Math.random()*100).toString();
 	
 	this.setElement = function( elementArg ) {
 		this.emptyElement();
@@ -55,6 +56,12 @@ function InlineAssessment(elementArg) {
 		if (this.allTypes[this.type].methods.length > 0){
 			this.setEvents();
 		}
+		if($(this.element).attr("item-title"))
+			this.itemId = $(this.element).attr("item-title");
+		else if(window.parent.bhItemId)
+			this.itemId = window.parent.bhItemId;
+		else
+			this.itemId = "NOITEMID";
 		return this.element;
 	};
 	
@@ -286,6 +293,7 @@ function InlineAssessment(elementArg) {
 InlineAssessment.prototype.getId = function() { return this.id; };					//additionally functionalities that may or may nto be needed
 InlineAssessment.prototype.getType = function() { return this.type; };
 InlineAssessment.prototype.getElement = function() { return this.element; };
+InlineAssessment.prototype.getItemId = function() { return this.itemId; };
 InlineAssessment.prototype.allTypes = 	this.allTypes = {		//all the available types. Each one needs to have the same formatting, even if it is null ,e.g., 'methods': [NULL], so the coding can be consistent
 	'simple_text': {
 		'inputElementsString':"<input type=\"text\" id=\"submitString\"/><input type=\"button\" id=\"submitButton\" value=\"submit\"/>",
@@ -559,7 +567,54 @@ function getSessionId() {
 		IsLog.c("Using Pre-Existing session id: "+window['IA-Data']['sessionId']);
 	}
 	return window['IA-Data']['sessionId'];
-	
+}
+
+function getIAObject(element) {
+	var iaObject = {"getItemId": function(){ return "ERROR: No Item Id set. IA Object not found.";}, "found":false};
+	if(element instanceof $) {
+		//	Make it a DOM Node (for consistency's sake)
+		element = element[0];
+	} else if (element instanceof HTMLElement) {
+		//	Nothing to do here.. we're already a DOM Node
+	} else {
+		IsLog.c("Error: Can't find the Inline Assessment Object from an element that doesn't exist.");
+		return -1;
+	}
+	var loopCounter = 0,maxLoops = 100;
+	while(element && loopCounter < maxLoops &&
+		(
+			element.className != "inline-assessment" &&
+			element.className != "inline_assessment" &&
+			element.tagName != "inline-assessment" &&
+			element.tagName != "inline_assessment" &&
+			element.id != "inline-assessment" &&
+			element.id != "inline_assessment"
+		)
+	) {
+		element = element.parentNode;
+		loopCounter++;
+	}
+	if(element) {
+		for(var a=0;a<assessmentElements.length;a++) {
+			var aEaElement = assessmentElements[a].getElement();
+			if(aEaElement instanceof $ && aEaElement.length > 0)
+				aEaElement = aEaElement[0]
+			if(aEaElement == element)
+				iaObject = assessmentElements[a];
+			else {
+				IsLog.c("Notice: Inline Assessment element mismatch: ");
+				IsLog.c(element);
+				IsLog.c(aEaElement);
+			}
+		}
+	} else {
+		IsLog.c("Error: IA Object not ancestor of element given!");
+	}
+	if(iaObject['found'] === false) {
+		IsLog.c("Error: IA Object not found!");
+		IsLog.c(element);
+	}
+	return iaObject;
 }
 
 if( typeof jQuery.cachedScript != "function" ) {
