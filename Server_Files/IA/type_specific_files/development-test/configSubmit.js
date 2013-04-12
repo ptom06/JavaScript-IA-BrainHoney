@@ -34,7 +34,7 @@ function() {
 			"domain": bhDomain,
 			"courseTitle": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 			"courseID": (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
-			"itemID": (window.parent.bhItemId)?window.parent.bhItemId:"NOTIEMID",
+			"itemID": getIAObject($(this)).getItemId(),
 			"itemTitle": (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
 			"action":"create"
 		},
