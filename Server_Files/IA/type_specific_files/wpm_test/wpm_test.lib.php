@@ -94,26 +94,33 @@ function start() {
 	/* hit done, gets user input, parses to see differences, calculates time taken, runs GetError, calculates the number of words, finds WPM and Correct WPM and accuracy*/
 function done(){
 	global $word, $wpm, $totalError,  $_SESSION, $grade, $goalWPM, $POST_GET, $total_time, $time_start, $end_time;
-		
-	$goalWPM=$_SESSION['goalWPM'];
+	$return_json = "";
+	$goalWPM = (!is_array($_SESSION['goalWPM']))?$_SESSION['goalWPM']:array_shift($_SESSION['goalWPM']);
 	$grade_obj = $POST_GET['gradingObj'];
-	$time_start=$_SESSION['start'];
+	$time_start = $_SESSION['start'];
 	//var_dump($grade_obj);
-	$wpm=$grade_obj[0];
-	$word=$grade_obj[2];
-	$totalError=$grade_obj[1];
-	$end_time=microtime(true);
-	$total_time=($end_time - $time_start);
-	
-	$wpm=round(($wpm/($total_time))*60);
-	
-	if(($wpm / $goalWPM) > 1){
-		$grade = 1;	
-	}else{
-		$grade = ($wpm / $goalWPM);
+	$wpm = $grade_obj[0];
+	$word = $grade_obj[2];
+	$totalError = $grade_obj[1];
+	$end_time = microtime(true);
+	$total_time = ($end_time - $time_start);
+	if(
+		is_numeric($wpm) && 
+		is_numeric($total_time) && 
+		is_numeric($goalWPM)
+	) {
+		$wpm = round(($wpm / ($total_time))*60);
+		if( floatval($wpm / $goalWPM) > 1 ){
+			$grade = 1;	
+		}else{
+			$grade = ($wpm / $goalWPM);
+		}
+	} else {
+		$return_json .= "\"error\":\"something wasn't a number: wpm=\\\"".$wpm."\\\" total_time=\\\"".$total_time."\\\" goalWPM=\\\"".$goalWPM."\\\"\"";
+		return $return_json;
 	}
 	
-	$return_json = "\"scores\":".json_encode(getScoreTable()).",\"time\":".json_encode($grade)."";
+	$return_json .= "\"scores\":".json_encode(getScoreTable()).",\"time\":".json_encode($grade)."";
 	$return_json .= ",\"get-sid\":\"".$sessionID."\",\"sid\":\"".session_id()."\",\"sobj\":".json_encode($_SESSION)."";
 	return $return_json;
 }
