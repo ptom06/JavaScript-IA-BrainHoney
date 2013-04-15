@@ -6,11 +6,11 @@ var obj = {
 			"methods":
 				[
 					{
-						"name": "testHandler2",
-						"type": "click",
-						"id": "noElementId",
-						"fireAutomatically": false,
-						"handler": "testFunction2.js"
+						"name":		"testHandler2",
+						"type": 	"click",
+						"id":		"noElementId",
+						"handler":	"testFunction2.js",
+						"fireAutomatically":	false
 					},{
 						"name":		"numTextAreaChange",
 						"type":		"change",
@@ -37,13 +37,18 @@ var obj = {
 		"methods":
 			[
 				{
-					"name": "showHideFeedback",
-					"type": "click",
-					"id": "submit",
-					"fireAutomatically": false,
-					"handler": "testFunction.js"
+					"name":		"showHideFeedback",
+					"type": 	"click",
+					"id": 		"submit",
+					"handler":	"testFunction.js",
+					"fireAutomatically":	false
+				},{
+					"name":		"done",
+					"type":		"click",	
+					"id":		"submit",
+					"handler":	"done.js",
+					"fireAutomatically":	false	
 				}
 			]
 	}
 }
-

@@ -16,21 +16,28 @@ function() {
 	for(var i=0; i < formInputs.length; i++) {
 		if((["assessmentSubmit"]).indexOf($(formInputs[i]).attr("id")) == -1) {
 			var objectKey = (($(formInputs[i]).attr("id"))?$(formInputs[i]).attr("id"):$(formInputs[i]).attr("name"));
-			if(formObject[objectKey] == null)
+			if(formObject[objectKey] == null) {
+				IsLog.c("simple set");
+				IsLog.c(formObject);
 				formObject[objectKey] = ($(formInputs[i]).val().trim());
-			else if($(formInputs[i]).val() != "") {
+			} else if($(formInputs[i]).val() != "") {
+				IsLog.c("complex set");
+				IsLog.c(formObject);
 				if(typeof formObject[objectKey] == "string")
 					formObject[objectKey] = [formObject[objectKey]];
 				formObject[objectKey].push($(formInputs[i]).val().trim());
 			}
 		}
 	}
+	//IsLog.c(typeof formObject);
+	//IsLog.c(formObject);
 	JSONString = JSON.stringify(formObject);
+	//IsLog.c(JSONString);
 	$.post(
 		portalURL,
 		{
 			"ia_type":"development-test",
-			"JSONString":JSONString,
+			"JSONString":	JSONString, //formObject,
 			"domain": bhDomain,
 			"courseTitle": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
 			"courseID": (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
@@ -39,9 +46,14 @@ function() {
 			"action":"create"
 		},
 		function(data) {
-			IsLog.c(JSONString);
-			$("body").append($("<h2>Assesment created successsfully</h2>"));
-			IsLog.c(arguments);
+			if(typeof data == "string")
+				data = JSON.parse(data);
+			IsLog.c(data);
+			if(data.file_lock.status == "success")
+				$("body").append($("<h2>Assesment created successsfully</h2>"));
+			else
+				$("body").append($("<h2>Assesment not created successsfully</h2>"));
+			//IsLog.c(arguments);
 		}
 	).error(function(){
 		IsLog.c("Config save failed.");
