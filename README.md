@@ -116,10 +116,7 @@ However the sequence I had in mind with the defaults were;
 	</li>
 </ol>
 
-Steps to creating your own configuration
----------
-
-
+<h2>Steps to creating your own configuration</h2>
 -----
 <h3>Step 1: Design the HTML</h3>
 
@@ -245,6 +242,9 @@ Once you've returned the JSON string you need you're done. The portal will take 
 
 So we now have a portal that sends us the text we entered into our configuration. Parsing and using that response is quite simple.
 
+First create a new Javascript file containing the handler for this new event. (Please note, the event handler we wrote previously was for the submission of the configuration data to be saved. This one is not being saved and is simply producing some result from portal, so it needs its own.)
+
+You can call this file anthing you like, as long as you remember to add it to your typeObject.lib.json file (remembering to specify a valid attachment parameter; id, class or tag).
 ```JavaScript
 function() {
 	//	You could modify the config example if you need to gather more than one piece of data, but in ours we don't.
@@ -269,4 +269,6 @@ function() {
 	);
 }
 ```
-Once you've added that, test it. It should work.
+Once you've added that, test it. It should work. If it doesn't, verify that your settings in the typeObject.lib.json are correct. Then make sure you didn't spell any variable names incorrectly.
+
+Good luck!
