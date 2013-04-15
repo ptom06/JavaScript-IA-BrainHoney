@@ -9,7 +9,6 @@ var obj = {
 						"name": "testHandler2",
 						"type": "click",
 						"id": "noElementId",
-						"fireAutomatically": false,
 						"handler": "testFunction2.js"
 					},{
 						"name":		"numTextAreaChange",
@@ -22,14 +21,12 @@ var obj = {
 						"name":		"updateFeedback",
 						"type":		"keypress blur",	
 						"class":	"user-input",
-						"handler":	"feedbackUpdater.js",
-						"fireAutomatically":	false
+						"handler":	"feedbackUpdater.js"
 					},{
 						"name":		"submitConfiguration",
 						"type":		"click",	
 						"id":		"submitMe",
-						"handler":	"configSubmit.js",
-						"fireAutomatically":	false	
+						"handler":	"configSubmit.js"
 					}
 				]
 		}],
@@ -40,7 +37,6 @@ var obj = {
 					"name": "showHideFeedback",
 					"type": "click",
 					"id": "submit",
-					"fireAutomatically": false,
 					"handler": "testFunction.js"
 				}
 			]
