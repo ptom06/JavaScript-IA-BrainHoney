@@ -123,6 +123,11 @@ function default_write_configuration_json_file($filename=null){
 	if(flock($fh, LOCK_EX)) {								//	Lock the file to force exclusive write
 		$stringData = 1;									//	get the JSON string and write it to the file
 		$stringData = $POST_GET['JSONString'];
+		if(json_decode($stringData) == null) {
+			$stringData = stripcslashes($stringData);
+		} else {
+			//	Didn't strip the slashes...
+		}
 		$bytes_written += fwrite($fh, $stringData);
 		flock($fh, LOCK_UN); 			//	Now that we've written all the data we can unlock the file!
 		fclose($fh);										//	... and close it.
