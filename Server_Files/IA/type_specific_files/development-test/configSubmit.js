@@ -25,6 +25,7 @@ function() {
 			}
 		}
 	}
+	IsLog.c(formObject);
 	JSONString = JSON.stringify(formObject);
 	$.post(
 		portalURL,

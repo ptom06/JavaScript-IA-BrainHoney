@@ -22,7 +22,7 @@ var obj = {
 						"name":		"updateFeedback",
 						"type":		"keypress blur",	
 						"class":	"user-input",
-						"handler":	"feedbackUpdater.js",
+						"handler":	"feedbackUpdaterConfigPage.js",
 						"fireAutomatically":	false
 					},{
 						"name":		"submitConfiguration",
@@ -32,18 +32,26 @@ var obj = {
 						"fireAutomatically":	false	
 					}
 				]
-		}],
-		"inputElementsString": "interactionPage.html",
-		"methods":
-			[
-				{
-					"name": "showHideFeedback",
-					"type": "click",
-					"id": "submit",
-					"fireAutomatically": false,
-					"handler": "testFunction.js"
-				}
-			]
+		},{
+			"condition":	{"function":"default_get_configuration_parameters(\"bool\")","value":true},
+			"inputElementsString": "interactionPage.html",
+			"methods":
+				[
+					{
+						"name":		"showHideFeedback",
+						"type": 	"click",
+						"id": 		"submit",
+						"handler": 	"testFunction.js",
+						"fireAutomatically": 	false
+					},{
+						"name":		"variableInit",
+						"type":		"click",
+						"id":		"#doesntexist",
+						"handler":	"feedbackUpdater.js",
+						"fireAutomatically":	true
+					}
+				]
+		}]
 	}
 }
 
