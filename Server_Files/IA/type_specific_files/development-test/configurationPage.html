@@ -22,6 +22,9 @@
 	border-radius: 3px;
 	margin-bottom: .5em;
 }
+.keyword-option{
+	display: inline-block;	
+}
 </style>
 
 <label>
@@ -43,13 +46,21 @@
 </div>
 <div class="border" id="repeatNode">
 	<label>
-		feedback.
+		feedback:
 		<textarea rows="4" cols="50" class="inputField user-input"/>
 	</label>
 	
-	<label style="display: block">
-		Keyword
-		<input type="text" class="keyword user-input"/>
+	<label>
+		Keyword:
+		<input type="text" id="keyword" class="keyword user-input"/>
+	</label>
+	<label>
+		All:
+		<input type="radio" name="matchAll" value="true" />
+	</label>
+	<label>
+		Any:
+		<input type="radio" name="matchAll" checked="checked" value="false" />
 	</label>
 </div>
 <div class="border">	

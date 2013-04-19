@@ -3,25 +3,34 @@ function() {
 	var errorMessage = "These fields cannot be blank: ";
 	var JSONString = "";
 	
-	var formInputs = $("input,textarea,select");
+	var formInputs = $("input,textarea");
 	
 	var requiredFields = {
-		"timeLimit":"You need a time limit.",
-		"expectedWPM":"You need an expected words per min.",
-		"errorValue":"You need to penalize errors (you could put zero).",
-		"errorValue":"You need to penalize errors (you could put zero).",
+		"default-feedback":"You must provide default feedback.",
 	};
 	
 	var formObject = {};					
 	for(var i=0; i < formInputs.length; i++) {
-		if((["assessmentSubmit"]).indexOf($(formInputs[i]).attr("id")) == -1) {
-			var objectKey = (($(formInputs[i]).attr("id"))?$(formInputs[i]).attr("id"):$(formInputs[i]).attr("name"));
+		if((["assessmentSubmit"]).indexOf($(formInputs[i]).attr("id")) == -1 && $(formInputs[i]).attr("id")) {
+			var objectKey = (($(formInputs[i]).attr("id"))?$(formInputs[i]).attr("id"):$(formInputs[i]).attr("name")).replace(/\d/g,"").trim();
+			IsLog.c($(formInputs[i]));
+			IsLog.c($("#"+$(formInputs[i]).attr("id")));
+			var formValue = (
+				(($(formInputs[i]).attr("type"))?
+					(
+						(["radio","checkbox"].indexOf($(formInputs[i]).attr("type").toLowerCase()) > -1)?
+							$(formInputs[i].tagName+":"+$(formInputs[i]).attr("type").toLowerCase()+"[name="+$(formInputs[i]).attr("name")+"]:checked"):
+							$(formInputs[i])
+					):
+					$(formInputs[i])
+				)
+			).val().trim();
 			if(formObject[objectKey] == null)
-				formObject[objectKey] = ($(formInputs[i]).val().trim());
+				formObject[objectKey] = formValue;
 			else if($(formInputs[i]).val() != "") {
 				if(typeof formObject[objectKey] == "string")
 					formObject[objectKey] = [formObject[objectKey]];
-				formObject[objectKey].push($(formInputs[i]).val().trim());
+				formObject[objectKey].push(formValue);
 			}
 		}
 	}
