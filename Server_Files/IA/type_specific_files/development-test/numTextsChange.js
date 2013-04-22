@@ -22,6 +22,7 @@ function() {
 			$(addNode.find("input")[2]).attr("id","matchAll"+i);
 			$(addNode.find("input")[1]).attr("name","matchAll"+i);
 			$(addNode.find("input")[2]).attr("name","matchAll"+i);
+			IsLog.c("matchAll value: "+matchAll[i]);
 			$(addNode.find("input")[1]).attr("checked",(matchAll[i])?"checked":"");
 			$(addNode.find("input")[2]).attr("checked",(!matchAll[i])?"checked":"");
 			

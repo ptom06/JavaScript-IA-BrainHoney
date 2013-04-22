@@ -20,7 +20,7 @@ var obj = {
 					},
 					{
 						"name":		"updateFeedback",
-						"type":		"keypress blur",	
+						"type":		"keypress blur change",	
 						"class":	"user-input",
 						"handler":	"feedbackUpdaterConfigPage.js",
 						"fireAutomatically":	false

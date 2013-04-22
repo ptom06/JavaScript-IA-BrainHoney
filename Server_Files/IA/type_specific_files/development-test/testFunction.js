@@ -43,4 +43,3 @@ function() {
 		$(this).val("submit");
 	}
 }
-//make the feedback0 change the "0" using for loop.

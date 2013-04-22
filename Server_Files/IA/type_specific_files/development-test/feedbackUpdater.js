@@ -4,6 +4,7 @@ function() {
 	else if(typeof window['IA-Storage']["feedback"] == "undefined" || typeof window['IA-Storage']["keyword"] == "undefined") {
 		window['IA-Storage']["feedback"] = [];
 		window['IA-Storage']["keyword"] = [];
+		window['IA-Storage']["matchAll"] = [];
 		window['IA-Storage']["default-feedback"] = "";
 	} else {
 		//	Data in window is already initialized.
