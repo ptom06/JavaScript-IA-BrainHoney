@@ -10,7 +10,11 @@ function() {
 		//	Data in window is already initialized.
 		//IsLog.c(window['IA-Storage']);
 	}
-	var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/));
+	if($(this).attr("id").indexOf(/\d/) != -1)
+		var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/));
+	else
+		var arrayIndex = $(this).attr("name").substr($(this).attr("name").indexOf(/\d/));
+	
 	IsLog.c("This is the arrayIndex "+arrayIndex);
 	IsLog.c("This is the \"this\"- "+$(this).attr("id"));
 	//	Feedback section
@@ -30,11 +34,7 @@ function() {
 		IsLog.c("Error: Keyword input not found! \"#keyword"+arrayIndex+"\"");
 	}
 	//	matchAll section
-	if($("#matchAll"+arrayIndex).val())
-		window['IA-Storage']['matchAll'][arrayIndex] = $("#matchAll"+arrayIndex).val();
-	else {
-		IsLog.c("Error: feedback(matchAll) input not found! \"#matchAll"+arrayIndex+"\"");
-	}
+	window['IA-Storage']['matchAll'][arrayIndex] = !$("#matchAll"+arrayIndex).prop("checked");
 	IsLog.c("This is the \'window\'");
 	IsLog.c(window['IA-Storage']);
 	return true;
