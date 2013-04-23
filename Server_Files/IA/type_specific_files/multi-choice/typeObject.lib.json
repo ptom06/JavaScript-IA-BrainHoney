@@ -1,0 +1,32 @@
+var obj = {
+	"development-test": {
+		"conditionals": [{
+			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
+			"configurationElementsString": "configurationPage.html",
+			"methods":
+				[
+					{
+						"name": "testHandler2",
+						"type": "click",
+						"id": "noElementId",
+						"fireAutomatically": false,
+						"handler": "testFunction2.js"
+					}
+				]
+		},{
+			"condition":	{"function":"default_get_configuration_parameters(\"bool\")","value":true},
+			"inputElementsString": "interactionPage.html",
+			"methods":
+				[
+					{
+						"name":		"showHideFeedback",
+						"type": 	"click",
+						"id": 		"submit",
+						"handler": 	"testFunction.js",
+						"fireAutomatically": 	false
+					}
+				]
+		}]
+	}
+}
+
