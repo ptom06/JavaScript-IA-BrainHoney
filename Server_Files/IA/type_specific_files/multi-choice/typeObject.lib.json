@@ -1,0 +1,35 @@
+var obj = {
+	"multi-choice": {
+		"conditionals": [{
+			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
+			"configurationElementsString": "configurationPage.html",
+			"methods":
+				[
+					{
+						"name": "repeatingFunciton",
+						"type": "change",
+						"id": "numChoices",
+						"handler": "repeater.js",
+						"fireAutomatically": true
+					},
+					{
+						"name": "textStorage",
+						"type": "keypress blur change",
+						"class": "user-input",
+						"handler": "configTextStorage.js",
+						"fireAutomatically": false
+					}
+				]
+		},{
+			"condition":	{"function":"default_get_configuration_parameters(\"bool\")","value":true},
+			"inputElementsString": "interactionPage.html",
+			"methods":
+				[
+					{
+						
+					}
+				]
+		}]
+	}
+}
+

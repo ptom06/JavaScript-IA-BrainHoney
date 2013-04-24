@@ -1,0 +1,41 @@
+<style>
+.border {
+	border: 1px solid;	
+	border-radius: 3px;	
+	margin-bottom: .5em;
+}
+textarea {
+	display: block;	
+}
+</style>
+<label>How many text options would you like: 
+	<select id="numChoices">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+	</select>
+</label>
+
+<div id="repeatArea">
+</div>
+<div class="border" id="repeatNode">
+	<label id="labelOptionsText">
+		Options Text:
+		<textarea rows="2" cols="56" id="optionsText" class="myText user-input"></textarea>
+	</label>
+	
+	<label id='labelFeedbackText'>
+		Feedback:
+		<textarea rows="2" cols="56" id="feedback" class="feedback user-input"></textarea>
+	</label>
+	
+</div>
+<div>
+	<input type="button" value="submit" id="submitMe" />
+</div>
+<br>

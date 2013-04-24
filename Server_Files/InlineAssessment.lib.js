@@ -89,8 +89,9 @@ function InlineAssessment(elementArg) {
 		}
 		
 		//Shorthand or statement. if it finds the type in the predefined types at the top, it returns the element string unput, else it outputs a message
+		IsLog.c(this.allTypes[this.type]);
 		if(
-			this.allTypes[this.type].teacherStudent == "Teacher" &&
+			((objectKeys(this.allTypes[this.type]).indexOf("teacherStudent") > -1)?this.allTypes[this.type].teacherStudent:"") == "Teacher" &&
 			(
 				(typeof this.allTypes[this.type].configurationElementsString) == "string" ||
 				(typeof this.allTypes[this.type].configurationElementString) == "string"

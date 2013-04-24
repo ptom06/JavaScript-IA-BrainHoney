@@ -1,32 +1,12 @@
 function() {
-	var numTexts = $("#numTexts").val();
-	IsLog.c("You selected "+numTexts+" texts!");
 	if(typeof window['IA-Storage'] == "undefined")
 		window['IA-Storage'] = {};
-	var feedback = window['IA-Storage']['feedback'] || [/*
-		"ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE ONE",
-		"TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO TWO",
-		"THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE THREE",
-		"FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR FOUR",
-		"FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE FIVE",
-		"SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX SIX",
-		"SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN SEVEN",
-		"EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT EIGHT",
-		"NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE NINE",
-		"TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN TEN"
-	*/];
-	var keyword = window['IA-Storage']['keyword'] || [/*
-		"ONE",
-		"TWO",
-		"THREE",
-		"FOUR",
-		"FIVE",
-		"SIX",
-		"SEVEN",
-		"EIGHT",
-		"NINE",
-		"TEN"
-	*/];
+	var numTexts = $("#numTexts").val(),
+		feedback = window['IA-Storage']['feedback'] || [],
+		keyword = window['IA-Storage']['keyword'] || [],
+		matchAll = window['IA-Storage']['matchAll'] || [];
+	IsLog.c("You selected "+numTexts+" texts!");
+	
 	
 	if(numTexts) {
 		var repeatNode = window['IA-Storage']['repeatElementNode'] || $("#repeatNode").clone(true, true);
@@ -39,6 +19,18 @@ function() {
 			addNode.attr("id", "text"+i);
 			$(addNode.find("textarea")[0]).attr("id","feedback"+i);
 			$(addNode.find("input")[0]).attr("id","keyword"+i);
+			$(addNode.find("input")[2]).attr("id","matchAll"+i);
+			$(addNode.find("input")[1]).attr("name","matchAll"+i);
+			$(addNode.find("input")[2]).attr("name","matchAll"+i);
+			if(matchAll.length >= i) {
+				$(addNode.find("input")[1]).prop("checked", matchAll[i]);
+				$(addNode.find("input")[2]).prop("checked", !matchAll[i]);
+			}
+			IsLog.c("matchAll value: "+matchAll[i]);
+			//$(addNode.find("input")[1]).attr("checked",(matchAll[i])?"checked":"");
+			//$(addNode.find("input")[2]).attr("checked",(!matchAll[i])?"checked":"");
+			$(addNode)
+			
 			$("#repeatArea").append(addNode);
 			if(feedback.length > i) {
 				$(addNode.find("textarea")[0]).val(feedback[i]);

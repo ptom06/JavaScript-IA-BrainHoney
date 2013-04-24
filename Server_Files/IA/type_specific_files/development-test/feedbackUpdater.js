@@ -1,25 +1,40 @@
 function() {
 	if(typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"feedback":[],"keyword":[]};
+		window['IA-Storage'] = {"feedback":[],"keyword":[],"default-feedback":""};
 	else if(typeof window['IA-Storage']["feedback"] == "undefined" || typeof window['IA-Storage']["keyword"] == "undefined") {
 		window['IA-Storage']["feedback"] = [];
-		window['IA-Storage']["keyword"] =[];
+		window['IA-Storage']["keyword"] = [];
+		window['IA-Storage']["matchAll"] = [];
+		window['IA-Storage']["default-feedback"] = "";
 	} else {
 		//	Data in window is already initialized.
-		//IsLog.c(window['IA-Storage']);
+		IsLog.c(window['IA-Storage']);
 	}
-	var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/));
-	if($("#feedback"+arrayIndex).val())
-		window['IA-Storage']['feedback'][arrayIndex] = $("#feedback"+arrayIndex).val();
-	else {
-		IsLog.c("Error: feedback input not found! \"#feedback"+arrayIndex+"\"");
+	if(window['IA-Storage']["feedback"].length == 0) {
+		$.post(
+			portalURL,
+			{
+				"ia_type":"development-test",
+				"domain": bhDomain,
+				"courseTitle": (window.parent.bhCourseTitle)?window.parent.bhCourseTitle:"UNTITLED",
+				"courseID": (window.parent.bhCourseId)?window.parent.bhCourseId:"NOCOURSEID",
+				"itemID": getIAObject($(this)).getItemId(),
+				"itemTitle": (window.parent.bhItemTitle)?window.parent.bhItemTitle:"NOTITLE",
+				"action":"load_configuration"
+			},
+			function(data) {
+				var configObject = JSON.parse(data);
+				IsLog.c(configObject);
+				for(var configProp in configObject['configuration']) {
+					IsLog.c(configProp);
+					window['IA-Storage'][configProp] = configObject['configuration'][configProp];
+				}
+				IsLog.c(window['IA-Storage']);
+			}
+		);
+	} else {
+		IsLog.c("feedback is not empty.");
+		IsLog.c(window['IA-Storage']);
 	}
-	if($("#keyword"+arrayIndex).val())
-		window['IA-Storage']['keyword'][arrayIndex] = $("#keyword"+arrayIndex).val();
-	else {
-		IsLog.c("Error: feedback input not found! \"#keyword"+arrayIndex+"\"");
-	}
-
-	IsLog.c(window['IA-Storage']);
 	return true;
 }
