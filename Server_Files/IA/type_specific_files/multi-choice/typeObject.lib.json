@@ -11,6 +11,13 @@ var obj = {
 						"id": "numChoices",
 						"handler": "repeater.js",
 						"fireAutomatically": true
+					},
+					{
+						"name": "textStorage",
+						"type": "keypress blur change",
+						"class": "user-input",
+						"handler": "configTextStorage.js",
+						"fireAutomatically": false
 					}
 				]
 		},{
