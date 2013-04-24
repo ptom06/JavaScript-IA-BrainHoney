@@ -1,16 +1,16 @@
 var obj = {
-	"development-test": {
+	"multi-choice": {
 		"conditionals": [{
 			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
 			"configurationElementsString": "configurationPage.html",
 			"methods":
 				[
 					{
-						"name": "testHandler2",
-						"type": "click",
-						"id": "noElementId",
-						"fireAutomatically": false,
-						"handler": "testFunction2.js"
+						"name": "repeatingFunciton",
+						"type": "change",
+						"id": "numChoices",
+						"handler": "repeater.js",
+						"fireAutomatically": true
 					}
 				]
 		},{
@@ -19,11 +19,7 @@ var obj = {
 			"methods":
 				[
 					{
-						"name":		"showHideFeedback",
-						"type": 	"click",
-						"id": 		"submit",
-						"handler": 	"testFunction.js",
-						"fireAutomatically": 	false
+						
 					}
 				]
 		}]

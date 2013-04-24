@@ -1,11 +1,11 @@
 function() {
-	var numTexts = $("#numTexts").val();
-	IsLog.c("You selected "+numTexts+" texts!");
 	if(typeof window['IA-Storage'] == "undefined")
 		window['IA-Storage'] = {};
-	var feedback = window['IA-Storage']['feedback'] || [];
-	var keyword = window['IA-Storage']['keyword'] || [];
-	var matchAll = window['IA-Storage']['matchAll'] || [];
+	var numTexts = $("#numTexts").val(),
+		feedback = window['IA-Storage']['feedback'] || [],
+		keyword = window['IA-Storage']['keyword'] || [],
+		matchAll = window['IA-Storage']['matchAll'] || [];
+	IsLog.c("You selected "+numTexts+" texts!");
 	
 	
 	if(numTexts) {
