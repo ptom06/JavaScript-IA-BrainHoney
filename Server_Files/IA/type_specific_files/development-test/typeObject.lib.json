@@ -17,8 +17,7 @@ var obj = {
 						"id":		"numTexts",
 						"handler":	"numTextsChange.js",
 						"fireAutomatically":	true
-					},
-					{
+					},{
 						"name":		"updateFeedback",
 						"type":		"keypress blur change",	
 						"class":	"user-input",

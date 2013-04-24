@@ -21,9 +21,9 @@ function() {
 			$(addNode.find("textarea")[0]).attr("id","optionsText"+i);
 			$(addNode.find("textarea")[1]).attr("id","feedback"+i);
 			//IsLog.c($(addNode.find("label"))[0]);
-			//	Is there a way that you can just change the text but not lose the textarea???
-			$(addNode.find("label")[0]).html("Options Text: "+(i+1)+"<textarea rows=\"2\" cols=\"56\" id=\"optionsText\" class=\"myText\"></textarea>");
-			$(addNode.find("label")[1]).html("Feedback: <textarea rows=\"2\" cols=\"56\" id=\"feedback\" class=\"feedback\"></textarea>");
+			//	Is there a way that you can just change the text but not lose the textarea??? -- is creating a span with an id better.
+			$(addNode.find("label")[0]).html("Options Text: "+(i+1)+"<textarea rows=\"2\" cols=\"56\" id=\"optionsText\" class=\"myText user-input\"></textarea>");
+			$(addNode.find("label")[1]).html("Feedback: <textarea rows=\"2\" cols=\"56\" id=\"feedback\" class=\"feedback user-input\"></textarea>");
 			
 			//	what is this "addNode for???"
 			//$(addNode)

@@ -6,18 +6,23 @@ var obj = {
 			"methods":
 				[
 					{
-						"name": "repeatingFunciton",
+						"name": "createClones",
 						"type": "change",
 						"id": "numChoices",
 						"handler": "repeater.js",
 						"fireAutomatically": true
-					},
-					{
-						"name": "textStorage",
+					},{
+						"name": "storeText",
 						"type": "keypress blur change",
 						"class": "user-input",
 						"handler": "configTextStorage.js",
 						"fireAutomatically": false
+					},{
+						"name":		"submitConfiguration",
+						"type":		"click",	
+						"id":		"submitMe",
+						"handler":	"configSubmit.js",
+						"fireAutomatically":	false	
 					}
 				]
 		},{

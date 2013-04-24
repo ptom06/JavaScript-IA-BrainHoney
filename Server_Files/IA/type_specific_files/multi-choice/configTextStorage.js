@@ -7,4 +7,8 @@ function() {
 	}else{
 		//	Data in window has already been initialized.
 	}
+	if($(this).attr("id").indexOf(/\d/) != -1)
+		var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/)); //  clarify this line of code
+	IsLog.c("this is the array index: " + arrayIndex);
+	IsLog.c('This is the \"this\": '+$(this).attr("id"));
 }
