@@ -7,8 +7,13 @@ function() {
 	}else{
 		//	Data in window has already been initialized.
 	}
-	if($(this).attr("id").indexOf(/\d/) != -1)
-		var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/)); //  clarify this line of code
-	IsLog.c("this is the array index: " + arrayIndex);
-	IsLog.c('This is the \"this\": '+$(this).attr("id"));
+	if((/\d+/).test($(this).attr("id"))){
+		var arrayIndex = (/\d+/).exec($(this).attr("id"));
+		IsLog.c("this is the array index: " + arrayIndex);
+		IsLog.c('This is the \"this\": '+$(this).attr("id"));
+	}else{
+		IsLog.c("Notice: We didn't enter the correct statement");	
+	}
+	
+	
 }

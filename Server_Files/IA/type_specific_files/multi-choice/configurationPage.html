@@ -6,6 +6,8 @@
 }
 textarea {
 	display: block;	
+	height: 3em;
+	width: 99%;
 }
 </style>
 <label>How many text options would you like: 
@@ -24,8 +26,14 @@ textarea {
 <div id="repeatArea">
 </div>
 <div class="border" id="repeatNode">
-	<label></label>	
-	<label></label>	
+	<label>
+		Option Text <span id="numberId0">1</span>
+		<textarea id="optionsText0" class="myText user-input"></textarea>
+	</label>	
+	<label>
+		Feedback Text
+		<textarea id="feedback0" class="myText user-input"></textarea>
+	</label>	
 </div>
 <div>
 	<input type="button" value="submit" id="submitMe" />

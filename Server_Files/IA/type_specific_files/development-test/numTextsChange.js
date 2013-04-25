@@ -17,11 +17,11 @@ function() {
 			IsLog.c("Adding node "+i);
 			var addNode = repeatNode.clone(true, true);
 			addNode.attr("id", "text"+i);
-			$(addNode.find("textarea")[0]).attr("id","feedback"+i);
-			$(addNode.find("input")[0]).attr("id","keyword"+i);
-			$(addNode.find("input")[2]).attr("id","matchAll"+i);
-			$(addNode.find("input")[1]).attr("name","matchAll"+i);
-			$(addNode.find("input")[2]).attr("name","matchAll"+i);
+			$(addNode.find("textarea")[0]).attr("id",$(addNode.find("textarea")[0]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[0]).attr("id",$(addNode.find("input")[0]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[2]).attr("id",$(addNode.find("input")[2]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[1]).attr("name",$(addNode.find("input")[1]).attr("name").replace(/\d+/, i));
+			$(addNode.find("input")[2]).attr("name",$(addNode.find("input")[2]).attr("name").replace(/\d+/, i));
 			if(matchAll.length >= i) {
 				$(addNode.find("input")[1]).prop("checked", matchAll[i]);
 				$(addNode.find("input")[2]).prop("checked", !matchAll[i]);
@@ -29,8 +29,7 @@ function() {
 			IsLog.c("matchAll value: "+matchAll[i]);
 			//$(addNode.find("input")[1]).attr("checked",(matchAll[i])?"checked":"");
 			//$(addNode.find("input")[2]).attr("checked",(!matchAll[i])?"checked":"");
-			$(addNode)
-			
+						
 			$("#repeatArea").append(addNode);
 			if(feedback.length > i) {
 				$(addNode.find("textarea")[0]).val(feedback[i]);

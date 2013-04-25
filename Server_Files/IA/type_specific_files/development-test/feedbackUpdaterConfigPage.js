@@ -10,10 +10,16 @@ function() {
 		//	Data in window is already initialized.
 		//IsLog.c(window['IA-Storage']);
 	}
-	if($(this).attr("id").indexOf(/\d/) != -1)
-		var arrayIndex = $(this).attr("id").substr($(this).attr("id").indexOf(/\d/));
-	else
-		var arrayIndex = $(this).attr("name").substr($(this).attr("name").indexOf(/\d/));
+	if((/\d+/).test($(this).attr("id")))
+		var arrayIndex = (/\d+/).exec($(this).attr("id"));
+	else if((/\d+/).test($(this).attr("name")))
+		var arrayIndex = (/\d+/).exec($(this).attr("name"));
+	else {
+		IsLog.c("Notice: can't get an array index.");
+		IsLog.c((/\d+/).test($(this).attr("id")));
+		IsLog.c((/\d+/).exec($(this).attr("id")));
+		return false;
+	}
 	
 	IsLog.c("This is the arrayIndex "+arrayIndex);
 	IsLog.c("This is the \"this\"- "+$(this).attr("id"));
