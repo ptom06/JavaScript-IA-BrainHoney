@@ -1,3 +1,31 @@
-<div class="questions"></div>
-<div id="feedback">NA</div>
-<input type="button" value="submit" id="submit">
+<style>
+.displaySpan {
+	padding-bottom: 1em;	
+}
+
+.feedback {
+	height: 0em;
+	overflow:hidden;
+	transition: height 1s;
+	-moz-transition: height 1s; /* Firefox 4 */
+	-webkit-transition: height 1s; /* Safari and Chrome */
+	-o-transition: height 1s; /* Opera */
+	padding-left: 1em;
+	color: #4027A6;
+}
+.displayDiv {
+	border: 1px solid;
+	border-radius: 3px;
+	margin-bottom: .5em;	
+}
+</style>
+<div id="cloneArea">
+</div>
+<div class="displayDiv" id="cloner">
+	<label>
+	<!--If we want to select more than one option we need to add a 0 on the name -->
+		<input type="radio" name="optionsRadio" class="radio-option"/>
+		<span class="displaySpan" id="optionSpan">Options text goes here</span>
+	</label>
+	<div class="feedback">Feedback: <span id="feedbackSpan">Feedback NA</span></div>
+</div>

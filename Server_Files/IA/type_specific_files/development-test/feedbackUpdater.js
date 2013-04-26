@@ -10,6 +10,7 @@ function() {
 		//	Data in window is already initialized.
 		IsLog.c(window['IA-Storage']);
 	}
+	//	What is the point of this statement
 	if(window['IA-Storage']["feedback"].length == 0) {
 		$.post(
 			portalURL,

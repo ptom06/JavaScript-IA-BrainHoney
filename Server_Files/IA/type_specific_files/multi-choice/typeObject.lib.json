@@ -31,7 +31,16 @@ var obj = {
 			"methods":
 				[
 					{
-						
+						"name": "variableInit",
+						"type": "click",
+						"id": "#doesntExist",
+						"handler": "interactionInit.js",
+						"fireAutomatically": true
+					},{
+						"name": "radioButtons",
+						"type":	"change",
+						"class":	"radio-option",
+						"handler":	"interactionRadioInputs.js"
 					}
 				]
 		}]

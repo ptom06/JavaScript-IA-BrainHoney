@@ -5,6 +5,8 @@ function() {
 		text = window['IA-Storage']['text'] || [],
 		feedback = window['IA-Storage']['feedback'] || [];	
 	IsLog.c('You have selected '+numChoices+' options');	
+	//IsLog.c(window['IA-Storage']['text'])
+	//IsLog.c(window['IA-Storage']['feedback'])
 	
 	if(numChoices){
 		var repeatNode = window['IA-Storage']['repeatElementNode'] || $("#repeatNode").clone(true, true);
@@ -19,8 +21,23 @@ function() {
 			$(addNode.find("textarea")[1]).attr("id",$(addNode.find("textarea")[1]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).html(i+1);
-									
+			//	go over this portion
 			$("#repeatArea").append(addNode);
+			if(i < text.length)
+				$(addNode.find("textarea")[0]).val(text[i])
+			else
+				IsLog.c('feedback was not long enough');
+			if(i < feedback.length)
+				$(addNode.find("textarea")[1]).val(feedback[i])
 		}
-	}
+	}else
+		IsLog.c('Error: You managed to break it');
+	//	Need to better understand this portion
+	if(this instanceof HTMLElement) {
+		for(var i=0; i < assessmentElements.length; i++) {
+			if(typeof assessmentElements[i].setEvents == "function") {
+				assessmentElements[i].setEvents();
+			}
+		}
+	}	
 }
