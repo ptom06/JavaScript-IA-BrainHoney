@@ -41,6 +41,11 @@ var obj = {
 						"type":	"change",
 						"class":	"radio-option",
 						"handler":	"interactionRadioInputs.js"
+					},{
+						"name": "wysiwyg",
+						"type":	"change",
+						"handler":	"tinymce.min.js",
+						"fireAutomatically": true
 					}
 				]
 		}]
