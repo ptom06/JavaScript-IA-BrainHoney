@@ -1,5 +1,8 @@
 var obj = {
 	"multi-choice": {
+		"scripts": [
+			"tinymce/tinymce.min.js"
+		],
 		"conditionals": [{
 			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
 			"configurationElementsString": "configurationPage.html",
@@ -41,11 +44,6 @@ var obj = {
 						"type":	"change",
 						"class":	"radio-option",
 						"handler":	"interactionRadioInputs.js"
-					},{
-						"name": "wysiwyg",
-						"type":	"change",
-						"handler":	"tinymce.min.js",
-						"fireAutomatically": true
 					}
 				]
 		}]
