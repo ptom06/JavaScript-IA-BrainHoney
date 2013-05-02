@@ -48,6 +48,11 @@ var obj = {
 						"id":		"user-text",
 						"handler":	"keypressShowHideFB.js",
 						"fireAutomatically":	false
+					},{
+						"name": "radioButtons",
+						"type":	"change",
+						"class":	"radio-option",
+						"handler":	"interactionDisplayHeight.js"
 					}
 				]
 		}]
