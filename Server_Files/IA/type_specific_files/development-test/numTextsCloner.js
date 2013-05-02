@@ -29,8 +29,8 @@ function() {
 			IsLog.c("matchAll value: "+matchAll[i]);
 			//$(addNode.find("input")[1]).attr("checked",(matchAll[i])?"checked":"");
 			//$(addNode.find("input")[2]).attr("checked",(!matchAll[i])?"checked":"");
-						
-			$("#repeatArea").append(addNode);
+			var previewDiv = $();		
+			$("#repeatArea").append(addNode)//.append("Feedback: <div>"+feedback+"</div> Keyword: <div>"+keyword+"</div>");
 			if(feedback.length > i) {
 				$(addNode.find("textarea")[0]).val(feedback[i]);
 				IsLog.c("feedback was long enough");

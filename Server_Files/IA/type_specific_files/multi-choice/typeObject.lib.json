@@ -16,7 +16,7 @@ var obj = {
 						"fireAutomatically": true
 					},{
 						"name": "storeText",
-						"type": "keypress blur change",
+						"type": "keyup blur change",
 						"class": "user-input",
 						"handler": "configTextStorage.js",
 						"fireAutomatically": false
@@ -25,7 +25,7 @@ var obj = {
 						"type":		"click",	
 						"id":		"submitMe",
 						"handler":	"configSubmit.js",
-						"fireAutomatically":	false	
+						"fireAutomatically":	false
 					}
 				]
 		},{

@@ -32,4 +32,9 @@ function() {
 	} else {
 		IsLog.c("Error: Options Text input not found! \"#feedback"+arrayIndex+"\"");	
 	}
+	
+	//$('.inline-assessment').append($(window['IA-Storage']['text']));
+	IsLog.c('this is the text');
+	IsLog.c($(window['IA-Storage']['text']));
+	IsLog.c($('.inline-assessment'))
 }

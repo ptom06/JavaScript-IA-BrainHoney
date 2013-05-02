@@ -6,22 +6,16 @@ var obj = {
 			"methods":
 				[
 					{
-						"name": "testHandler2",
-						"type": "click",
-						"id": "noElementId",
-						"fireAutomatically": false,
-						"handler": "testFunction2.js"
-					},{
 						"name":		"numTextAreaChange",
 						"type":		"change",
 						"id":		"numTexts",
-						"handler":	"numTextsChange.js",
+						"handler":	"numTextsCloner.js",
 						"fireAutomatically":	true
 					},{
 						"name":		"updateFeedback",
 						"type":		"keypress blur change",	
 						"class":	"user-input",
-						"handler":	"feedbackUpdaterConfigPage.js",
+						"handler":	"configFeedbackUpdater.js",
 						"fireAutomatically":	false
 					},{
 						"name":		"submitConfiguration",
@@ -37,17 +31,23 @@ var obj = {
 			"methods":
 				[
 					{
-						"name":		"showHideFeedback",
+						"name":		"feedbackComparison",
 						"type": 	"click",
 						"id": 		"submit",
-						"handler": 	"testFunction.js",
+						"handler": 	"onUserSubmit.js",
 						"fireAutomatically": 	false
 					},{
 						"name":		"variableInit",
 						"type":		"click",
 						"id":		"#doesntexist",
-						"handler":	"feedbackUpdater.js",
+						"handler":	"interactionInitFeedback.js",
 						"fireAutomatically":	true
+					},{
+						"name":		"showHideFeedback",
+						"type":		"keypress focus",
+						"id":		"user-text",
+						"handler":	"keypressShowHideFB.js",
+						"fireAutomatically":	false
 					}
 				]
 		}]
