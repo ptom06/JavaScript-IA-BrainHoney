@@ -9,6 +9,9 @@ textarea {
 	height: 3em;
 	width: 99%;
 }
+.boxing {
+	white-space: normal;	
+}
 </style>
 <label>How many text options would you like: 
 	<select id="numChoices">
@@ -39,3 +42,12 @@ textarea {
 	<input type="button" value="submit" id="submitMe" />
 </div>
 <br>
+<div id="previewPane0">
+	This is a preview section of how the interaction page could possibly look: 
+	<div>Options Text 1:  
+	<span class="boxing" id="optionsPreview"></span>
+	</div>
+	<div>Feedback Text 1:
+	<span class="boxing" id="feedbackPreview"></span>
+	</div>
+</div>

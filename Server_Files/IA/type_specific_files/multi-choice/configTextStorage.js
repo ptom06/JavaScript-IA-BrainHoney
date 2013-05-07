@@ -33,12 +33,19 @@ function() {
 		IsLog.c("Error: Options Text input not found! \"#feedback"+arrayIndex+"\"");	
 	}
 	
-	/*var textObj = $(window['IA-Storage']['text'])
+	var textObj = window['IA-Storage']['text'],
+		feedbackObj = window['IA-Storage']['feedback'];
 	//var newDiv = $("<span></span>");
 	//newDiv.text(textObj[0]);
 	//$('.inline-assessment').append(newDiv);
-	$('.inline-assessment').append("<div>"+textObj[0]+"</div>");
+	IsLog.c("this is my newest log");
+	IsLog.c(typeof feedbackObj);
+	IsLog.c(feedbackObj);
+	$('#optionsPreview').empty();
+	$('#feedbackPreview').empty();
+	$('#optionsPreview').append(textObj[0]);
+	$('#feedbackPreview').append(feedbackObj[0]);
 	IsLog.c('this is the text');
 	IsLog.c(textObj);
-	IsLog.c(newDiv);*/
+	//IsLog.c(newDiv);
 }
