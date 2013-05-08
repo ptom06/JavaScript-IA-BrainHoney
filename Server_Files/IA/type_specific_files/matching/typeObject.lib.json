@@ -1,0 +1,38 @@
+var obj = {
+	"matching": {
+		"conditionals": [{
+			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
+			"configurationElementsString": "configurationPage.html",
+			"methods":
+				[
+					{
+						"name":		"configuration-clonesOnChangeOfOptions",
+						"type":		"change",
+						"id":		"numChoices",
+						"handler":	"configCloner.js",
+						"fireAutomatically":	true
+					},{
+						"name": "storeText",
+						"type": "keypress blur change",
+						"class": "user-input",
+						"handler": "configTextStorage.js",
+						"fireAutomatically": false
+					},{
+						"name":		"submitConfiguration",
+						"type":		"click",	
+						"id":		"submitMe",
+						"handler":	"configSubmit.js",
+						"fireAutomatically":	false
+					}
+				]
+		},{
+			"condition":	{"function":"default_get_configuration_parameters(\"bool\")","value":true},
+			"inputElementsString": "interactionPage.html",
+			"methods":
+				[
+					
+				]
+		}]
+	}
+}
+
