@@ -1,9 +1,10 @@
 function() {
 	if (typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"question":[],"answer":[]}
-	else if(typeof window['IA-Storage']['question'] == "undefined" || typeof window['IA-Storage']['answer'] == "undefined") {
+		window['IA-Storage'] = {"question":[],"answer":[],"feedback":[]}
+	else if(typeof window['IA-Storage']['question'] == "undefined" || typeof window['IA-Storage']['answer'] == "undefined" || typeof window['IA-Storage']['feedback'] == "undefined") {
 		window['IA-Storage']['question'] = [];
 		window['IA-Storage']['answer'] = [];
+		window['IA-Storage']['feedback'] = [];
 	}else{
 		//	Data in window has already been initialized.
 	}
@@ -33,6 +34,16 @@ function() {
 		IsLog.c(window['IA-Storage']['answer']);
 	} else {
 		IsLog.c("Error: Options Text input not found! \"#answer"+arrayIndex+"\"");	
+	}
+	//	feedback section
+	if($("#feedback"+arrayIndex).val() === "") {
+		IsLog.c("Notice: Nothing has been typed in: \"feedback"+arrayIndex+"\"");	
+	} else if(typeof $("#feedback"+arrayIndex).val() == "string") {
+		IsLog.c("We should be storing the text");
+		window['IA-Storage']['feedback'][arrayIndex] = $("#feedback"+arrayIndex).val();
+		IsLog.c(window['IA-Storage']['feedback']);
+	} else {
+		IsLog.c("Error: Options Text input not found! \"#feedback"+arrayIndex+"\"");	
 	}
 	
 	//var textObj = window['IA-Storage']['question'],

@@ -3,10 +3,12 @@ function(){
 		window['IA-Storage'] = {};
 	var numChoices = $("#numChoices").val(),
 		question = window['IA-Storage']['question'] || [],
-		answer = window['IA-Storage']['answer'] || [];	
+		answer = window['IA-Storage']['answer'] || [],
+		feedback = window['IA-Storage']['feedback'] || [];	
 	IsLog.c('You have selected '+numChoices+' options');
-	IsLog.c(window['IA-Storage']['question']);
-	IsLog.c(window['IA-Storage']['answer']);
+	IsLog.c(window['IA-Storage'] );
+	//IsLog.c(window['IA-Storage']['question']);
+	//IsLog.c(window['IA-Storage']['answer']);
 
 	if(numChoices){
 		var repeatNode = window['IA-Storage']['repeatElementNode'] || $("#repeatNode").clone(true, true);
@@ -21,8 +23,9 @@ function(){
 			//IsLog.c('this is addNode: ');
 			//IsLog.c(addNode);
 			//IsLog.c(textareas);
-			$(textareas[0]).attr("id",$(textareas[0]).attr("id").replace(/\d+/, i));
-			$(textareas[1]).attr("id",$(textareas[1]).attr("id").replace(/\d+/, i));
+			$(textareas[0]).attr("id",$(textareas[0]).attr("id").replace(/\d+/, i));	//	question
+			$(textareas[1]).attr("id",$(textareas[1]).attr("id").replace(/\d+/, i));	//	answer
+			$(textareas[2]).attr("id",$(textareas[2]).attr("id").replace(/\d+/, i));	//	feedback
 			$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).html(i+1);
 			
@@ -30,18 +33,23 @@ function(){
 			if(i < question.length)
 				$(textareas[0]).val(question[i])
 			else
-				IsLog.c('answer was not long enough');
+				IsLog.c('question was not long enough');
 			if(i < answer.length)
 				$(textareas[1]).val(answer[i])
+			else
+				IsLog.c('answer wasnt long enough');
+			if(i < feedback.length)
+				$(textareas[2]).val(feedback[i])
+			else
+				IsLog.c('feedback wasn\'t long enought');
 		}		
-	}else{
+	}else
 		IsLog.c('it has been broke');
 		
-		if(this instanceof HTMLElement) {
-			for(var i=0; i < assessmentElements.length; i++) {
-				if(typeof assessmentElements[i].setEvents == "function") {
-					assessmentElements[i].setEvents();
-				}
+	if(this instanceof HTMLElement) {
+		for(var i=0; i < assessmentElements.length; i++) {
+			if(typeof assessmentElements[i].setEvents == "function") {
+				assessmentElements[i].setEvents();
 			}
 		}
 	}

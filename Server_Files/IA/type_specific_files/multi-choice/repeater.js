@@ -4,7 +4,7 @@ function() {
 	var numChoices = $("#numChoices").val(),
 		text = window['IA-Storage']['text'] || [],
 		feedback = window['IA-Storage']['feedback'] || [];	
-	IsLog.c('You have selected '+numChoices+' options');	
+	IsLog.c('You have selected '+numChoices+' options');
 	//IsLog.c(window['IA-Storage']['text'])
 	//IsLog.c(window['IA-Storage']['feedback'])
 	
