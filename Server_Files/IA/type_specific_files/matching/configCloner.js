@@ -18,7 +18,7 @@ function(){
 		for (var i=0; i<numChoices; i++){
 			IsLog.c('Adding Node '+(i+1));
 			var addNode = repeatNode.clone(true, true),
-				textareas = addNode.find("textarea");
+				textareas = addNode.find("textarea,input");
 			addNode.attr('id','clonetext'+i);
 			//IsLog.c('this is addNode: ');
 			//IsLog.c(addNode);

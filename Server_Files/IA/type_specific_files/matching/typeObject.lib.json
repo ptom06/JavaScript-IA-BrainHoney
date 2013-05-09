@@ -36,8 +36,15 @@ var obj = {
 						"id":		"doesntExist",
 						"handler":	"interactionInit.js",
 						"fireAutomatically":	true
+					},{
+						"name":		"finishedMatching",
+						"type":		"click",
+						"id":		"finish",
+						"handler":	"finishedMatching.js",
+						"fireAutomatically":	false
 					}
-				]
+				],
+			"scripts": ["interactionShuffle.js"]
 		}]
 	}
 }
