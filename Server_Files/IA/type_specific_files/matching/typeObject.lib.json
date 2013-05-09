@@ -30,7 +30,13 @@ var obj = {
 			"inputElementsString": "interactionPage.html",
 			"methods":
 				[
-					
+					{
+						"name":		"interactionInitClone",
+						"type":		"click",
+						"id":		"doesntExist",
+						"handler":	"interactionInit.js",
+						"fireAutomatically":	true
+					}
 				]
 		}]
 	}

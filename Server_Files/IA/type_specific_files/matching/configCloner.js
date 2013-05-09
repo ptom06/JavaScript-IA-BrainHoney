@@ -24,7 +24,9 @@ function(){
 			//IsLog.c(addNode);
 			//IsLog.c(textareas);
 			$(textareas[0]).attr("id",$(textareas[0]).attr("id").replace(/\d+/, i));	//	question
+			//	Dont need to clone the value //$(textareas[0]).attr("value",$(textareas[0]).attr("value").replace(/\d+/, i));
 			$(textareas[1]).attr("id",$(textareas[1]).attr("id").replace(/\d+/, i));	//	answer
+			//$(textareas[1]).attr("value",$(textareas[1]).attr("value").replace(/\d+/, i));
 			$(textareas[2]).attr("id",$(textareas[2]).attr("id").replace(/\d+/, i));	//	feedback
 			$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).html(i+1);

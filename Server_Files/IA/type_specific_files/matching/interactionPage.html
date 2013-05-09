@@ -2,7 +2,6 @@
 .displaySpan {
 	padding-bottom: 1em;	
 }
-
 .feedback {
 	height: 0em;
 	overflow:hidden;
@@ -12,20 +11,56 @@
 	-o-transition: height 1s; /* Opera */
 	padding-left: 1em;
 	color: #4027A6;
+	display: inline-block;
+}
+#cloneArea{
+	background-color: #F60;	
+}
+#leftBox{
+	background-color: cyan;
+	display: inline-block;
+	width: 45%;
+}
+#rightBox{
+	background-color: #9BE72D;
+	width: 50%;
+	display: inline-block;
 }
 .displayDiv {
-	border: 1px solid;
-	border-radius: 3px;
 	margin-bottom: .5em;	
+}
+.question{
+	white-space: normal;
+	width: 80%;
+	display: inline-block;
+}
+.answer-blank{
+	margin-top: 0.2em;
+	width: 1em;
+	height: 1em;
+	resize: none;
+	display: inline-block;
 }
 </style>
 <div id="cloneArea">
 </div>
 <div class="displayDiv" id="cloner">
-	<label>
-	<!--If we want to select more than one option we need to add a 0 on the name -->
-		<textarea name="optionsRadio" class="radio-option"/>
-		<span class="displaySpan" id="optionSpan">Options text goes here</span>
-	</label>
-	<div class="feedback">Feedback: <span id="feedbackSpan">Feedback NA</span></div>
+	<div id="leftBox">
+		<!--If we want to select more than one option we need to add a 0 on the name -->
+		<div class="question"> Question:&nbsp;<span id="question-option0"/></div>
+			<!--<span class="displaySpan" id="optionSpan0">feedback goes here.</span>-->
+		<label>&nbsp;
+			<!--If we want to select more than one option we need to add a 0 on the name -->
+			<textarea class="answer-blank" id="answerBlank0"/>
+			<!--<span class="displaySpan" id="optionSpan">Options text goes here</span>-->
+		</label>
+		<div class="feedback">Feedback:
+			<span id="feedbackSpan">Feedback NA</span>
+		</div>		
+	</div>
+	<div id="rightBox">
+		<div class="answers">
+			<span>test</span>
+		</div>
+	</div>
 </div>
