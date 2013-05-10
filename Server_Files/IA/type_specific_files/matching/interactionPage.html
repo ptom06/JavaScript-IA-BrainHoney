@@ -19,7 +19,7 @@
 	min-width: 65%;
 	width: 65%;
 }
-#leftBox{
+.leftBox{
 	background-color: cyan;
 	display: inline-block;
 	width: 100%;
@@ -47,7 +47,8 @@
 	display: inline-block;
 }
 #finish{
-	display: block;	
+	display: block;
+	width: 100%;
 }
 </style>
 <div id="cloneArea">
@@ -58,7 +59,7 @@
 	</div>
 </div>
 <div class="displayDiv" id="cloner">
-	<div id="leftBox">
+	<div id="leftBox" class="leftBox">
 		<!--If we want to select more than one option we need to add a 0 on the name -->
 		<div class="question"> Question:&nbsp;<span id="question-option0"/></div>
 			<!--<span class="displaySpan" id="optionSpan0">feedback goes here.</span>-->

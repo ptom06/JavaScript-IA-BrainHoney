@@ -66,11 +66,12 @@ function() {
 						IsLog.c('adding node '+(i+1));
 						var addClone = cloner.clone(true, true);
 						$(addClone).attr("id","clonedText"+i);
+						$(addClone.find("#leftBox")[0]).attr("id", "leftBox"+i);
 						$(addClone.find(".question span")[0]).attr("id",$(addClone.find(".question span")[0]).attr("id").replace(/\d+/, i));	//	question
 						$(addClone.find("textarea,input")[0]).attr("id",$(addClone.find("textarea,input")[0]).attr("id").replace(/\d+/, i));	//	answer
 						//$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));	//	feedback
 						//$(addClone.find("#optionSpan"+i)).attr("id","optionSpan"+i);
-						$(addClone.find(".feedback span")[1]).attr("id","feedbackSpan"+i);
+						$(addClone.find(".feedback").find("span")[0]).attr("id","feedbackSpan"+i);
 						//$(addClone.find(".feedback")[0]).attr("id","feedback"+i);
 						//$(addClone.find("input[name=optionsRadio]")).attr("id",$(addClone.find("input[name=optionsRadio]")).attr("name")+i);
 						//IsLog.c("this is the optionsRadio: "+ $("optionsradio"+i));
