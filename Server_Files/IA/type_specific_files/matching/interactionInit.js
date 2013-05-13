@@ -68,7 +68,7 @@ function() {
 						$(addClone).attr("id","clonedText"+i);
 						$(addClone.find("#leftBox")[0]).attr("id", "leftBox"+i);
 						$(addClone.find(".question span")[0]).attr("id",$(addClone.find(".question span")[0]).attr("id").replace(/\d+/, i));	//	question
-						$(addClone.find("textarea,input")[0]).attr("id",$(addClone.find("textarea,input")[0]).attr("id").replace(/\d+/, i));	//	answer
+						$(addClone.find("select, option")[0]).attr("id",$(addClone.find("select, option")[0]).attr("id").replace(/\d+/, i));	//	answer
 						//$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));	//	feedback
 						//$(addClone.find("#optionSpan"+i)).attr("id","optionSpan"+i);
 						$(addClone.find(".feedback").find("span")[0]).attr("id","feedbackSpan"+i);
@@ -86,6 +86,11 @@ function() {
 						//	$(addClone.find(".answers span")[0]).html((i+1)+": "+questions[i].answer)
 						if(i<questions[i].feedback.length)
 							$(addClone.find("#feedbackSpan")[0]).html(questions[i].feedback)
+						/*if(i<questions[i].answer.length){
+							IsLog.c('here we go');
+							IsLog.c($(addClone.find("select, option")[0]));
+							$(addClone.find("select, option")[0]).append((i+1))
+						}*/
 					}
 					questions = shuffle(questions);
 					$($(".answers")[0]).empty();
@@ -94,6 +99,8 @@ function() {
 					}
 				}
 				// show and hide feedback
+				//IsLog.c('this is the log im looking for');
+				//IsLog.c((/^\w+/).exec($(".answers").text()));
 			}
 		);
 	} else {
