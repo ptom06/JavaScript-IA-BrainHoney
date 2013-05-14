@@ -1,0 +1,44 @@
+var obj = {
+	"slideShow": {
+		"conditionals": [{
+			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
+			"configurationElementsString": "configurationPage.html",
+			"methods":
+				[
+					{
+						"name": "createClones",
+						"type": "change",
+						"id": "numChoices",
+						"handler": "repeater.js",
+						"fireAutomatically": true
+					},{
+						"name": "storeText",
+						"type": "keyup blur change",
+						"class": "user-input",
+						"handler": "configTextStorage.js",
+						"fireAutomatically": false
+					},{
+						"name":		"submitConfiguration",
+						"type":		"click",	
+						"id":		"submitMe",
+						"handler":	"configSubmit.js",
+						"fireAutomatically":	false
+					}
+				]
+		},{
+			"condition":	{"function":"default_get_configuration_parameters(\"bool\")","value":true},
+			"inputElementsString": "interactionPage.html",
+			"methods":
+				[
+					{
+						"name": "variableInit",
+						"type": "click",
+						"id": "#doesntExist",
+						"handler": "interactionInit.js",
+						"fireAutomatically": true
+					}
+				]
+		}]
+	}
+}
+

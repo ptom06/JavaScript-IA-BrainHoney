@@ -1,0 +1,64 @@
+<style>
+.border {
+	border: 1px solid;	
+	border-radius: 3px;	
+	margin-bottom: auto;
+}
+label {
+	display: block;	
+	height: 2em;
+	width: 99%;
+}
+#previewPane {
+	white-space: normal;	
+}
+</style>
+<label>How many slides would you like: 
+	<select id="numChoices">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+		<option>11</option>
+		<option>12</option>
+		<option>13</option>
+		<option>14</option>
+		<option>15</option>
+		<option>16</option>
+		<option>17</option>
+		<option>18</option>
+		<option>19</option>
+		<option>20</option>
+	</select>
+</label>
+<div id="repeatArea">
+</div>
+<div class="border" id="repeatNode">
+<label>
+	Image file path <span id="numberId0">1</span>:
+	<input type="text" id="image0" class="myText user-input"/>
+</label>	
+<label>
+	Displayed Text:
+	<input type="text" id="text0" class="myText user-input"/>
+</label>
+<label>
+	Sound Path:
+	<input type="text" id="sound0" class="myText user-input"/>
+</label>
+<label>
+	Auto-play audio: On 
+	<input type="radio" name="auto-play0" checked="checked" value="true" class="myText user-input"/>
+	Off&nbsp;
+	<input type="radio" name="auto-play0" value="false" id="autoPlay0" class="myText user-input"/>
+</label>
+</div>
+<div>
+	<input type="button" value="submit" id="submitMe" />
+</div>
