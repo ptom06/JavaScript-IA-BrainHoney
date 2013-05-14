@@ -58,17 +58,24 @@ function() {
 				
 				//	Clone the radio buttons with the text. Correlate the options with their feedback
 				if(questions){
-					var cloner = window['IA-Storage']['cloneElementNode'] || $("#cloner").clone(true, true);
+					var cloner = window['IA-Storage']['cloneElementNode'] || $("#cloner").clone(true, true),
+						optionArray = [];
 					window['IA-Storage']['cloneElementNode'] = cloner;
 					$("#cloner").remove();
 					$("#cloneArea").empty();
+					for(var i=0; i<questions.length; i++){
+						if(optionArray.indexOf(questions[i].answer) == -1)
+							optionArray.push(questions[i].answer);
+					}
 					for(var i=0; i<questions.length; i++){
 						IsLog.c('adding node '+(i+1));
 						var addClone = cloner.clone(true, true);
 						$(addClone).attr("id","clonedText"+i);
 						$(addClone.find("#leftBox")[0]).attr("id", "leftBox"+i);
+						IsLog.c($((addClone.find(".question")[0]).firstChild));
+						$(addClone.find(".question span")[0]).before((i+1)+". "+$($(addClone.find(".question")[0]).firstChild).text());
 						$(addClone.find(".question span")[0]).attr("id",$(addClone.find(".question span")[0]).attr("id").replace(/\d+/, i));	//	question
-						$(addClone.find("select, option")[0]).attr("id",$(addClone.find("select, option")[0]).attr("id").replace(/\d+/, i));	//	answer
+						$(addClone.find("#answerChoiceSelect0")[0]).attr("id",$(addClone.find("#answerChoiceSelect0")[0]).attr("id").replace(/\d+/, i));	//	answer
 						//$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));	//	feedback
 						//$(addClone.find("#optionSpan"+i)).attr("id","optionSpan"+i);
 						$(addClone.find(".feedback").find("span")[0]).attr("id","feedbackSpan"+i);
@@ -78,24 +85,36 @@ function() {
 						$("#cloneArea").append(addClone);
 						IsLog.c("my Log");
 						IsLog.c($(addClone.find("#feedbackSpan")[0]));
-						if(i < questions[i].question.length)
-							$(addClone.find(".question span")[0]).html(questions[i].question)
-						else
+						if(questions[i].question.length > 0) {
+							$(addClone.find(".question span")[0]).html(questions[i].question);
+						}
+						//else
 							//IsLog.c("Notice: this is not working");
 						//if(i<questions[i].answer.length)
 						//	$(addClone.find(".answers span")[0]).html((i+1)+": "+questions[i].answer)
-						if(i<questions[i].feedback.length)
-							$(addClone.find("#feedbackSpan")[0]).html(questions[i].feedback)
-						/*if(i<questions[i].answer.length){
-							IsLog.c('here we go');
-							IsLog.c($(addClone.find("select, option")[0]));
-							$(addClone.find("select, option")[0]).append((i+1))
-						}*/
+						if(questions[i].feedback.length > 0) {
+							$(addClone.find("#feedbackSpan")[0]).html(questions[i].feedback);
+						}
+						for(var j=0; j<optionArray.length; j++){
+							var newOption = $($(addClone.find("#answerChoiceSelect"+i)[0]).find("option")[0]).clone();
+							$(newOption).text((j+10).toString(26+10));
+							$(addClone.find("#answerChoiceSelect"+i)[0]).append(newOption);
+							//$(addClone.find("select, option")[0]).append("<option>"+(i+1)+"</option>");
+						}
 					}
+					
 					questions = shuffle(questions);
-					$($(".answers")[0]).empty();
+					optionArray = [];
 					for(var i=0; i<questions.length; i++){
-						$($(".answers")[0]).append("<div id=\"distractor"+i+"\"style=\"margin-bottom:0.5em\">"+((i+10).toString(26+10))+": "+questions[i].answer+"</div>");
+						if(optionArray.indexOf(questions[i].answer) == -1)
+							optionArray.push(questions[i].answer);
+					}
+					$($(".answers")[0]).empty();
+					for(var i=0; i<optionArray.length; i++){
+						IsLog.c("answerArray index = "+optionArray.indexOf(optionArray[i]));
+						IsLog.c(optionArray[i]);
+						//questions[j].answer.remove();
+						$($(".answers")[0]).append("<div id=\"distractor"+i+"\"style=\"margin-bottom:0.5em\">"+((i+10).toString(26+10))+": "+optionArray[i]+"</div>");
 					}
 				}
 				// show and hide feedback

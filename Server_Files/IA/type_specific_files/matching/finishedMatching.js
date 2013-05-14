@@ -3,7 +3,7 @@ function(){
 	for(var i=0; i < questions.length; i++) {
 		var userQuestion = {
 				"questionText": $("#question-option"+i).text(),
-				"questionAnswerLetter": $("#answerBlank"+i).val(),
+				"questionAnswerLetter": $("#answerChoiceSelect"+i).val(),
 				"questionAnswer": false,
 				"found": false,
 				"feedback": false
