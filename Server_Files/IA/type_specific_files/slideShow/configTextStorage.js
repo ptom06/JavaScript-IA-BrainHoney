@@ -1,10 +1,10 @@
 function() {
 	if (typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"text":[],"feedback":[]}
+		window['IA-Storage'] = {"image":[],"feedback":[]}
 	else if(typeof window['IA-Storage']['text'] == "undefined" || typeof window['IA-Storage']['feedback'] == "undefined") {
 		window['IA-Storage']['image'] = [];
-		window['IA-Storage']['text'] = [];
 		window['IA-Storage']['sound'] = [];
+		window['IA-Storage']['text'] = [];
 	}else{
 		//	Data in window has already been initialized.
 	}
@@ -24,15 +24,6 @@ function() {
 	} else {
 		IsLog.c("Error: image file path input not found! \"#image"+arrayIndex+"\"");	
 	}
-	//	text Section
-	if($("#text"+arrayIndex).val() === "") {
-		IsLog.c("Notice: Nothing has been typed in: \"text"+arrayIndex+"\"");	
-	} else if(typeof $("#text"+arrayIndex).val() == "string") {
-		IsLog.c("We should be storing the text");
-		window['IA-Storage']['text'][arrayIndex] = $("#text"+arrayIndex).val();
-	} else {
-		IsLog.c("Error: Options Text input not found! \"#text"+arrayIndex+"\"");	
-	}
 	//	sound path Section
 	if($("#sound"+arrayIndex).val() === "") {
 		IsLog.c("Notice: Nothing has been typed in: \"sound"+arrayIndex+"\"");	
@@ -42,7 +33,16 @@ function() {
 	} else {
 		IsLog.c("Error: Options Text input not found! \"#sound"+arrayIndex+"\"");	
 	}
-	var imageObj = window['IA-Storage']['image'],
-		textObj = window['IA-Storage']['text'];
+	//	text Section
+	if($("#text"+arrayIndex).val() === "") {
+		IsLog.c("Notice: Nothing has been typed in: \"text"+arrayIndex+"\"");	
+	} else if(typeof $("#text"+arrayIndex).val() == "string") {
+		IsLog.c("We should be storing the text");
+		window['IA-Storage']['text'][arrayIndex] = $("#text"+arrayIndex).val();
+	} else {
+		IsLog.c("Error: Options Text input not found! \"#text"+arrayIndex+"\"");	
+	}
+		var imageObj = window['IA-Storage']['image'],
 		soundObj = window['IA-Storage']['sound'];
+		textObj = window['IA-Storage']['text'];
 }

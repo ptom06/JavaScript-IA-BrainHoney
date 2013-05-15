@@ -2,12 +2,13 @@ function() {
 	if(typeof window['IA-Storage'] == "undefined")
 		window['IA-Storage'] = {};
 	var numChoices = $("#numChoices").val(),
-		image = window['IA-Storage']['text'] || [],
-		text = window['IA-Storage']['feedback'] || [],
-		sound = window['IA-Storage']['feedback'] || [];	
+		image = window['IA-Storage']['image'] || [],
+		sound = window['IA-Storage']['sound'] || [],
+		text = window['IA-Storage']['text'] || [];
 	IsLog.c('You have selected '+numChoices+' options');
-	//IsLog.c(window['IA-Storage']['text'])
-	//IsLog.c(window['IA-Storage']['feedback'])
+	IsLog.c(window['IA-Storage']['image']);
+	IsLog.c(window['IA-Storage']['sound']);
+	IsLog.c(window['IA-Storage']['text']);
 	
 	if(numChoices){
 		var repeatNode = window['IA-Storage']['repeatElementNode'] || $("#repeatNode").clone(true, true);
@@ -19,22 +20,22 @@ function() {
 			var addNode = repeatNode.clone(true, true);
 			addNode.attr('id','cloneText'+i);
 			$(addNode.find("input")[0]).attr("id",$(addNode.find("input")[0]).attr("id").replace(/\d+/, i));
-			$(addNode.find("input")[1]).attr("id",$(addNode.find("input")[1]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).attr("id",$(addNode.find("span")[0]).attr("id").replace(/\d+/, i));
 			$(addNode.find("span")[0]).html(i+1);
-			$(addNode.find("input")[2]).attr("id",$(addNode.find("input")[2]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[1]).attr("id",$(addNode.find("input")[1]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[2]).attr("name",$(addNode.find("input")[2]).attr("name").replace(/\d+/, i));
 			$(addNode.find("input")[3]).attr("name",$(addNode.find("input")[3]).attr("name").replace(/\d+/, i));
-			$(addNode.find("input")[4]).attr("name",$(addNode.find("input")[4]).attr("name").replace(/\d+/, i));
-			$(addNode.find("input")[4]).attr("id",$(addNode.find("input")[4]).attr("id").replace(/\d+/, i));
+			$(addNode.find("input")[3]).attr("id",$(addNode.find("input")[3]).attr("id").replace(/\d+/, i));
+			$(addNode.find("textarea")[0]).attr("id",$(addNode.find("textarea")[0]).attr("id").replace(/\d+/, i));
 			
 			//	go over this portion
 			$("#repeatArea").append(addNode);
 			if(image.length > i)
 				$(addNode.find("input")[0]).val(image[i])
-			if(text.length > i)
-				$(addNode.find("input")[1]).val(text[i])
 			if(sound.length > i)
-				$(addNode.find("input")[2]).val(sound[i])
+				$(addNode.find("input")[1]).val(sound[i])
+			if(text.length > i)
+				$(addNode.find("textarea")[0]).val(text[i])
 				
 		}
 	}else

@@ -4,13 +4,16 @@
 	border-radius: 3px;	
 	margin-bottom: auto;
 }
-label {
-	display: block;	
-	height: 2em;
-	width: 99%;
+textarea{
+	display: block;
+	height: 3em;
+	width: 99%;	
 }
-#previewPane {
-	white-space: normal;	
+.myText{
+	display: inline-block;
+	padding-right: 5em;
+	padding-bottom: .1em;
+	margin-bottom: .5em;
 }
 </style>
 <label>How many slides would you like: 
@@ -40,24 +43,24 @@ label {
 <div id="repeatArea">
 </div>
 <div class="border" id="repeatNode">
-<label>
-	Image file path <span id="numberId0">1</span>:
-	<input type="text" id="image0" class="myText user-input"/>
-</label>	
-<label>
-	Displayed Text:
-	<input type="text" id="text0" class="myText user-input"/>
-</label>
-<label>
-	Sound Path:
-	<input type="text" id="sound0" class="myText user-input"/>
-</label>
-<label>
-	Auto-play audio: On 
-	<input type="radio" name="auto-play0" checked="checked" value="true" class="myText user-input"/>
-	Off&nbsp;
-	<input type="radio" name="auto-play0" value="false" id="autoPlay0" class="myText user-input"/>
-</label>
+	<label>
+		Image file path <span id="numberId0">1</span>:
+		<input type="text" id="image0" class="myText user-input"/>
+	</label><br />	
+	<label>
+		Sound Path:
+		<input type="text" id="sound0" class="myText user-input"/>
+	</label><br />
+	<label>
+		Auto-play audio: On 
+		<input type="radio" name="auto-play0" checked="checked" value="true" class="user-input"/>
+		Off&nbsp;
+		<input type="radio" name="auto-play0" value="false" id="autoPlay0" class="user-input"/>
+	</label><br />
+	<label>
+		Displayed Text:
+		<textarea id="text0" class="user-input"></textarea>
+	</label>
 </div>
 <div>
 	<input type="button" value="submit" id="submitMe" />
