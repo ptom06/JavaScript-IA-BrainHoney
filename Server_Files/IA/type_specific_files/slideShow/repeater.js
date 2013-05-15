@@ -4,6 +4,7 @@ function() {
 	var numChoices = $("#numChoices").val(),
 		image = window['IA-Storage']['image'] || [],
 		sound = window['IA-Storage']['sound'] || [],
+		autoPlay = window['IA-Storage']['autoPlay'] || [],
 		text = window['IA-Storage']['text'] || [];
 	IsLog.c('You have selected '+numChoices+' options');
 	IsLog.c(window['IA-Storage']['image']);
@@ -27,7 +28,10 @@ function() {
 			$(addNode.find("input")[3]).attr("name",$(addNode.find("input")[3]).attr("name").replace(/\d+/, i));
 			$(addNode.find("input")[3]).attr("id",$(addNode.find("input")[3]).attr("id").replace(/\d+/, i));
 			$(addNode.find("textarea")[0]).attr("id",$(addNode.find("textarea")[0]).attr("id").replace(/\d+/, i));
-			
+			if(autoPlay.length >= i){
+				$(addNode.find("input")[2]).prop("checked", autoPlay[i]);
+				$(addNode.find("input")[3]).prop("checked", !autoPlay[i]);
+			}
 			//	go over this portion
 			$("#repeatArea").append(addNode);
 			if(image.length > i)

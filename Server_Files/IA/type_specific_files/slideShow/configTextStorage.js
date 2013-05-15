@@ -1,9 +1,10 @@
 function() {
 	if (typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"image":[],"feedback":[]}
-	else if(typeof window['IA-Storage']['text'] == "undefined" || typeof window['IA-Storage']['feedback'] == "undefined") {
+		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[]}
+	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined") {
 		window['IA-Storage']['image'] = [];
 		window['IA-Storage']['sound'] = [];
+		window['IA-Storage']['autoPlay'] = [];
 		window['IA-Storage']['text'] = [];
 	}else{
 		//	Data in window has already been initialized.
@@ -33,6 +34,7 @@ function() {
 	} else {
 		IsLog.c("Error: Options Text input not found! \"#sound"+arrayIndex+"\"");	
 	}
+	
 	//	text Section
 	if($("#text"+arrayIndex).val() === "") {
 		IsLog.c("Notice: Nothing has been typed in: \"text"+arrayIndex+"\"");	
@@ -42,7 +44,13 @@ function() {
 	} else {
 		IsLog.c("Error: Options Text input not found! \"#text"+arrayIndex+"\"");	
 	}
+	//	auto-play Section
+	window['IA-Storage']['autoPlay'][arrayIndex] = !$("#autoPlay"+arrayIndex).prop("checked");
+	IsLog.c("This is the \'window\'");
+	IsLog.c(window['IA-Storage']);
+	return true;
 		var imageObj = window['IA-Storage']['image'],
-		soundObj = window['IA-Storage']['sound'];
-		textObj = window['IA-Storage']['text'];
+			soundObj = window['IA-Storage']['sound'],
+			autoPlayObj = window['IA-Storage']['autoPlay'],
+			textObj = window['IA-Storage']['text'];
 }
