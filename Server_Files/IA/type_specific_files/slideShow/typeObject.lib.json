@@ -36,6 +36,13 @@ var obj = {
 						"id": "#doesntExist",
 						"handler": "interactionInit.js",
 						"fireAutomatically": true
+					},
+					{
+						"name": "SlideThatShow",
+						"type": "click",
+						"id": "page_select",
+						"handler": "leftRightClick.js",
+						"fireAutomatically": true
 					}
 				]
 		}]

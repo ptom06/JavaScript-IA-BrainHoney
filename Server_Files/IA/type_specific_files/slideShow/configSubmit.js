@@ -4,7 +4,7 @@ function() {
 	var JSONString = "";
 	
 	//	do we need to have input included for the submit button or can we remove it?
-	var formInputs = $("input,textarea");
+	var formInputs = $("input,textarea, span");
 	
 	var requiredFields = {
 		"default-feedback":"You must provide default feedback.",
