@@ -23,7 +23,7 @@ function() {
 		IsLog.c("We should be storing the text for the image input");
 		window['IA-Storage']['image'][arrayIndex] = $("#image"+arrayIndex).val();
 	} else {
-		IsLog.c("Error: image file path input not found! \"#image"+arrayIndex+"\"");	
+		IsLog.c("Error: Image file path input not found! \"#image"+arrayIndex+"\"");	
 	}
 	//	sound path Section
 	if($("#sound"+arrayIndex).val() === "") {
@@ -32,7 +32,7 @@ function() {
 		IsLog.c("We should be storing the text");
 		window['IA-Storage']['sound'][arrayIndex] = $("#sound"+arrayIndex).val();
 	} else {
-		IsLog.c("Error: Options Text input not found! \"#sound"+arrayIndex+"\"");	
+		IsLog.c("Error: Sound file path not found! \"#sound"+arrayIndex+"\"");	
 	}
 	
 	//	text Section
@@ -42,15 +42,15 @@ function() {
 		IsLog.c("We should be storing the text");
 		window['IA-Storage']['text'][arrayIndex] = $("#text"+arrayIndex).val();
 	} else {
-		IsLog.c("Error: Options Text input not found! \"#text"+arrayIndex+"\"");	
+		IsLog.c("Error: Display text input not found! \"#text"+arrayIndex+"\"");	
 	}
 	//	auto-play Section
 	window['IA-Storage']['autoPlay'][arrayIndex] = !$("#autoPlay"+arrayIndex).prop("checked");
 	IsLog.c("This is the \'window\'");
 	IsLog.c(window['IA-Storage']);
 	return true;
-		var imageObj = window['IA-Storage']['image'],
+		/*var imageObj = window['IA-Storage']['image'],
 			soundObj = window['IA-Storage']['sound'],
 			autoPlayObj = window['IA-Storage']['autoPlay'],
-			textObj = window['IA-Storage']['text'];
+			textObj = window['IA-Storage']['text'];*/
 }

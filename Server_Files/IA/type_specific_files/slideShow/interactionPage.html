@@ -1,31 +1,29 @@
 <style>
-.displaySpan {
-	padding-bottom: 1em;	
-}
-
-.feedback {
-	height: 0em;
-	overflow:hidden;
-	transition: height 1s;
-	-moz-transition: height 1s; /* Firefox 4 */
-	-webkit-transition: height 1s; /* Safari and Chrome */
-	-o-transition: height 1s; /* Opera */
-	padding-left: 1em;
-	color: #4027A6;
-}
+/*@font-face {
+    font-family: 'ModernPictogramsNormal';
+    src: url('modernpics-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
 .displayDiv {
 	border: 1px solid;
 	border-radius: 3px;
+	height: 30em;
+	width: 99%;
 	margin-bottom: .5em;	
+	background-color: #36E6DE;
+}
+#page_select {
+	/*font-family: ModernPictogramsNormal;*/
+	font-size: 4em;
+	width: 44%;
+	text-align: center;
+	position: fixed;
+	bottom:3em;
 }
 </style>
 <div id="cloneArea">
 </div>
 <div class="displayDiv" id="cloner">
-	<label>
-	<!--If we want to select more than one option we need to add a 0 on the name -->
-		<input type="radio" name="optionsRadio" class="radio-option"/>
-		<span class="displaySpan" id="optionSpan">Options text goes here</span>
-	</label>
-	<div class="feedback">Feedback: <span id="feedbackSpan">Feedback NA</span></div>
+	<div id="page_select"><span id="back">&lt;</span> <span id="forward">&gt;</span></div>
 </div>

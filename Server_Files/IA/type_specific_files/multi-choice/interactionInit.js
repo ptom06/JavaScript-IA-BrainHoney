@@ -31,6 +31,9 @@ function() {
 				IsLog.c(window['IA-Storage']);
 				var text = window['IA-Storage']['text'],
 					feedback = window['IA-Storage']['feedback'];
+					IsLog.c("workin here");
+					IsLog.c(text.length);
+					IsLog.c(feedback.length);
 				//	Display the first options text to start.
 				//$("#optionSpan").text(text[0]);
 				//$("#feedbackSpan").text(feedback[0]);
