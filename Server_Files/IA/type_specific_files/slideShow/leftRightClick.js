@@ -12,19 +12,14 @@ function(){
 		autoPlay = window['IA-Storage']['autoPlay'],
 		text = window['IA-Storage']['text'],
 		i = 0;
-	//for(var i=0; i<image.length+1;){
 		IsLog.c('our current value of \"I\" is: '+i);
-		IsLog.c(this);
-		if(this==$("#forward") && i<= image.length){
+		IsLog.c(image[0]);
+		if(this == $("#forward")[0] && i < image.length){
 			IsLog.c('we should be moving forward');
-			//$("#displayDiv").append("<img id=\"displayImage"+i+" scr=\""+image[i]+"\"/>");
 			i++;
 		}
-		if(this==$("#back") && i>0){
+		if($(this)==$("#back") && i>0){
 			IsLog.c('we should be moving backwards');
-			//$("#displayDiv").append("<img id=\"displayImage"+i+" scr=\""+image[i]+"\"/>");
-			//i--;
 		}
-	//}
 	
 }

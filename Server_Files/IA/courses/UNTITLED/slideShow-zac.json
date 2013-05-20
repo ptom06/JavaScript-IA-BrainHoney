@@ -1,1 +1,1 @@
-{"image":["image1.jpg","image2.jpg"],"sound":["sound1.mp3","sound2.mp3"],"autoPlay":["false","false"],"text":["this is displayed text 1","<h1>this is displayed text 2</h1>"],"submitMe":"submit"}
+{"numberId":"","image":["images/valley.jpg","images/fog.jpg","images/sunRise.jpg"],"sound":"","autoPlay":["false","false","false"],"text":["This is the text I'm going to place on the page.","<style font-color: red>This is the fog</style","The sun is rising, up over the mountains."],"submitMe":"submit"}

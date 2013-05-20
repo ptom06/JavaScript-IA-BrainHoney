@@ -6,17 +6,17 @@ var obj = {
 			"methods":
 				[
 					{
+						"name": "storeText",
+						"type": "keyup blur change",
+						"class": "user-input",
+						"handler": "configTextStorage.js",
+						"fireAutomatically": true
+					},{
 						"name": "createClones",
 						"type": "change",
 						"id": "numChoices",
 						"handler": "repeater.js",
 						"fireAutomatically": true
-					},{
-						"name": "storeText",
-						"type": "keyup blur change",
-						"class": "user-input",
-						"handler": "configTextStorage.js",
-						"fireAutomatically": false
 					},{
 						"name":		"submitConfiguration",
 						"type":		"click",	
@@ -31,17 +31,10 @@ var obj = {
 			"methods":
 				[
 					{
-						"name": "variableInit",
+						"name": "variableInitAndForwardAndBackwards",
 						"type": "click",
-						"id": "#doesntExist",
+						"class": "ssnavfb",
 						"handler": "interactionInit.js",
-						"fireAutomatically": true
-					},
-					{
-						"name": "SlideThatShow",
-						"type": "click",
-						"id": "page_select",
-						"handler": "leftRightClick.js",
 						"fireAutomatically": true
 					}
 				]
