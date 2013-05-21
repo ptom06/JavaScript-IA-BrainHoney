@@ -29,7 +29,8 @@ function() {
 				}*/
 				IsLog.c(configObject);
 				
-				var image = configObject['configuration']['image'];	//window['IA-Storage']['image'];
+				var image = configObject['configuration']['image'],
+					text = configObject['configuration']['text'];	//window['IA-Storage']['image'];
 				//IsLog.c($('.backgroundImage').length);
 				if($('.backgroundImage').length == 0){
 					for(var i=0; i<image.length; i++){
@@ -37,6 +38,7 @@ function() {
 						imageElement.attr("id", "displayImage"+i);
 						imageElement.attr("class", "backgroundImage");
 						imageElement.css("background-image", "url("+image[i]+")");
+						imageElement.text(text[i]);
 						$(".displayDiv").append(imageElement);
 						//IsLog.c($('#displayImage'+i));
 					}
@@ -48,7 +50,7 @@ function() {
 				//	use the $('.backgroundImage') in the clicking forward and backwards
 				var backgroundImage = $('.backgroundImage'),
 					slideIndex = window['IA-Storage']['slideIndex'];
-				
+					
 				/*if($(this)==$("#back") && slideIndex > 0){
 					slideIndex--;
 				}
