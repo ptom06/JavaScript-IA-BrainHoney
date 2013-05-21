@@ -1,11 +1,13 @@
 function() {
 	if(typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[]}
-	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined") {
+		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[], "slideIndex": 0}
+	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined" || typeof window['IA-Storage']['slideIndex'] == "undefined") {
 		window['IA-Storage']['image'] = [];
 		window['IA-Storage']['sound'] = [];
 		window['IA-Storage']['autoPlay'] = [];
 		window['IA-Storage']['text'] = [];
+		window['IA-Storage']['slideIndex'] = 0;
+		
 	}
 	if(window['IA-Storage']["image"].length == 0) { //This should be something other thatn image.?.?
 		$.post(
@@ -44,19 +46,17 @@ function() {
 				IsLog.c($('.backgroundImage'));
 				//	These if statements are for the forward and backwards.
 				//	use the $('.backgroundImage') in the clicking forward and backwards
-				if(this == $("#forward")[0] && i < image.length){
-					IsLog.c('we should be moving forward');
-					i++;
+				var backgroundImage = $('.backgroundImage'),
+					slideIndex = window['IA-Storage']['slideIndex'];
+				
+				/*if($(this)==$("#back") && slideIndex > 0){
+					slideIndex--;
 				}
-				else if(this == $("#forward")[0] && i >= image.length)
-					IsLog.c('we shouldn\'t be able to move forward');
-					
-				if($(this)==$("#back") && i>0){
-					IsLog.c('we should be moving backwards');
-					i--;
+				if(this == $("#forward")[0] && slideIndex < backgroundImage.length-1){
+					slideIndex++;
 				}
-				else if($(this)==$("#back") && i>=0)
-					IsLog.c('we shouldn\'t be able to move backwards');
+				slideIndex++;
+				IsLog.c("SlideIndex is: "+slideIndex);*/
 
 				//	I need to get all the image id's on the page so that i can call them.
 				
