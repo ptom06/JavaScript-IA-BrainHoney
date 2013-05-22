@@ -7,10 +7,13 @@ function() {
 		window['IA-Storage']['autoPlay'] = [];
 		window['IA-Storage']['text'] = [];
 	}else{
+		IsLog.c('We are bypassing the storage of our var');
 		//	Data in window has already been initialized.
 	}
 	if((/\d+/).test($(this).attr("id")))
 		var arrayIndex = (/\d+/).exec($(this).attr("id"));
+	else if ((/\d+/).test($(this).attr("name")))
+		var arrayIndex = (/\d+/).exec($(this).attr("name"));
 	else
 		IsLog.c("Notice: We didn't enter the correct statement");	
 	
@@ -46,6 +49,10 @@ function() {
 	}
 	//	auto-play Section
 	window['IA-Storage']['autoPlay'][arrayIndex] = !$("#autoPlay"+arrayIndex).prop("checked");
+	IsLog.c(arrayIndex);
+	IsLog.c(window['IA-Storage']['autoPlay'][arrayIndex]);
+	IsLog.c(!$("#autoPlay"+arrayIndex).prop("checked"));
+	IsLog.c($('#autoPlay'+0));
 	IsLog.c("This is the \'window\'");
 	IsLog.c(window['IA-Storage']);
 	return true;

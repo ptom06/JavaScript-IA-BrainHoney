@@ -10,8 +10,8 @@
 	border-radius: 3px;
 	height: 30em;
 	width: 99%;
-	margin-bottom: .5em;	
-	background-color: #36E6DE;
+	margin-bottom: .5em;
+	overflow: scroll;
 }
 #page_select {
 	/*font-family: ModernPictogramsNormal;*/
@@ -21,9 +21,18 @@
 	position: fixed;
 	bottom:3em;
 }
+.backgroundImage{
+	max-width: 100%;
+	max-height: 100%;
+	min-height: 100%;
+	min-width: 100%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #353F44;
+	color: white;
+}
 </style>
-<div id="cloneArea">
-</div>
 <div class="displayDiv" id="cloner">
-	<div id="page_select"><span id="back">&lt;</span> <span id="forward">&gt;</span></div>
+	<div id="page_select"><span class="ssnavfb" id="back">&lt;</span> <span class="ssnavfb" id="forward">&gt;</span></div>
 </div>
