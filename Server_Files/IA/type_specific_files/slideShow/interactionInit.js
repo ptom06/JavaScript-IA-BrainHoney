@@ -30,7 +30,10 @@ function() {
 				IsLog.c(configObject);
 				
 				var image = configObject['configuration']['image'],
-					text = configObject['configuration']['text'];	//window['IA-Storage']['image'];
+					text = configObject['configuration']['text'],	//window['IA-Storage']['image'];
+					backgroundImage = $('.backgroundImage'),
+					slideIndex = window['IA-Storage']['slideIndex'];
+
 				//IsLog.c($('.backgroundImage').length);
 				if($('.backgroundImage').length == 0){
 					for(var i=0; i<image.length; i++){
@@ -38,19 +41,27 @@ function() {
 						imageElement.attr("id", "displayImage"+i);
 						imageElement.attr("class", "backgroundImage");
 						imageElement.css("background-image", "url("+image[i]+")");
-						imageElement.text(text[i]);
+						imageElement.html(text[i]);
 						$(".displayDiv").append(imageElement);
 						//IsLog.c($('#displayImage'+i));
 					}
 				}else
 					IsLog.c('We already loaded the images on the page');
 				IsLog.c($('.backgroundImage').length);
-				IsLog.c($('.backgroundImage'));
+				IsLog.c($('.backgroundImage')[0]);
+				$('.backgroundImage')[0].css("position","relative")
 				//	These if statements are for the forward and backwards.
 				//	use the $('.backgroundImage') in the clicking forward and backwards
-				var backgroundImage = $('.backgroundImage'),
-					slideIndex = window['IA-Storage']['slideIndex'];
-					
+				//	This backgroundImage isn't working. WHY?
+				//IsLog.c(backgroundImage);
+				
+				//IsLog.c($(this).attr("id"));
+				//IsLog.c($("#forward"));
+				//IsLog.c($(this)==$("#forward"));
+				if($(this)==$("#forward")){
+					IsLog.c('were in the loop');
+					backgroundImage[1].css("position", "relative");
+				}
 				/*if($(this)==$("#back") && slideIndex > 0){
 					slideIndex--;
 				}
