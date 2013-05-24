@@ -1,11 +1,14 @@
 function() {
 	if(typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[], "slideIndex": 0}
-	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined" || typeof window['IA-Storage']['slideIndex'] == "undefined") {
+		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[], "textColor":[], "slideIndex": 0}
+	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || 
+			typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined" ||
+			typeof window['IA-Storage']['textColor'] == "undefined" || typeof window['IA-Storage']['slideIndex'] == "undefined") {
 		window['IA-Storage']['image'] = [];
 		window['IA-Storage']['sound'] = [];
 		window['IA-Storage']['autoPlay'] = [];
 		window['IA-Storage']['text'] = [];
+		window['IA-Storage']['textColor'] = [];
 		window['IA-Storage']['slideIndex'] = 0;
 		
 	}
@@ -32,7 +35,8 @@ function() {
 				var image = configObject['configuration']['image'],
 					text = configObject['configuration']['text'],	//window['IA-Storage']['image'];
 					backgroundImage = $('.backgroundImage'),
-					slideIndex = window['IA-Storage']['slideIndex'];
+					slideIndex = window['IA-Storage']['slideIndex'],
+					textColor = window['IA-Storage']['textColor'];
 
 				//IsLog.c($('.backgroundImage').length);
 				if($('.backgroundImage').length == 0){
@@ -41,7 +45,7 @@ function() {
 						imageElement.attr("id", "displayImage"+i);
 						imageElement.attr("class", "backgroundImage");
 						imageElement.css("background-image", "url("+image[i]+")");
-						imageElement.html(text[i]);
+						imageElement.html("<div style=\"color:#"+textColor[i]+"\">"+text[i]+"</div>");
 						$(".displayDiv").append(imageElement);
 						//IsLog.c($('#displayImage'+i));
 					}

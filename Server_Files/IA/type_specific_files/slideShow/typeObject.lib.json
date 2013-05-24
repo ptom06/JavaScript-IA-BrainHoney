@@ -1,5 +1,8 @@
 var obj = {
 	"slideShow": {
+		"scripts":[
+			"jscolor/jscolor.js"
+		],
 		"conditionals": [{
 			"condition": {"function":"default_get_configuration_parameters(\"bool\")","value":false},
 			"configurationElementsString": "configurationPage.html",

@@ -1,11 +1,14 @@
 function() {
 	if (typeof window['IA-Storage'] == "undefined")
-		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[]}
-	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined") {
+		window['IA-Storage'] = {"image":[],"sound":[], "autoPlay":[], "text":[], "textColor":[]}
+	else if(typeof window['IA-Storage']['image'] == "undefined" || typeof window['IA-Storage']['sound'] == "undefined" || 
+			typeof window['IA-Storage']['autoPlay'] == "undefined" || typeof window['IA-Storage']['text'] == "undefined" ||
+			typeof window['IA-Storage']['textColor'] == "undefined") {
 		window['IA-Storage']['image'] = [];
 		window['IA-Storage']['sound'] = [];
 		window['IA-Storage']['autoPlay'] = [];
 		window['IA-Storage']['text'] = [];
+		window['IA-Storage']['textColor'] = [];
 	}else{
 		IsLog.c('We are bypassing the storage of our var');
 		//	Data in window has already been initialized.
@@ -46,6 +49,15 @@ function() {
 		window['IA-Storage']['text'][arrayIndex] = $("#text"+arrayIndex).val();
 	} else {
 		IsLog.c("Error: Display text input not found! \"#text"+arrayIndex+"\"");	
+	}
+	//	Color Section
+	if($("#textColor"+arrayIndex).val() === ""){
+		IsLog.c("Notice: Nothing has been typed in: \"textColor"+arrayIndex+"\"");	
+	} else if(typeof $("#textColor"+arrayIndex).val() == "string") {
+		IsLog.c("We should be storing the text from the textColor");
+		window['IA-Storage']['textColor'][arrayIndex] = $("#textColor"+arrayIndex).val();
+	} else {
+		IsLog.c("Error: Display text input not found! \"#textColor"+arrayIndex+"\"");
 	}
 	//	auto-play Section
 	window['IA-Storage']['autoPlay'][arrayIndex] = !$("#autoPlay"+arrayIndex).prop("checked");
