@@ -12,7 +12,7 @@ function() {
 		window['IA-Storage']['slideIndex'] = 0;
 		
 	}
-	if(window['IA-Storage']["image"].length == 0) { //This should be something other thatn image.?.?
+	if(window['IA-Storage']["image"].length == 0) { //This should be something other than image.?.?
 		$.post(
 			portalURL,
 			{
@@ -38,7 +38,6 @@ function() {
 					slideIndex = window['IA-Storage']['slideIndex'],
 					textColor = window['IA-Storage']['textColor'];
 
-				//IsLog.c($('.backgroundImage').length);
 				if($('.backgroundImage').length == 0){
 					for(var i=0; i<image.length; i++){
 						var imageElement = $("<div></div>");
@@ -52,51 +51,22 @@ function() {
 				}else
 					IsLog.c('We already loaded the images on the page');
 				IsLog.c($('.backgroundImage').length);
-				IsLog.c($('.backgroundImage')[0]);
-				$('.backgroundImage')[0].css("position","relative")
-				//	These if statements are for the forward and backwards.
-				//	use the $('.backgroundImage') in the clicking forward and backwards
-				//	This backgroundImage isn't working. WHY?
-				//IsLog.c(backgroundImage);
-				
-				//IsLog.c($(this).attr("id"));
-				//IsLog.c($("#forward"));
-				//IsLog.c($(this)==$("#forward"));
+				IsLog.c($('.backgroundImage')[0] instanceof HTMLElement);
+				$($('.backgroundImage')[0]).addClass("currentSlide");
+				$(".currentSlide").css("display","block");
+				/*for(var i=0; i < backgroundImage.length; i++{
+					//	have an if for setting and removing .currentSlide
+				}*/
+
 				if($(this)==$("#forward")){
 					IsLog.c('were in the loop');
-					backgroundImage[1].css("position", "relative");
+					if(backgroundImage == $(".currentSlide")){
+						$(".currentSlide").css("display", "block");
+					}
 				}
-				/*if($(this)==$("#back") && slideIndex > 0){
+				if($(this)==$("#back") && slideIndex > 0){
 					slideIndex--;
 				}
-				if(this == $("#forward")[0] && slideIndex < backgroundImage.length-1){
-					slideIndex++;
-				}
-				slideIndex++;
-				IsLog.c("SlideIndex is: "+slideIndex);*/
-
-				//	I need to get all the image id's on the page so that i can call them.
-				
-				//IsLog.c(window['IA-Storage']['image'][0]);
-				
-				
-				/*IsLog.c(window['IA-Storage']);
-				var image = window['IA-Storage']['image'],
-					sound = window['IA-Storage']['sound'],
-					autoPlay = window['IA-Storage']['autoPlay'],
-					text = window['IA-Storage']['text'];
-					IsLog.c("working it here");
-					IsLog.c(image.length);
-					IsLog.c(sound);
-					IsLog.c(autoPlay);
-					IsLog.c(text);
-					
-				if(image){
-					for(var i = 0; i<image.length; i++){
-						$(".displayDiv").append("<img id=\"displayImage"+i+" scr=\""+image[i]+"\"/>");
-						$(".displayDiv").append("<span id=\"displayText"+i+"\">"+text[i]+"</span>");
-					}
-				}*/
 			}
 		);
 	} else {
